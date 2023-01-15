@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="flex flex-row gap-8 p-8">
+  <div class="h-full overflow-auto">
+    <div class="flex z-20 sticky bg-base-100/10 backdrop-blur-xl border-b border-base-200/40 top-0 flex-row gap-8 p-8">
       <div class="my-auto flex">
         <div class="indicator">
           <div class="indicator-item indicator-bottom">
@@ -41,8 +41,8 @@
           <span class="text-sm">#4 • 10 kills</span>
       </div>
     </div>
-    <div class="p-8">
-      <feed-block/>
+    <div class="p-8 flex flex-col gap-4">
+      <feed-block v-for="n in 10" :key="n" />
     </div>
 
   </div>

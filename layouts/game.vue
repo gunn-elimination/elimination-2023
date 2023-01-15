@@ -2,7 +2,7 @@
   <div class="h-screen w-screen">
     <div class="drawer drawer-mobile">
       <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
-      <div class="drawer-content flex flex-col">
+      <div class="drawer-content bg-base-100 flex flex-col">
         <NuxtPage class="h-full" />
         <btm-nav />
       </div>
@@ -14,8 +14,8 @@
             p-4
             w-80
             gap-1
-            bg-base-100
-            border-r border-primary/20
+            bg-base-200
+            no-border-r border-primary/20
             text-primary
           "
         >
