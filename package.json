@@ -13,8 +13,12 @@
   },
   "dependencies": {
     "@heroicons/vue": "^2.0.13",
+    "@nuxt-alt/auth": "^2.2.4",
+    "@nuxt-alt/http": "^1.5.7",
+    "@pinia/nuxt": "^0.4.6",
     "@tailwindcss/typography": "^0.5.9",
     "daisyui": "^2.46.1",
+    "pinia": "^2.0.29",
     "vue-feather": "^2.0.0"
   }
 }

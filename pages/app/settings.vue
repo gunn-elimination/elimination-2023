@@ -1,6 +1,9 @@
 <template>
-  <div>
-    <h1 class="title">Settings</h1>
+  <div class="h-full overflow-auto">
+    <h1 class="title sticky-header p-8">Settings</h1>
+    <div class="px-8">
+
+    </div>
   </div>
 </template>
 

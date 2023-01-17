@@ -4,5 +4,7 @@
 <script >
 definePageMeta({
   layout: "game",
+  middleware:"auth"
 });
+
 </script>

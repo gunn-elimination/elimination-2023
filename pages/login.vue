@@ -17,7 +17,7 @@
     </div>
     <div v-if="agreed" class="my-auto ml-auto">
         <!-- todo: change this to the login url of the backend -->
-        <a href="/app" class="btn btn-primary btn-sm">Create Account</a>
+        <a href="https://xz.ax/login?redirect_url=http://localhost:3000/" class="btn btn-primary btn-sm">sign in</a>
     </div>
     </div>
   </div>

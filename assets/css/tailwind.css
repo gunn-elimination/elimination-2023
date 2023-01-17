@@ -6,3 +6,7 @@
 .title {
     @apply font-sans font-semibold text-3xl text-primary;
 }
+
+.sticky-header {
+    @apply z-20 sticky bg-base-100/50 backdrop-blur-md border-b border-base-200/40 top-0;
+}
