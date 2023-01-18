@@ -1,13 +1,3 @@
 <template>
-  <game-has-not-begun/>
+    <game-has-not-begun/>
 </template>
-
-<script>
-export default {
-
-}
-</script>
-
-<style>
-
-</style>

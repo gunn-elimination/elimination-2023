@@ -50,7 +50,7 @@
 
 <script>
 import { ChevronDownIcon, QrCodeIcon, CameraIcon, ViewfinderCircleIcon } from "@heroicons/vue/24/outline/index.js";
-import Avatar from '~~/components/avatar.vue';
+import Avatar from '~~/components/Avatar.vue';
 
 export default {
   components: { ChevronDownIcon, Avatar, QrCodeIcon, CameraIcon, ViewfinderCircleIcon },
