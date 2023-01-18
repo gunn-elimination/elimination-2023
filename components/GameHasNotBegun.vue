@@ -1,7 +1,10 @@
 <template>
-    <div class="flex p-8">
-        <h2 class="mx-auto text-accent dark:text-primary text-center my-auto font-bold text-8xl">
+    <div class="flex flex-col p-8 h-full items-center justify-center">
+        <h2 class="text-accent dark:text-primary text-center font-bold text-8xl mb-10">
             The game has not begun.
         </h2>
+        <NuxtLink href="/" class="text-accent dark:text-primary">
+            Return to home.
+        </NuxtLink>
     </div>
 </template>
