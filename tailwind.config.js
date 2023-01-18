@@ -1,28 +1,32 @@
 const autumn = require("daisyui/src/colors/themes")["[data-theme=autumn]"]
-let coffee = require("daisyui/src/colors/themes")["[data-theme=coffee]"]
-delete coffee['base-content']
+const business = require("daisyui/src/colors/themes")["[data-theme=business]"]
 
 module.exports = {
   plugins: [require("@tailwindcss/typography"), require('daisyui')],
   daisyui: {
     styled: true,
-    themes: [{
-      autumn: {
-        ...autumn,
-        primary: autumn.accent,
-        accent: autumn.primary,
+    themes: [
+      {
+        autumn: {
+          ...autumn,
+          primary: autumn.accent,
+          accent: autumn.primary,
+        }
+      },
+      {
+        business: {
+          ...business,
+          primary: '#ff594c',
+          accent: '#eb144c'
+        }
       }
-    }, {
-      coffee: {
-        ...coffee,
-      }
-    }],
+    ],
     base: true,
     utils: true,
     logs: true,
     rtl: false,
     prefix: "",
-    darkTheme: "coffee",
+    darkTheme: "business",
   },
   theme: {
     fontFamily: {

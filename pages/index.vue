@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h1 class="pt-24 text-center text-4xl lg:text-6xl text-primary font-bold">
+        <h1 class="pt-24 text-center text-6xl sm:text-8xl text-transparent bg-gradient-to-br from-primary to-accent bg-clip-text font-bold">
             Gunn Elimination
         </h1>
         <div class="mt-10 flex flex-col mx-auto text-center gap-8">
