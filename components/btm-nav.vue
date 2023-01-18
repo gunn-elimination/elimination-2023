@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { HomeIcon, Cog6ToothIcon, MegaphoneIcon, CalendarIcon, TrophyIcon } from "@heroicons/vue/24/outline";
+import { HomeIcon, Cog6ToothIcon, MegaphoneIcon, CalendarIcon, TrophyIcon } from "@heroicons/vue/24/outline/index.js";
 
 export default {
     components: {

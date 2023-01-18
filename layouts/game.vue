@@ -79,7 +79,7 @@ import {
   MegaphoneIcon,
   CalendarIcon,
   TrophyIcon,
-} from "@heroicons/vue/24/outline";
+} from "@heroicons/vue/24/outline/index.js";
 
 export default {
   components: {

@@ -29,7 +29,6 @@ const agreed = ref(false)
 const protocol = ref('')
 const host = ref('')
 if(!process.server){
-  
   protocol.value = document.location.protocol
   host.value = document.location.host
 }

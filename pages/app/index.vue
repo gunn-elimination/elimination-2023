@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { ChevronDownIcon, QrCodeIcon, CameraIcon, ViewfinderCircleIcon } from "@heroicons/vue/24/outline";
+import { ChevronDownIcon, QrCodeIcon, CameraIcon, ViewfinderCircleIcon } from "@heroicons/vue/24/outline/index.js";
 import Avatar from '~~/components/avatar.vue';
 
 export default {
