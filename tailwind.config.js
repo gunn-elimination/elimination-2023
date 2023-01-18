@@ -9,8 +9,7 @@ module.exports = {
       {
         autumn: {
           ...autumn,
-          primary: autumn.accent,
-          accent: autumn.primary,
+          accent: autumn.secondary
         }
       },
       {

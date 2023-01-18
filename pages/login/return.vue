@@ -1,15 +1,9 @@
 <template>
-  <div>llol</div>
+    <div>llol</div>
 </template>
 
 <script setup>
-definePageMeta({ 
+definePageMeta({
     middleware: false
-    })
-   
-
+})
 </script>
-
-<style>
-
-</style>
