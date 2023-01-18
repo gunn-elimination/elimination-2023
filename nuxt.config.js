@@ -11,9 +11,8 @@ export default defineNuxtConfig({
             cookie: {
                 cookie: {
                     server: true,
-                    name: "SESSION",
-                    domain: "xz.ax",
-                    httpOnly: true
+                    name: "SSUSER",
+                    httpOnly: true,
                 },
                 endpoints: {
                     login: { 
@@ -21,7 +20,7 @@ export default defineNuxtConfig({
                         method: 'get' 
                     },
                     user: { 
-                        
+                        includeCredentials: true,
                         url: 'https://xz.ax/me', 
                         method: 'get' 
                     }

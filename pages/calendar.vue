@@ -3,7 +3,9 @@
 </template>
 
 <script>
+import gameHasNotBegun from '~~/components/gameHasNotBegun.vue'
 export default {
+  components: { gameHasNotBegun },
 
 }
 </script>
