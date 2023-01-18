@@ -1,18 +1,21 @@
 <template>
-    <div>
-        <h1 class="font-display pt-24 text-center text-4xl lg:text-6xl text-primary">Elimination</h1>
-        <div class="px-10 mt-16 flex flex-col mx-auto text-center gap-4">
-            <div>
-                <a href="/app" class="btn btn-lg btn-wide btn-primary">Play</a>
-            </div>
-            <div>
-                <a class="btn btn-lg btn-wide btn-accent">Rules</a>
-            </div>
-            <div>
-                <a href="/calendar" class="btn btn-lg btn-wide btn-accent">Calendar</a>
-            </div>
-            <div>
-                <a href="/leaderboard" class="btn btn-lg btn-wide btn-accent">Leaderboard</a>
+    <div class="container">
+        <h1 class="pt-24 text-center text-4xl lg:text-6xl text-primary font-bold">
+            Gunn Elimination
+        </h1>
+        <div class="mt-10 flex flex-col mx-auto text-center gap-8">
+            <a href="/app" class="btn btn-primary btn-wide mx-auto font-bold">Play</a>
+            <p>
+                <!-- TODO: rewrite this game info blurb to be shorter and more fun -->
+                At the beginning of the game (1/27/23, 12:00 A.M.), each player will be assigned another player (target). Your
+                mission is to eliminate your target by tagging them with a miniature stuffed plushie. After you eliminate your
+                first target, you will get assigned your target's target. Eliminations are only valid under certain circumstances
+                (see below). The game will end on 2/10/23 at 11:59 PM and whoever has the most kills by then wins!
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center">
+                <a href="/app" class="btn btn-wide btn-accent font-bold">Rules</a>
+                <a href="/calendar" class="btn btn-wide btn-accent font-bold">Calendar</a>
+                <a href="/leaderboard" class="btn btn-wide btn-accent font-bold">Leaderboard</a>
             </div>
         </div>
     </div>
