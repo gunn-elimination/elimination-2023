@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-10 mt-16">
+  <div class="px-10 mt-16">
     <h1 class="title mb-8">Log In</h1>
     <p>
       We don't sell your data because we don't know who to sell it to. Also,

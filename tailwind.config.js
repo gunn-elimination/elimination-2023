@@ -12,7 +12,10 @@ module.exports = {
         accent: autumn.primary,
       }
     }, {
-      coffee
+      coffee: {
+        ...coffee,
+        
+      }
     }],
     base: true,
     utils: true,
