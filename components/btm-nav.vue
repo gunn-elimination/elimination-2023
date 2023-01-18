@@ -15,7 +15,7 @@
   </NuxtLink>
   <NuxtLink exact-active-class="active" active-class="active" href="/app/announcements" class="text-primary">
   <div class="indicator">
-      <span class="indicator-item badge badge-sm badge-error">2</span> 
+      <span v-if="false" class="indicator-item badge badge-sm badge-error">2</span> 
   <MegaphoneIcon class="h-5 w-5 stroke-2"/>
   </div>
   </NuxtLink>
