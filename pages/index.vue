@@ -17,7 +17,9 @@
                 first target, you will get assigned your target's target. Eliminations are only valid under certain circumstances
                 (see below). The game will end on 2/10/23 at 11:59 PM and whoever has the most kills by then wins!
             </p>
-            <a href="/app" class="btn btn-primary btn-wide mx-auto font-bold">Play</a>
+            <a href="/app" class="block rounded bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/50 px-4 py-2 mx-auto text-white font-bold focus:outline-none focus-visible:ring-[3px]">
+                Play Elimination
+            </a>
         </div>
     </div>
 </template>
