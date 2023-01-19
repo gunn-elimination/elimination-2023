@@ -12,6 +12,6 @@
 <script>
 definePageMeta({
     layout: "game",
-    middleware: "elim-auth"
+    // middleware: "elim-auth"
 });
 </script>
