@@ -6,6 +6,13 @@ export default defineNuxtConfig({
         '@pinia/nuxt',
         '@kevinmarrec/nuxt-pwa'
     ],
+    pwa: {
+        meta: {
+            name: 'Gunn Elimination',
+            description: 'Kill or be killed. It\'s Gunn Elimination 2023!',
+            nativeUI: true
+        }
+    },
     auth: {
         //globalMiddleware: true,
         strategies: {
