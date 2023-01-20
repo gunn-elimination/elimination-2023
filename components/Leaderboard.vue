@@ -13,11 +13,11 @@
 <script lang="ts">
 import {EliminationUser} from '~/utils/types';
 
-const leaderboard: {users: EliminationUser[]} = await (await fetch('https://xz.ax/game/scoreboard')).json();
-
 export default {
     name: "Leaderboard",
-    data() {
+    async data() {
+        const leaderboard: {users: EliminationUser[]} = await (await fetch('https://xz.ax/game/scoreboard')).json();
+
         return {
             leaderboard
         }
