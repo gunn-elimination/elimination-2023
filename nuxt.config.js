@@ -3,15 +3,9 @@ export default defineNuxtConfig({
     modules: [
         '@nuxtjs/tailwindcss',
         '@nuxt-alt/auth',
-        '@pinia/nuxt'
+        '@pinia/nuxt',
+        '@kevinmarrec/nuxt-pwa'
     ],
-    app: {
-        head: {
-            link: [
-                {rel: 'icon', href: 'favicon.png'}
-            ]
-        }
-    },
     auth: {
         //globalMiddleware: true,
         strategies: {
