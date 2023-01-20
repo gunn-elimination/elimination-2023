@@ -5,6 +5,13 @@ export default defineNuxtConfig({
         '@nuxt-alt/auth',
         '@pinia/nuxt'
     ],
+    app: {
+        head: {
+            link: [
+                {rel: 'icon', href: 'favicon.png'}
+            ]
+        }
+    },
     auth: {
         //globalMiddleware: true,
         strategies: {
