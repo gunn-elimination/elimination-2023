@@ -5,3 +5,9 @@
 
     <NuxtPage />
 </template>
+
+<script lang="ts">
+definePageMeta({
+    layout: "login",
+});
+</script>
