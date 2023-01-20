@@ -1,65 +1,40 @@
 <template>
-  <div class="h-full overflow-auto">
-    <h1 class="title sticky-header p-8">Announcements</h1>
-    <div class="px-8">
-      <div class="card card-compact w-full">
-        <div class="card-body">
-          <h2 class="card-title font-bold">
-            January 26, 2023
-            <div class="badge badge-secondary">NEW</div>
-          </h2>
-          <p class="whitespace-pre-wrap">
-            Long announcement. Long announcement. Long announcement. Long
-            announcement. Long announcement. Long announcement. Long
-            announcement. Long announcement. Long announcement. Long
-            announcement. Long announcement. Long announcement. Long
-            announcement. Long announcement. Long announcement. Long
-            announcement.
-          </p>
-          <div class="card-actions justify-end">
-            <button class="btn btn-sm btn-primary">mark as read</button>
-          </div>
-        </div>
+    <div class="h-full overflow-auto flex flex-col">
+        <h1 class="title sticky-header p-8">Announcements</h1>
+        <GameHasNotBegun />
+        <!--
+        <div class="px-8">
+            <div class="card card-compact w-full">
+                <Announcement
+                    title="Example Announcement"
+                    body="Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement."
+                    start-date="January 26, 2023"
+                    end-date="January 26, 2023"
+                    unread
+                />
 
-        <div class="card-body">
-          <h2 class="card-title">
-            January 25, 2023
-            <div class="badge badge-secondary">NEW</div>
-          </h2>
-          <p class="whitespace-pre-wrap">
-            Long announcement. Long announcement. Long announcement. Long
-            announcement. Long announcement. Long announcement. Long
-            announcement. Long announcement. Long announcement. Long
-            announcement. Long announcement. Long announcement. Long
-            announcement. Long announcement. Long announcement. Long
-            announcement.
-          </p>
-          <div class="card-actions justify-end">
-            <button class="btn btn-sm btn-primary">mark as read</button>
-          </div>
-        </div>
+                <Announcement
+                    title="Example Announcement"
+                    body="Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement."
+                    start-date="January 25, 2023"
+                    end-date="January 25, 2023"
+                    unread
+                />
 
-        <div v-for="n in 5" :key="n" class="card card-compact w-full">
-          <div class="card-body">
-            <h2 class="card-title">January 2{{ 5 - n }}, 2023</h2>
-            <p class="whitespace-pre-wrap">
-              Long announcement. Long announcement. Long announcement. Long
-              announcement. Long announcement. Long announcement. Long
-              announcement. Long announcement. Long announcement. Long
-              announcement. Long announcement. Long announcement. Long
-              announcement. Long announcement. Long announcement. Long
-              announcement.
-            </p>
-          </div>
+                <div v-for="announcement in announcements" :key="announcement.title + announcement.body" class="card card-compact w-full">
+                    <Announcement
+                        title="Example Announcement"
+                        body="Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement."
+                        start-date="January 21, 2023"
+                        end-date="January 21, 2023"
+                    />
+                </div>
+            </div>
         </div>
-      </div>
+        -->
     </div>
-  </div>
 </template>
 
-<script>
-export default {};
+<script setup>
+const {data: announcements} = useFetch('https://xz.ax/announcements');
 </script>
-
-<style>
-</style>
