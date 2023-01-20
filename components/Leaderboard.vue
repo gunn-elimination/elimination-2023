@@ -10,17 +10,6 @@
     </ol>
 </template>
 
-<script lang="ts">
-import {EliminationUser} from '~/utils/types';
-
-export default {
-    name: "Leaderboard",
-    async data() {
-        const leaderboard: {users: EliminationUser[]} = await (await fetch('https://xz.ax/game/scoreboard')).json();
-
-        return {
-            leaderboard
-        }
-    }
-}
+<script setup lang="ts">
+const {data: leaderboard} = useFetch('https://xz.ax/game/scoreboard');
 </script>
