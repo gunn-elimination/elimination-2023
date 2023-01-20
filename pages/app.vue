@@ -1,15 +1,12 @@
 <template>
     <Head>
         <Title>App | Gunn Elimination</Title>
-        <Meta name="description" content="Kill or be killed. It's Gunn Elimination 2023!" />
     </Head>
 
-    <GameHasNotBegun />
-    <!-- ENABLE THIS AFTER EVERYTHING IS DONE --->
-    <!--<NuxtPage/>--->
+    <NuxtPage />
 </template>
 
-<script>
+<script setup lang="ts">
 definePageMeta({
     layout: "game",
     middleware: "elim-auth"

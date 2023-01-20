@@ -1,5 +1,9 @@
 <template>
-    <div class="h-full overflow-auto">
+    <div class="h-full overflow-auto flex flex-col">
+        <h1 class="title sticky-header p-8">Dashboard</h1>
+        <GameHasNotBegun />
+
+        <!--
         <div class="flex sticky-header flex-row gap-8 p-8">
             <div class="my-auto flex">
                 <div class="indicator">
@@ -48,6 +52,7 @@
         <div class="p-8 flex flex-col gap-4">
             <KillFeedBlock v-for="n in 10" :key="n"/>
         </div>
+        -->
     </div>
 </template>
 
@@ -56,5 +61,9 @@ import {ChevronDownIcon, QrCodeIcon, CameraIcon, ViewfinderCircleIcon} from "@he
 
 export default {
     components: {ChevronDownIcon, QrCodeIcon, CameraIcon, ViewfinderCircleIcon},
+    /* props: {
+        currentUser: Object,
+        target: Object
+    } */
 };
 </script>
