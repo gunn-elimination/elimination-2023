@@ -28,13 +28,6 @@ module.exports = {
     darkTheme: "business",
   },
   theme: {
-    fontFamily: {
-      'sans': ['ui-sans-serif', 'system-ui'],
-      'serif': [/* 'Antonio', */ 'ui-serif', 'Georgia'],
-      'mono': ['ui-monospace', 'SFMono-Regular'],
-      'display': ['"Seymour One"'],
-      'body': ['Oxygen'],
-    },
     container: {
       center: true,
       padding: {
