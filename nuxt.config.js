@@ -3,13 +3,20 @@ export default defineNuxtConfig({
     modules: [
         '@nuxtjs/tailwindcss',
         '@nuxt-alt/auth',
-        '@pinia/nuxt'
+        '@pinia/nuxt',
+        '@kevinmarrec/nuxt-pwa'
     ],
-    app: {
-        head: {
-            link: [
-                {rel: 'icon', href: 'favicon.png'}
-            ]
+    pwa: {
+        meta: {
+            name: 'Gunn Elimination',
+            description: 'Kill or be killed. It\'s Gunn Elimination 2023!',
+            nativeUI: true
+        },
+        manifest: {
+            name: 'Gunn Elimination',
+            short_name: 'Elimination',
+            description: 'Kill or be killed. It\'s Gunn Elimination 2023!',
+            start_url: '/app'
         }
     },
     auth: {

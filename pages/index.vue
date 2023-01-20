@@ -1,7 +1,6 @@
 <template>
     <Head>
         <Title>Gunn Elimination</Title>
-        <Meta name="description" content="Kill or be killed. It's Elimination 2023!" />
     </Head>
 
     <h1 class="text-center text-5xl sm:text-8xl text-transparent bg-gradient-to-br from-primary to-accent bg-clip-text font-bold">
