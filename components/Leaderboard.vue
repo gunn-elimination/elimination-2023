@@ -11,10 +11,7 @@
     <ol v-else class="flex flex-col gap-2 list-decimal list-inside">
         <LeaderboardUser
             v-for="user in leaderboard.users"
-            :forename="user.forename"
-            :surname="user.surname"
-            :eliminations="user.eliminated.length"
-            :key="user.email"
+            :user="user"
         />
     </ol>
 </template>

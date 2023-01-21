@@ -1,5 +1,6 @@
 <template>
-    <div v-if="src" class="avatar w-10 my-auto">
+    <!-- TODO: backend pfps -->
+    <div v-if="false" class="avatar my-auto" :class="large ? 'w-24' : 'w-10'">
         <div
             class="w-full rounded-full ring-primary ring-offset-base-100 ring-offset-2"
             :class={ring:ring}
@@ -7,15 +8,24 @@
             <img :src="src" />
         </div>
     </div>
-    <div v-else class="avatar placeholder">
-        <div class="bg-base-200 text-neutral-content rounded-full w-10">
-            <span class="text-xl text-secondary">{{ placeholder }}</span>
+    <div v-else class="avatar placeholder" :class="large ? 'w-24' : 'w-10'">
+        <div class="bg-base-200 text-neutral-content rounded-full w-full">
+            <span class="text-secondary" :class="large ? 'text-3xl' : 'text-lg'">
+                {{ user.forename.charAt(0) + user.surname.charAt(0) }}
+            </span>
         </div>
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import type {PropType} from 'vue';
+import type {EliminationUser} from '~/utils/types';
+
 export default {
-    props: ['src', 'ring', 'placeholder']
+    props: {
+        ring: Boolean,
+        large: Boolean,
+        user: Object as PropType<EliminationUser>
+    }
 }
 </script>

@@ -11,18 +11,22 @@
 </template>
 
 <script setup lang="ts">
+import type {FetchResponse} from 'ofetch';
+
 definePageMeta({
     layout: "game",
     // middleware: "elim-auth"
 });
 
+async function responseHandler({response}: { response: FetchResponse<any> }) {
+    if (response._data.error) return navigateTo('/login');
+    return response._data;
+}
+
+// TODO: middleware?
 const {data: currentUser, pending} = useFetch('https://xz.ax/me', {
     credentials: 'include',
     server: false,
-    async onResponse({response}) {
-        console.log(response._data.error)
-        if (response._data.error) return navigateTo('/login');
-        return response._data;
-    }
+    onResponse: responseHandler
 });
 </script>
