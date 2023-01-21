@@ -3,11 +3,10 @@
         <Spinner /> Loading leaderboard...
     </div>
     <div v-else-if="error">
-        <!-- TODO: this is hard to test, I hope the styling is ok -->
         <p class="mb-4">An error occurred fetching the leaderboard:</p>
-        <pre class="rounded-lg p-5 bg-base-200 font-mono">
+        <code class="rounded-lg p-5 bg-base-200 font-mono text-secondary whitespace-pre-wrap">
             {{ error }}
-        </pre>
+        </code>
     </div>
     <ol v-else class="flex flex-col gap-2 list-decimal list-inside">
         <LeaderboardUser
