@@ -1,5 +1,5 @@
 <template>
-    <div class="card bg-base-300 border border-gray-300/10">
+    <div class="card bg-base-200 dark:bg-base-300 border border-gray-300/10">
         <div class="card-body px-6">
             <h2 class="card-title">
                 {{ title }} | {{ startDate }}

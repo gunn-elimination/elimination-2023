@@ -9,7 +9,9 @@ module.exports = {
       {
         autumn: {
           ...autumn,
-          accent: autumn.secondary
+          primary: '#a51618',
+          secondary: '#6b7280',
+          accent: autumn.secondary,
         }
       },
       {
