@@ -4,3 +4,12 @@ export type EliminationUser = {
     surname: string,
     eliminated: EliminationUser[]
 }
+
+export type Announcement = {
+    id: number,
+    title: string,
+    body: string,
+    active: boolean,
+    startDate: number,
+    endDate: number
+}

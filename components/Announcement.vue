@@ -1,14 +1,16 @@
 <template>
-    <div class="card-body">
-        <h2 class="card-title">
-            {{ title }} | {{ startDate }}
-            <span class="badge badge-primary" v-if="unread">NEW</span>
-        </h2>
-        <p class="whitespace-pre-wrap">
-            {{ body }}
-        </p>
-        <div class="card-actions justify-end" v-if="unread">
-            <button class="btn btn-sm btn-primary">mark as read</button>
+    <div class="card bg-base-300 border border-gray-300/10">
+        <div class="card-body px-6">
+            <h2 class="card-title">
+                {{ title }} | {{ startDate }}
+                <span class="badge badge-primary" v-if="unread">NEW</span>
+            </h2>
+            <p class="whitespace-pre-wrap text-secondary">
+                {{ body }}
+            </p>
+            <div class="card-actions justify-end" v-if="unread">
+                <button class="btn btn-sm btn-primary">mark as read</button>
+            </div>
         </div>
     </div>
 </template>
@@ -20,7 +22,6 @@ export default {
         title: String,
         body: String,
         startDate: String,
-        endDate: String,
         unread: Boolean
     }
 }

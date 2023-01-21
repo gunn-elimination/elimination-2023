@@ -1,37 +1,17 @@
 <template>
     <div class="h-full overflow-auto flex flex-col">
         <h1 class="title sticky-header p-8">Announcements</h1>
-        <GameHasNotBegun />
-        <!--
-        <div class="px-8">
-            <div class="card card-compact w-full">
-                <Announcement
-                    title="Example Announcement"
-                    body="Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement."
-                    start-date="January 26, 2023"
-                    end-date="January 26, 2023"
-                    unread
-                />
 
-                <Announcement
-                    title="Example Announcement"
-                    body="Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement."
-                    start-date="January 25, 2023"
-                    end-date="January 25, 2023"
-                    unread
-                />
-
-                <div v-for="announcement in announcements" :key="announcement.title + announcement.body" class="card card-compact w-full">
-                    <Announcement
-                        title="Example Announcement"
-                        body="Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement. Long announcement."
-                        start-date="January 21, 2023"
-                        end-date="January 21, 2023"
-                    />
-                </div>
-            </div>
+        <div v-for="announcement in announcements" :key="announcement.id" class="card w-full pt-6 pb-12 px-8">
+            <!-- TODO: date formatting? -->
+            <!-- TODO: only display if active && after start time && before end time -->
+            <Announcement
+                v-if="announcement.active"
+                :title="announcement.title"
+                :body="announcement.body"
+                :start-date="new Date(announcement.startDate).toLocaleDateString()"
+            />
         </div>
-        -->
     </div>
 </template>
 
