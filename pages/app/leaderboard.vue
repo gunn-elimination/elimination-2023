@@ -13,7 +13,7 @@
                 />
 
                 <span class="font-bold text-lg">{{ currentUser.forename }} {{ currentUser.surname }}</span>
-                <span class="text-sm"><!-- #4 • -->{{ currentUser.eliminated.length }} kills</span>
+                <span class="text-sm"><!-- #4 • -->{{ currentUser.eliminated.length }} eliminations</span>
             </div>
         </div>
         <div class="px-12 mt-6 pb-12">
