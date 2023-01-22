@@ -11,11 +11,23 @@
 </template>
 
 <script setup lang="ts">
+import {useCurrentTimeStore} from '@/store/time';
 import type {FetchResponse} from 'ofetch';
 
 definePageMeta({
     layout: "game",
     // middleware: "elim-auth"
+});
+
+// Update current time store on interval
+const currentTimeStore = useCurrentTimeStore();
+let currentTimeInterval: NodeJS.Timer;
+
+onMounted(() => {
+    currentTimeInterval = setInterval(() => currentTimeStore.updateTime(), 1000);
+});
+onUnmounted(() => {
+    clearInterval(currentTimeInterval);
 });
 
 async function responseHandler({response}: { response: FetchResponse<any> }) {

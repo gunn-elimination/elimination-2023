@@ -11,7 +11,9 @@
                         href="/app/announcements"
                     >
                         <div class="indicator">
-                            <span class="indicator-item badge badge-sm badge-error rounded-lg">2</span>
+                            <client-only>
+                                <GameSidebarUnreadAnnouncementsBadge />
+                            </client-only>
                             <MegaphoneIcon class="h-5 w-5 stroke-2"/>
                         </div>
                         Announcements
@@ -62,7 +64,7 @@
     </aside>
 </template>
 
-<script>
+<script lang="ts">
 import {HomeIcon, Cog6ToothIcon, MegaphoneIcon, CalendarIcon, TrophyIcon} from "@heroicons/vue/24/outline/index.js";
 
 export default {
