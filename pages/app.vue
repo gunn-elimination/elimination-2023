@@ -3,9 +3,8 @@
         <Title>App | Gunn Elimination</Title>
     </Head>
 
-    <div v-if="pending">
-        <!-- TODO: style this better -->
-        Loading...
+    <div v-if="pending" class="flex gap-3 flex-grow items-center justify-center text-secondary text-lg font-semibold">
+        <Spinner /> Loading app...
     </div>
     <NuxtPage v-else :currentUser="currentUser" />
 </template>
