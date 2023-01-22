@@ -11,6 +11,7 @@
 </template>
 
 <script setup lang="ts">
+import {useDocumentVisibility} from '@vueuse/core';
 import {useCurrentTimeStore} from '@/store/time';
 import type {FetchResponse} from 'ofetch';
 
@@ -29,6 +30,10 @@ onMounted(() => {
 onUnmounted(() => {
     clearInterval(currentTimeInterval);
 });
+
+// Scan for service worker updates on page visibility
+const pageVisibility = useDocumentVisibility();
+watch(pageVisibility, () => navigator.serviceWorker.getRegistration().then(res => res?.update()));
 
 async function responseHandler({response}: { response: FetchResponse<any> }) {
     if (response._data.error) return navigateTo('/login');
