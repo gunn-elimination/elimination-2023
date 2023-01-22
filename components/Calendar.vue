@@ -1,6 +1,6 @@
 <template>
     <div class="grid grid-cols-7 rounded-lg overflow-hidden text-center border border-gray-300/10">
-        <div v-for="day in ['S', 'M', 'T', 'W', 'T', 'F', 'S']" :key="day" class="bg-base-200 py-2 px-4">
+        <div v-for="day in ['S', 'M', 'T', 'W', 'T', 'F', 'S']" :key="day" class="bg-base-300 py-2 px-4">
             {{ day }}
         </div>
 
