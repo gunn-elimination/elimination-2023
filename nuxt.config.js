@@ -48,5 +48,8 @@ export default defineNuxtConfig({
                 }
             },
         }
+    },
+    experimental:{
+        treeshakeClientOnly: false
     }
 })
