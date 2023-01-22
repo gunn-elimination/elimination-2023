@@ -12,9 +12,15 @@
                 :start-date="new Date(announcement.startDate).toLocaleDateString()"
             />
         </div>
+
+        {{ currentTime.time.toLocaleString(DateTime.DATE_HUGE) }}
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import {useCurrentTimeStore} from '@/store/time';
+import {DateTime} from 'luxon';
+
+const currentTime = useCurrentTimeStore();
 const {data: announcements} = useFetch('https://xz.ax/announcements');
 </script>
