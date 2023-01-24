@@ -1,0 +1,113 @@
+<form method="post" th:fragment="editform" th:action="'/admin/announcement/' + ${announcement.getID()}">
+    <table>
+        <tr>
+            <td>
+                <label>Title</label>
+            </td>
+            <td>
+                <input type="text" th:id='title + ${announcement.getID()}' name="title"
+                       th:value="${announcement.getTitle()}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="body">Body</label>
+            </td>
+            <td>
+                <textarea th:id="body + ${announcement.getID()}" name="body">[[${announcement.getBody()}]]</textarea>
+            </td>
+            <td>
+                Markdown supported
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="startTime">Start time (epoch millis):</label>
+            </td>
+            <td>
+                <input type="text" th:id="startTime + ${announcement.getID()}" name="startTime"
+                       th:value="${announcement.getStartDate().getTime()}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="endTime">End time (epoch millis):</label>
+            </td>
+            <td>
+                <input type="text" th:id="endTime + ${announcement.getID()}" name="endTime"
+                       th:value="${announcement.getEndDate().getTime()}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="active">Is active:</label>
+            </td>
+            <td>
+                <input type="checkbox" th:id="active + ${announcement.getID()}" name="active"
+                       th:checked="${announcement.isActive()}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" value="update" name="action"/>
+                <input type="submit" value="delete" name="action"/>
+            </td>
+        </tr>
+    </table>
+</form>
+
+<form th:fragment="createform" action="/admin/announcement" method="post">
+    <label for="title">
+        Title
+    </label>
+    <input type="text" id="title" name="title" placeholder="title"/>
+    <br/>
+
+    <label for="body">
+        Body
+    </label>
+    <textarea id="body" name="body" placeholder="body"></textarea>
+    <br/>
+
+    <label for="startTime">
+        Start time (epoch ms):
+    </label>
+    <input type="text" id="startTime" name="startTime" placeholder="start time"/>
+    <br/>
+
+    <label for="endTime">
+        End time (epoch ms):
+    </label>
+    <input type="text" id="endTime" name="endTime" placeholder="end time"/>
+    <br/>
+
+    <label for="active">
+        Is active (announcement shows only if after start time AND before end time AND is active):
+    </label>
+    <input type="checkbox" checked id="active" name="active"/>
+    <br/>
+
+    <input type="submit" value="post announcement"/>
+
+
+</form>
+
+<div th:fragment="announcements">
+    <h1>Announcements:</h1>
+    <div th:if="${roles.contains('ROLE_ADMIN')}" th:replace="announcement-fragments :: createform"></div>
+    <table>
+        <tr th:each="announcement : ${announcements}"
+            th:if="${announcement.shouldDisplayToNonAdmins() || roles.contains('ROLE_ADMIN')}">
+            <td>
+                <h1 th:style="${announcement.shouldDisplayToNonAdmins() ? '' : 'text-decoration: line-through'}"
+                    th:text="${announcement.getTitle()}"></h1>
+
+                <h3 th:if="${!announcement.shouldDisplayToNonAdmins()} " th:style="'color: #A0A0A0'">[not shown to
+                    users]</h3>
+                <h3 th:text="'Published:  ' + ${announcement.getStartDate()}"></h3>
+                <md-block th:text="${announcement.getBody()}"></md-block>
+            </td>
+            <td th:insert="announcement-fragments :: editform" th:if="${roles.contains('ROLE_ADMIN')}"></td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,47 @@
+version: "3.9"
+services:
+    traefik:
+        image: traefik:v2.5
+        command:
+            - --api.insecure=true
+            - --providers.docker=true
+            - --providers.docker.exposedbydefault=false
+            - --entrypoints.web.address=:80
+            - --entryPoints.web.forwardedHeaders.trustedIPs=0.0.0.0/0
+            - --entryPoints.web.forwardedHeaders.insecure
+
+        ports:
+            - "${PORT}:80"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+    backend:
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.backend.rule=PathPrefix(`/api`)"
+            - "traefik.http.routers.backend.entrypoints=web"
+            - "traefik.http.services.backend.loadbalancer.server.port=80"
+            - "traefik.frontend.headers.SSLProxyHeaders=X-Forwarded-Proto: https"
+        environment:
+            PORT: 80
+            CONTEXT_PATH: /api
+
+            JDBC_DATABASE_URL: ${POSTGRES_URL}
+            JDBC_DATABASE_USERNAME: ${POSTGRES_USER}
+            JDBC_DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
+
+            CLIENT_ID: ${CLIENT_ID}
+            CLIENT_SECRET: ${CLIENT_SECRET}
+            COOKIE_SAMESITE: ${COOKIE_SAMESITE}
+
+        extra_hosts:
+            -   "host.docker.internal:host-gateway"
+        build: backend
+    frontend:
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
+            - "traefik.http.routers.frontend.entrypoints=web"
+            - "traefik.http.services.frontend.loadbalancer.server.port=80"
+            - "traefik.frontend.headers.SSLProxyHeaders=X-Forwarded-Proto: https"
+
+        build: frontend

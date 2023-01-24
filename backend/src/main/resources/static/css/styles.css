@@ -1,0 +1,33 @@
+table.fancy {
+    border: 2px solid darkblue;
+    text-align: center;
+}
+
+tbody tr td {
+    border: inherit;
+    vertical-align: middle;
+}
+
+body {
+    font-family: "Helvetica Neue", "Helvetica", sans-serif;
+}
+
+#criticalInfoTable {
+    display: grid;
+    place-items: center;
+    font-size: xxx-large;
+    text-align: left;
+    border-spacing: 2rem 1rem;
+}
+
+#eliminationBox {
+    border:3px solid black;
+    font-size: x-large;
+    text-align: center;
+    display: inline-block;
+}
+
+#playerWindow {
+    display: grid;
+    place-items: center;
+}
