@@ -35,7 +35,7 @@ server:
             cookie:
                 same-site: ${COOKIE_SAMESITE:none}
             timeout: 4320m
-        context-path: ${CONTEXT_PATH:/}
+        context-path: ${CONTEXT_PATH:/api}
     error:
         whitelabel:
             enabled: false
