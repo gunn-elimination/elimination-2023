@@ -50,7 +50,7 @@ class WebSecurityConfig {
             .and()
             .oauth2Login(n -> n.userInfoEndpoint().oidcUserService(userDetailsService)
                 .and()
-                .successHandler((request, response, authentication) -> response.sendRedirect("/login/success"))
+                .successHandler((request, response, authentication) -> response.sendRedirect(request.getContextPath() + "/login/success"))
                 .failureHandler((request, response, authException) -> {
                     response.setContentType("application/json");
                     request.getSession().invalidate();
