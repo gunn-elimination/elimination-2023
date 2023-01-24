@@ -1,0 +1,47 @@
+elimination:
+    words: classpath:sgb-words.txt
+    words-per-code: 3
+    registration-deadline: 2023-01-24T23:59
+    game-start-time: 2023-01-26T00:00
+    game-end-time: 2023-06-01T00:00
+    client-id: ${CLIENT_ID:null}
+    client-secret: ${CLIENT_SECRET:null}
+    admins:
+        - ap40132@pausd.us
+        - ky28059@pausd.us
+        - el31132@pausd.us
+
+spring:
+    datasource:
+        url: ${JDBC_DATABASE_URL}
+        username: ${JDBC_DATABASE_USERNAME}
+        password: ${JDBC_DATABASE_PASSWORD}
+    jpa:
+        hibernate:
+            ddl-auto: update
+    thymeleaf:
+        cache: false
+        mode: HTML
+        encoding: UTF-8
+
+sentry:
+    dsn: https://10a99dc899b14b05a86a7177f92d68e6@o4504552325644288.ingest.sentry.io/4504552326823936
+    traces-sample-rate: 1.0
+
+
+server:
+    servlet:
+        session:
+            cookie:
+                same-site: ${COOKIE_SAMESITE:none}
+            timeout: 4320m
+        context-path: ${CONTEXT_PATH:/}
+    error:
+        whitelabel:
+            enabled: false
+        path: '/error'
+    port: ${PORT:8080}
+    forward-headers-strategy: native
+spring.session.jdbc.initialize-schema: always
+spring.session.store-type: jdbc
+spring.jpa.generate-ddl: true
