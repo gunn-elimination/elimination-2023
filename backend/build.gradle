@@ -64,7 +64,7 @@ dependencies {
     implementation 'org.thymeleaf:thymeleaf-spring5'
 
 
-    testImplementation 'com.h2database:h2:2.1.214'
+    implementation 'com.h2database:h2:2.1.214'
     testImplementation 'org.mockito:mockito-core:4.7.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
