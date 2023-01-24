@@ -30,12 +30,12 @@ export default defineNuxtConfig({
                 },
                 endpoints: {
                     login: { 
-                        url: 'https://xz.ax/login', 
+                        url: '/api/login', 
                         method: 'get' 
                     },
                     user: { 
                         includeCredentials: true,
-                        url: 'https://xz.ax/me', 
+                        url: '/api/me', 
                         method: 'get' 
                     }
                 },

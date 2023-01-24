@@ -40,7 +40,7 @@ async function responseHandler({response}: { response: FetchResponse<any> }) {
 }
 
 // TODO: middleware?
-const {data: currentUser, pending} = useFetch('https://xz.ax/me', {
+const {data: currentUser, pending} = useFetch('/api/me', {
     credentials: 'include',
     server: false,
     onResponse: responseHandler

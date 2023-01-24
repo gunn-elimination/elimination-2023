@@ -3,7 +3,7 @@ import {useLocalStorage} from '@vueuse/core';
 
 
 export const useAnnouncementsStore = defineStore('announcements', () => {
-    const {data: announcements} = useFetch('https://xz.ax/announcements');
+    const {data: announcements} = useFetch('/api/announcements');
 
     // Read announcements ID management
     const readIds = useLocalStorage<number[]>('elim-read-announcements', [], {

@@ -9,7 +9,7 @@
             Please log in using your pausd.us email address.
         </p>
     </div>
-    <a :href="`https://xz.ax/login?redirect_url=${protocol}//${host}/app`" class="btn btn-primary btn-sm font-bold w-60 h-10 my-4 min-w-min">
+    <a :href="`/api/login?redirect_url=${protocol}//${host}/app`" class="btn btn-primary btn-sm font-bold w-60 h-10 my-4 min-w-min">
         Continue
     </a>
     <div class="text-secondary text-sm">

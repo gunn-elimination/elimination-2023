@@ -4,7 +4,7 @@
         <p class="mx-auto text-xl font-medium ">Sorry, there was a problem logging in. Please try again.</p>
         <div>
             <client-only>
-                <a :href="`https://xz.ax/login?redirect_url=${protocol}//${host}/app`" class="btn btn-primary btn-lg">
+                <a :href="`/api/login?redirect_url=${protocol}//${host}/app`" class="btn btn-primary btn-lg">
                     log in
                 </a>
             </client-only>

@@ -17,5 +17,5 @@
 </template>
 
 <script setup lang="ts">
-const {data: leaderboard, pending, error} = useFetch('https://xz.ax/game/scoreboard');
+const {data: leaderboard, pending, error} = useFetch('/api/game/scoreboard');
 </script>

@@ -1,6 +1,6 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
     if (process.server) return;
-    const a = await fetch('https://xz.ax/me', {
+    const a = await fetch('/api/me', {
         headers: {
             // 'Content-Type': 'application/json'
             // 'Content-Type': 'application/x-www-form-urlencoded',
