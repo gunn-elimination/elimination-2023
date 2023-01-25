@@ -33,7 +33,7 @@ public interface UserRepository extends JpaRepository<EliminationUser, Long> {
 	Stream<EliminationUser> findTopByNumberOfEliminations();
 
 	// return limited list. with limit as param
-	@Query("select u.subject from EliminationUser u order by u.eliminated.size desc")
+	@Query("select u from EliminationUser u order by u.eliminated.size desc")
 	@Cacheable("scoreboard")
 	List<EliminationUser> findTopByNumberOfEliminations(Pageable pageable);
 
