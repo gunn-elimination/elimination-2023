@@ -4,5 +4,7 @@
     </Head>
 
     <h1 class="title mb-8">Leaderboard</h1>
-    <Leaderboard />
+    <client-only>
+        <Leaderboard />
+    </client-only>
 </template>

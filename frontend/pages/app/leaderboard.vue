@@ -17,7 +17,9 @@
             </div>
         </div>
         <div class="px-12 mt-6 pb-12">
-            <Leaderboard />
+            <client-only>
+                <Leaderboard />
+            </client-only>
         </div>
     </div>
 </template>
