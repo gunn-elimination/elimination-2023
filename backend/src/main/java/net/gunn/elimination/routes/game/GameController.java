@@ -47,6 +47,7 @@ public class GameController {
     public void eliminate(HttpServletResponse response,  @AuthenticationPrincipal EliminationAuthentication me, @RequestParam("code") String code) throws IncorrectEliminationCodeException, EmptyGameException, IOException {
         var eliminated = eliminationManager.attemptElimination(me.user(), code);
         scoreboardController.pushKill(new Kill(me.user(), eliminated));
+		scoreboardController.pushScoreboard();
         response.sendRedirect("/");
     }
 
