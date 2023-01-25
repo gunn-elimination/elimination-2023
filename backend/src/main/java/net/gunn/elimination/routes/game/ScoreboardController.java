@@ -37,8 +37,7 @@ public class ScoreboardController {
 	@ResponseBody
 	@SentrySpan
 	public Scoreboard scoreboard(@RequestParam(defaultValue = "20") int limit) {
-		limit = Math.min(Math.max(limit, 0), 100);
-		return new Scoreboard(userRepository.findTopByNumberOfEliminations().filter(user -> user.getEmail().endsWith("@pausd.us")).limit(limit).toList());
+		return scoreboard(limit);
 	}
 
 	private Scoreboard scoreboard0(@RequestParam(defaultValue = "20") int limit) {
