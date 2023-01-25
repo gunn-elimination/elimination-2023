@@ -62,6 +62,7 @@ public class ScoreboardController {
 			return emitter;
 		} finally {
 			em.getTransaction().commit();
+			em.close();
 		}
 
 	}
