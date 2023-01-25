@@ -1,13 +1,14 @@
 package net.gunn.elimination.routes.admin;
 
 import net.gunn.elimination.EliminationManager;
+import net.gunn.elimination.auth.EliminationUserService;
 import net.gunn.elimination.model.Announcement;
 import net.gunn.elimination.model.EliminationUser;
+import net.gunn.elimination.model.Kill;
 import net.gunn.elimination.repository.AnnouncementRepository;
 import net.gunn.elimination.repository.UserRepository;
 import net.gunn.elimination.routes.AnnouncementController;
 import net.gunn.elimination.routes.SSEController;
-import net.gunn.elimination.model.Kill;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,11 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.Instant;
-import java.util.Optional;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static net.gunn.elimination.auth.Roles.BANNED;
 import static net.gunn.elimination.auth.Roles.PLAYER;
@@ -37,13 +34,15 @@ public class AdminController {
 
 	private final AnnouncementController announcementController;
 	private final Optional<SSEController> sseController;
+	private final EliminationUserService userService;
 
-	public AdminController(AnnouncementRepository announcementRepository, EliminationManager eliminationManager, UserRepository userRepository, AnnouncementController announcementController, Optional<SSEController> sseController) {
+	public AdminController(AnnouncementRepository announcementRepository, EliminationManager eliminationManager, UserRepository userRepository, AnnouncementController announcementController, EliminationUserService userService, Optional<SSEController> sseController) {
 		this.announcementRepository = announcementRepository;
 		this.eliminationManager = eliminationManager;
 		this.userRepository = userRepository;
 		this.announcementController = announcementController;
 		this.sseController = sseController;
+		this.userService = userService;
 	}
 
 	@PostMapping("/announcement")
@@ -93,11 +92,12 @@ public class AdminController {
 
 			announcementRepository.deleteById(id);
 			announcementRepository.save(announcement);
-			announcementController.pushAnnouncement(announcement);
+			sseController.ifPresent(SSEController::signalAnnouncementChange);
 		}
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.sendRedirect(req.getHeader("Referer"));
 	}
+
 
 	@DeleteMapping("/user/{email}")
 	@Transactional
@@ -205,7 +205,10 @@ public class AdminController {
 					// if not, this should be our first chain
 					// otherwise we'll have separate chains which is Bad
 					if (visitedActiveUsers.size() > 0) {
-						valid = false;
+						// check that we're in the chain
+						if (!visitedActiveUsers.contains(user)) {
+							valid = false;
+						}
 
 						// add all active users anyway for accurate counts
 						visitedActiveUsers.add(user);
@@ -215,13 +218,11 @@ public class AdminController {
 
 						EliminationUser current = user.getTarget();
 						while (current != user) { // keep going until back at start user
-							// ensure not already visited
-							if (visitedActiveUsers.contains(current)) {
+							// add to list of active users
+							// if already in there, something is wrong
+							if (!visitedActiveUsers.add(current)) {
 								valid = false;
 							}
-
-							// add all active users for accurate counts
-							visitedActiveUsers.add(user);
 
 							// go next
 							current = current.getTarget();
@@ -231,11 +232,25 @@ public class AdminController {
 			}
 		}
 
+		List<String> activeChain = new ArrayList<>();
+		for (EliminationUser user : visitedActiveUsers) {
+			activeChain.add(user.getForename() + " " + user.getSurname() + "->" + user.getTarget().getForename() + " " + user.getTarget().getSurname());
+		}
+
 		return Map.of(
 			"users", allUsers.size(),
 			"eliminated", eliminated.size(),
 			"active", visitedActiveUsers.size(),
-			"valid game", valid
+			"valid game", valid,
+			"elim chain", activeChain
 		);
+	}
+
+	@GetMapping("/insertTestDataAAAA")
+	public void insertTestData() {
+		userService.setupNewUser(new EliminationUser(
+			"bbbb", "ky28059@pausd.us", "Kevin", "Yu", "no-no", new HashSet<>()));
+		userService.setupNewUser(new EliminationUser(
+			"cccc", "ap40132@pausd.us", "Alec", "Petridis", "maybe-maybe", new HashSet<>()));
 	}
 }

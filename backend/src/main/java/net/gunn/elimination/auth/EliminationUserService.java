@@ -4,7 +4,6 @@ import net.gunn.elimination.EliminationManager;
 import net.gunn.elimination.exceptions.NonPAUSDUserException;
 import net.gunn.elimination.model.EliminationUser;
 import net.gunn.elimination.repository.UserRepository;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -26,7 +24,7 @@ import static net.gunn.elimination.auth.Roles.*;
 
 @Service
 @Transactional
-class EliminationUserService implements OAuth2UserService<OidcUserRequest, OidcUser> {
+public class EliminationUserService implements OAuth2UserService<OidcUserRequest, OidcUser> {
 	private static final Pattern PAUSD_DOMAIN_PATTERN = Pattern.compile("[a-z]{2}[0-9]{5}@pausd\\.us");
 	private final Random random = new Random();
 	private final OidcUserService delegate;
@@ -104,6 +102,21 @@ class EliminationUserService implements OAuth2UserService<OidcUserRequest, OidcU
 		userRepository.save(insertionPoint);
 	}
 
+	public void setupNewUser(EliminationUser user) {
+		if (userRepository.count() == 1) {
+			// Start the game
+			userRepository.findAll().forEach(u -> {
+				u.addRole(PLAYER);
+				userRepository.save(u);
+			});
+		}
+
+		userRepository.save(user);
+
+		if (!eliminationManager.gameHasEnded())
+			insertUserRandomly(user);
+	}
+
 	private void setupNewUser(OidcUser oidcUser) {
 		var user = new EliminationUser(
 			oidcUser.getSubject(),
@@ -120,11 +133,7 @@ class EliminationUserService implements OAuth2UserService<OidcUserRequest, OidcU
 				userRepository.save(u);
 			});
 		}
-
-		userRepository.save(user);
-
-		if (!eliminationManager.gameHasEnded())
-			insertUserRandomly(user);
+		setupNewUser(user);
 	}
 
 	private EliminationOauthAuthenticationImpl processOidcUser(OidcUser oidcUser) throws RegistrationClosedException, BannedUserException {

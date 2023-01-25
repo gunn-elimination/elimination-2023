@@ -19,16 +19,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Configuration
 public class EliminationApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(EliminationApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(EliminationApplication.class, args);
+	}
 
 	@Bean
 	@Profile(value = "test")
 	public EmbeddedDatabase dataSource() {
 		return new EmbeddedDatabaseBuilder()
 			.setType(EmbeddedDatabaseType.H2)
-			.addScript("org/springframework/session/jdbc/schema-h2.sql").build();
+			.addScript("org/springframework/session/jdbc/schema-h2.sql")
+			.build();
 	}
 
 	@ExceptionHandler(CannotCreateTransactionException.class)
