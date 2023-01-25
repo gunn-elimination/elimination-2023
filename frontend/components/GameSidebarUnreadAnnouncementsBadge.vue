@@ -1,9 +1,9 @@
 <template>
     <span
-        v-if="announcementsStore.filteredAnnouncements?.length"
+        v-if="announcementsStore.unreadCount"
         class="indicator-item badge badge-sm badge-error rounded-lg"
     >
-        {{ announcementsStore.filteredAnnouncements.length }}
+        {{ announcementsStore.unreadCount }}
     </span>
 </template>
 

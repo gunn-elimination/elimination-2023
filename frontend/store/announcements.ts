@@ -17,11 +17,10 @@ export const useAnnouncementsStore = defineStore('announcements', () => {
     }
 
     const {data} = useEventSource(`${config.public.apiUrl}/announcements`);
-    const announcements = computed(() => data.value && JSON.parse(data.value));
-    const filteredAnnouncements = computed(() => announcements.value?.filter((announcement: Announcement) => announcement.active
+    const announcements = computed<Announcement[] | null>(() => data.value && JSON.parse(data.value).filter((announcement: Announcement) => announcement.active
         && currentTime.value >= announcement.startDate
-        && currentTime.value <= announcement.endDate
-        && !readIds.value.includes(announcement.id)))
+        && currentTime.value <= announcement.endDate));
+    const unreadCount = computed(() => announcements.value?.filter((announcement) => !readIds.value.includes(announcement.id)).length)
 
-    return {announcements, filteredAnnouncements, readIds, markRead};
+    return {announcements, unreadCount, readIds, markRead};
 });
