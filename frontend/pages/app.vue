@@ -14,6 +14,8 @@ import {useDocumentVisibility} from '@vueuse/core';
 import {useCurrentTimeStore} from '@/store/time';
 import type {FetchResponse} from 'ofetch';
 
+const config = useRuntimeConfig();
+
 definePageMeta({
     layout: "game",
     // middleware: "elim-auth"
@@ -40,7 +42,7 @@ async function responseHandler({response}: { response: FetchResponse<any> }) {
 }
 
 // TODO: middleware?
-const {data: currentUser, pending} = useFetch('/api/me', {
+const {data: currentUser, pending} = useFetch(`${config.public.apiUrl}/me`, {
     credentials: 'include',
     server: false,
     onResponse: responseHandler

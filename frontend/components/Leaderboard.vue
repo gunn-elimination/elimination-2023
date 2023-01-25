@@ -17,5 +17,6 @@
 </template>
 
 <script setup lang="ts">
-const {data: leaderboard, pending, error} = useFetch('/api/game/scoreboard');
+const config = useRuntimeConfig();
+const {data: leaderboard, pending, error} = useFetch(`${config.public.apiUrl}/game/scoreboard`);
 </script>

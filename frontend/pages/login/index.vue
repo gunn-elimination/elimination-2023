@@ -9,13 +9,18 @@
             Please log in using your pausd.us email address.
         </p>
     </div>
-    <a :href="`/api/login?redirect_url=/app`" class="btn btn-primary btn-sm font-bold w-60 h-10 my-4 min-w-min">
+    <a
+        :href="`${config.public.apiUrl}/login?redirect_url=${config.public.appUrl}/app`"
+        class="btn btn-primary btn-sm font-bold w-60 h-10 my-4 min-w-min"
+    >
         Continue
     </a>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+
+const config = useRuntimeConfig();
 
 const protocol = ref('');
 const host = ref('');

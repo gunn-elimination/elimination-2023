@@ -19,6 +19,12 @@ export default defineNuxtConfig({
             start_url: '/app'
         }
     },
+    runtimeConfig: {
+        public: {
+            apiUrl: process.env.NODE_ENV !== 'production' ? 'https://elimination.gunn.one/api' : '/api',
+            appUrl: process.env.NODE_ENV !== 'production' ? 'http://localhost:3000' : '',
+        }
+    },
     auth: {
         //globalMiddleware: true,
         strategies: {
@@ -49,7 +55,7 @@ export default defineNuxtConfig({
             },
         }
     },
-    experimental:{
+    experimental: {
         treeshakeClientOnly: false
     }
 })
