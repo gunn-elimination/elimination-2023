@@ -7,6 +7,7 @@ import net.gunn.elimination.repository.AnnouncementRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -44,6 +45,7 @@ public class AnnouncementController {
     }
 
     @GetMapping(name = "/announcements", produces = "text/event-stream")
+	@ResponseBody
     public SseEmitter announcementsStream() throws IOException {
         var emitter = new SseEmitter(-1L);
         var announcements = new HashSet<>(announcements());
