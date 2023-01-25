@@ -5,7 +5,6 @@
         <div v-for="announcement in store.announcements" :key="announcement.id" class="card w-full pt-6 pb-12 px-8">
             <!-- TODO: date formatting? -->
             <Announcement
-                v-if="announcement.active && currentTime.time >= announcement.startDate && currentTime.time <= announcement.endDate"
                 :title="announcement.title"
                 :body="announcement.body"
                 :start-date="DateTime.fromMillis(announcement.startDate).toLocaleString()"
@@ -17,9 +16,7 @@
 
 <script setup lang="ts">
 import {DateTime} from 'luxon';
-import {useCurrentTimeStore} from '@/store/time';
 import {useAnnouncementsStore} from '@/store/announcements';
 
-const currentTime = useCurrentTimeStore();
 const store = useAnnouncementsStore();
 </script>

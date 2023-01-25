@@ -1,9 +1,12 @@
 import { defineStore } from 'pinia'
-import {useLocalStorage} from '@vueuse/core';
+import {useEventSource, useLocalStorage, useTimestamp} from '@vueuse/core';
+import {useCurrentTimeStore} from '@/store/time';
+import {Announcement} from '@/utils/types';
 
 
 export const useAnnouncementsStore = defineStore('announcements', () => {
-    const {data: announcements} = useFetch('/api/announcements');
+    const config = useRuntimeConfig();
+    const currentTime = useTimestamp(); // TODO: use current time store for this?
 
     // Read announcements ID management
     const readIds = useLocalStorage<number[]>('elim-read-announcements', [], {
@@ -13,5 +16,11 @@ export const useAnnouncementsStore = defineStore('announcements', () => {
         readIds.value = [...readIds.value, id];
     }
 
-    return {announcements, readIds, markRead};
+    const {data} = useEventSource(`${config.public.apiUrl}/announcements`);
+    const announcements = computed<Announcement[] | null>(() => data.value && JSON.parse(data.value).filter((announcement: Announcement) => announcement.active
+        && currentTime.value >= announcement.startDate
+        && currentTime.value <= announcement.endDate));
+    const unreadCount = computed(() => announcements.value?.filter((announcement) => !readIds.value.includes(announcement.id)).length)
+
+    return {announcements, unreadCount, readIds, markRead};
 });
