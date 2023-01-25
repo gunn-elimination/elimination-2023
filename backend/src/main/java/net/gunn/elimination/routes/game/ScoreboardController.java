@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,17 +43,23 @@ public class ScoreboardController {
 
     @GetMapping(value = "/scoreboard", produces = "text/event-stream")
     @ResponseBody
-    @Transactional
     public SseEmitter scoreboardStream(@RequestParam(defaultValue = "20") int limit) throws IOException {
-        var emitter = new SseEmitter(-1L);
-        emitter.send(scoreboard(limit));
-        // close tr
+		var em = emf.createEntityManager();
+		em.getTransaction().begin();
 
-        var sub = new ScoreboardSubscription(emitter, limit);
-        scoreboardEmitters.add(sub);
-        emitter.onCompletion(() -> scoreboardEmitters.remove(sub));
+		try {
+			var emitter = new SseEmitter(-1L);
+			emitter.send(scoreboard(limit));
+			// close tr
 
-        return emitter;
+			var sub = new ScoreboardSubscription(emitter, limit);
+			scoreboardEmitters.add(sub);
+			emitter.onCompletion(() -> scoreboardEmitters.remove(sub));
+			return emitter;
+		} finally {
+			em.getTransaction().commit();
+		}
+
     }
 
     @GetMapping(value = "/eliminations", produces = "text/event-stream")
@@ -67,9 +75,12 @@ public class ScoreboardController {
 
     @SentrySpan(description = "send scoreboard after update via sse")
     public void pushScoreboard() {
+		var maxLimit = new HashSet<>(scoreboardEmitters).stream().max(Comparator.comparingInt(ScoreboardSubscription::limit)).get().limit;
+		var sb = scoreboard(maxLimit);
         for (var sub : new HashSet<>(scoreboardEmitters)) {
             try {
-                sub.emitter.send(scoreboard(sub.limit));
+				var sublist = sb.users.subList(0, Math.min(sub.limit, sb.users.size()));
+                sub.emitter.send(new Scoreboard(sublist));
             } catch (IOException e) {
                 // ignore, spring should call onCompletion
             }
