@@ -23,7 +23,7 @@ services:
             - "traefik.frontend.headers.SSLProxyHeaders=X-Forwarded-Proto: https"
             # cors credentials
             - "traefik.http.middlewares.cors.headers.accessControlAllowCredentials=true"
-            - "traefik.http.middlewares.cors.headers.accessControlAllowOriginList=*, https://elimination.gunn.one, http://localhost:3000"
+            - "traefik.http.middlewares.cors.headers.accesscontrolalloworigin=*, https://elimination.gunn.one, http://localhost:3000"
         environment:
             PORT: 80
             CONTEXT_PATH: /api
