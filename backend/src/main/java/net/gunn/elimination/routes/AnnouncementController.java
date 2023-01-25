@@ -48,22 +48,20 @@ public class AnnouncementController {
 	@ResponseBody
     public SseEmitter announcementsStream() throws IOException {
         var emitter = new SseEmitter(-1L);
-        var announcements = new HashSet<>(announcements());
 
         emitters.add(emitter);
 
-        for (var announcement : announcements) {
-            emitter.send(announcement);
-        }
+        emitter.send(announcements());
 
         emitter.onCompletion(() -> emitters.remove(emitter));
         return emitter;
     }
 
     public void pushAnnouncement(Announcement announcement) {
+		var allAnnouncements = announcements();
         for (var emitter : new HashSet<>(emitters)) {
             try {
-                emitter.send(announcement);
+                emitter.send(allAnnouncements);
             } catch (IOException e) {
                 // Ignore
             }

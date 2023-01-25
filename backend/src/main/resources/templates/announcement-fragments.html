@@ -94,7 +94,7 @@
 
 <div th:fragment="announcements">
     <h1>Announcements:</h1>
-    <div th:if="${roles.contains('ROLE_ADMIN')}" th:replace="announcement-fragments :: createform"></div>
+    <div th:replace="${roles.contains('ROLE_ADMIN')} ? ~{announcement-fragments :: createform}"></div>
     <table>
         <tr th:each="announcement : ${announcements}"
             th:if="${announcement.shouldDisplayToNonAdmins() || roles.contains('ROLE_ADMIN')}">
