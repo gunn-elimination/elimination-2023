@@ -9,4 +9,7 @@
             <GameSidebar />
         </div>
     </div>
+    <client-only>
+        <InstallModal />
+    </client-only>
 </template>
