@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -26,6 +27,10 @@ public interface UserRepository extends JpaRepository<EliminationUser, Long> {
 
     @Query("select u from EliminationUser u order by u.eliminated.size desc")
     Stream<EliminationUser> findTopByNumberOfEliminations();
+
+	// return limited list. with limit as param
+	@Query("select u from EliminationUser u order by u.eliminated.size desc")
+	List<EliminationUser> findTopByNumberOfEliminations( Pageable pageable);
 
     Optional<EliminationUser> findByWinnerTrue();
 }
