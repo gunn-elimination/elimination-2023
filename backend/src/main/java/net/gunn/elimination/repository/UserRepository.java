@@ -29,8 +29,8 @@ public interface UserRepository extends JpaRepository<EliminationUser, Long> {
 	Page<EliminationUser> findEliminationUsersByRolesContainingAndSubjectNot(Role role, String blacklistedSubject, Pageable pageable);
 
 	// return limited list. with limit as param
-	@Query("select u.subject from EliminationUser u order by u.eliminated.size desc")
-	List<String> findTopByNumberOfEliminations(Pageable pageable);
+	@Query("select u from EliminationUser u order by u.eliminated.size desc")
+	List<EliminationUser> findTopByNumberOfEliminations(Pageable pageable);
 
 	Optional<EliminationUser> findByWinnerTrue();
 }
