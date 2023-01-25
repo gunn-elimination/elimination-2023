@@ -50,6 +50,7 @@ public class ScoreboardController {
 	public SseEmitter scoreboardStream(@RequestParam(defaultValue = "20") int limit) throws IOException {
 		var em = emf.createEntityManager();
 		em.getTransaction().begin();
+		em.getTransaction().setRollbackOnly();
 
 		try {
 			var emitter = new SseEmitter(-1L);
@@ -61,7 +62,8 @@ public class ScoreboardController {
 			emitter.onCompletion(() -> scoreboardEmitters.remove(sub));
 			return emitter;
 		} finally {
-			em.getTransaction().commit();
+			em.getTransaction().rollback();
+			em.close();
 		}
 
 	}
