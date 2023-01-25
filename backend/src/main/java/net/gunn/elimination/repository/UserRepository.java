@@ -17,7 +17,6 @@ import java.util.stream.Stream;
 
 @Component
 @Repository
-@Cacheable("users")
 public interface UserRepository extends JpaRepository<EliminationUser, Long> {
 	boolean existsBySubject(String subject);
 
@@ -29,17 +28,9 @@ public interface UserRepository extends JpaRepository<EliminationUser, Long> {
 
 	Page<EliminationUser> findEliminationUsersByRolesContainingAndSubjectNot(Role role, String blacklistedSubject, Pageable pageable);
 
-	@Query("select u from EliminationUser u order by u.eliminated.size desc")
-	Stream<EliminationUser> findTopByNumberOfEliminations();
-
 	// return limited list. with limit as param
-	@Query("select u from EliminationUser u order by u.eliminated.size desc")
-	@Cacheable("scoreboard")
-	List<EliminationUser> findTopByNumberOfEliminations(Pageable pageable);
-
-	@Override
-	@CacheEvict(value = {"scoreboard", "users"}, allEntries = true)
-	<S extends EliminationUser> S save(S entity);
+	@Query("select u.subject from EliminationUser u order by u.eliminated.size desc")
+	List<String> findTopByNumberOfEliminations(Pageable pageable);
 
 	Optional<EliminationUser> findByWinnerTrue();
 }

@@ -11,10 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
@@ -24,6 +21,8 @@ public class ScoreboardController {
 	private final UserRepository userRepository;
 	private final Set<ScoreboardSubscription> scoreboardEmitters = ConcurrentHashMap.newKeySet();
 	private final Set<SseEmitter> killEmitters = ConcurrentHashMap.newKeySet();
+
+	private final Map<String, EliminationUser> userCache = new ConcurrentHashMap<>();
 
 	private final EntityManagerFactory emf;
 
@@ -41,7 +40,11 @@ public class ScoreboardController {
 	}
 
 	private Scoreboard scoreboard0(@RequestParam(defaultValue = "20") int limit) {
-		return new Scoreboard(userRepository.findTopByNumberOfEliminations(Pageable.ofSize(limit)));
+		var users_ = userRepository.findTopByNumberOfEliminations(Pageable.ofSize(limit));
+		var users = users_.stream().map(
+			user -> userCache.computeIfAbsent(user, u -> userRepository.findBySubject(u).orElseThrow())
+		).toList();
+		return new Scoreboard(users);
 	}
 
 	@GetMapping(value = "/scoreboard", produces = "text/event-stream")
