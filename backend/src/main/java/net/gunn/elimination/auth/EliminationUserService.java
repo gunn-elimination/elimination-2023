@@ -35,7 +35,7 @@ class EliminationUserService implements OAuth2UserService<OidcUserRequest, OidcU
     private final AdminList admins;
     private final EliminationCodeGenerator eliminationCodeGenerator;
     private final UserRepository userRepository;
-    private final Instant registrationDeadline;
+    private final LocalDateTime registrationDeadline;
     private final EliminationManager eliminationManager;
     @PersistenceContext
     private final EntityManager entityManager;
@@ -53,9 +53,8 @@ class EliminationUserService implements OAuth2UserService<OidcUserRequest, OidcU
         this.eliminationCodeGenerator = eliminationCodeGenerator;
 
         this.admins = admins;
-        this.registrationDeadline = registrationDeadline.toInstant(ZonedDateTime.now().getOffset());
+        this.registrationDeadline = registrationDeadline;
         this.eliminationManager = eliminationManager;
-
         this.delegate = new OidcUserService();
     }
 
@@ -133,7 +132,7 @@ class EliminationUserService implements OAuth2UserService<OidcUserRequest, OidcU
 
     private EliminationOauthAuthenticationImpl processOidcUser(OidcUser oidcUser) {
         if (!userRepository.existsBySubject(oidcUser.getSubject())) {
-            if (Instant.now().isAfter(registrationDeadline))
+            if (LocalDateTime.now().isAfter(registrationDeadline))
                 throw new IllegalArgumentException("Registration is closed");
 
             setupNewUser(oidcUser);
