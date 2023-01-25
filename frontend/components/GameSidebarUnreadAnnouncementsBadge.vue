@@ -1,6 +1,6 @@
 <template>
     <span
-        v-if="announcementsStore.filteredAnnouncements.length"
+        v-if="announcementsStore.filteredAnnouncements?.length"
         class="indicator-item badge badge-sm badge-error rounded-lg"
     >
         {{ announcementsStore.filteredAnnouncements.length }}

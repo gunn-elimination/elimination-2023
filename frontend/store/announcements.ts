@@ -18,7 +18,7 @@ export const useAnnouncementsStore = defineStore('announcements', () => {
 
     const {data} = useEventSource(`${config.public.apiUrl}/announcements`);
     const announcements = computed(() => data.value && JSON.parse(data.value));
-    const filteredAnnouncements = computed(() => announcements.value.filter((announcement: Announcement) => announcement.active
+    const filteredAnnouncements = computed(() => announcements.value?.filter((announcement: Announcement) => announcement.active
         && currentTime.value >= announcement.startDate
         && currentTime.value <= announcement.endDate
         && !readIds.value.includes(announcement.id)))
