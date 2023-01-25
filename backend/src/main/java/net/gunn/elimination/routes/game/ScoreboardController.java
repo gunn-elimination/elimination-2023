@@ -33,11 +33,11 @@ public class ScoreboardController {
 	}
 
 	@GetMapping(value = "/scoreboard", produces = "application/json")
-	@Transactional
+	@Transactional(readOnly = true)
 	@ResponseBody
 	@SentrySpan
 	public Scoreboard scoreboard(@RequestParam(defaultValue = "20") int limit) {
-		return scoreboard(limit);
+		return scoreboard0(limit);
 	}
 
 	private Scoreboard scoreboard0(@RequestParam(defaultValue = "20") int limit) {
