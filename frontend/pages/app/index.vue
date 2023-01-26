@@ -1,12 +1,9 @@
 <template>
     <div class="h-full overflow-auto flex flex-col">
-        <h1 class="title sticky-header p-8">Dashboard</h1>
-        <GameHasNotBegun />
-
-        <!--
         <div class="flex sticky-header flex-row gap-8 p-8">
             <div class="my-auto flex">
                 <div class="indicator">
+                    <!--
                     <div class="indicator-item indicator-bottom">
                         <div class="dropdown">
                             <label
@@ -24,7 +21,8 @@
                             </ul>
                         </div>
                     </div>
-                    <Avatar :ring="true" src="https://placeimg.com/192/192/people"/>
+                    -->
+                    <Avatar :ring="true" :user="currentUser" v-if="currentUser" />
                 </div>
             </div>
             <h2 class="font-bold text-3xl text-center text-primary w-full align-middle my-auto">Left Hand</h2>
@@ -37,33 +35,34 @@
                 </button>
             </div>
         </div>
+
         <div class="p-8 bg-secondary text-secondary-content">
-            <h2 class="font-bold text-xl flex flex-row gap-2">
-                <ViewfinderCircleIcon class="w-5 h-5 stroke-2 my-auto"/>
+            <h2 class="font-bold text-xl flex flex-row gap-2 mb-2">
+                <ViewfinderCircleIcon class="w-5 h-5 stroke-2 my-auto" />
                 Your Target
             </h2>
-            <div class="text-center  mr-2 flex flex-col">
-                <Avatar class="w-24 mb-2 mx-auto" src="https://placeimg.com/192/192/people?e=p"/>
-
-                <span class="font-bold text-lg">Alec Petridis</span>
-                <span class="text-sm">#4 • 10 kills</span>
+            <div class="text-center flex flex-col items-center" v-if="target">
+                <Avatar :user="target" large />
+                <span class="font-bold text-lg">{{ target.forename }} {{ target.surname }}</span>
+                <span class="text-sm"><!-- #4 • -->{{ target.eliminated.length }} kills</span>
             </div>
         </div>
         <div class="p-8 flex flex-col gap-4">
             <KillFeedBlock v-for="n in 10" :key="n"/>
         </div>
-        -->
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import type {PropType} from 'vue';
+import type {EliminationUser} from '@/utils/types';
 import {ChevronDownIcon, QrCodeIcon, CameraIcon, ViewfinderCircleIcon} from "@heroicons/vue/24/outline/index.js";
 
 export default {
     components: {ChevronDownIcon, QrCodeIcon, CameraIcon, ViewfinderCircleIcon},
-    /* props: {
-        currentUser: Object,
-        target: Object
-    } */
+    props: {
+        currentUser: Object as PropType<EliminationUser>,
+        target: Object as PropType<EliminationUser>
+    }
 };
 </script>
