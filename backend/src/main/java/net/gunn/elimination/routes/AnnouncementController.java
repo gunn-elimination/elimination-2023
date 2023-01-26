@@ -4,7 +4,6 @@ import io.sentry.spring.tracing.SentrySpan;
 import net.gunn.elimination.auth.EliminationAuthentication;
 import net.gunn.elimination.model.Announcement;
 import net.gunn.elimination.repository.AnnouncementRepository;
-import net.gunn.elimination.routes.game.ScoreboardController;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
