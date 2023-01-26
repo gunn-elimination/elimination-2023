@@ -1,7 +1,7 @@
 <template>
     <div class="h-full overflow-auto flex flex-col">
         <div class="flex sticky-header flex-row gap-8 p-8">
-            <div class="my-auto flex">
+            <div class="my-auto flex hidden sm:block">
                 <div class="indicator">
                     <!--
                     <div class="indicator-item indicator-bottom">
@@ -22,7 +22,11 @@
                         </div>
                     </div>
                     -->
-                    <Avatar :ring="true" :user="currentUser" v-if="currentUser" />
+                    <Avatar
+                        ring
+                        :user="currentUser"
+                        v-if="currentUser"
+                    />
                 </div>
             </div>
             <h2 class="font-bold text-3xl text-center text-primary w-full align-middle my-auto">Left Hand</h2>

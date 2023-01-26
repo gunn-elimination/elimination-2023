@@ -1,7 +1,7 @@
 <template>
     <div class="btm-nav lg:hidden">
-        <NuxtLink exact-active-class="active" active-class="active" href="/app/settings" class="text-primary">
-            <Cog6ToothIcon class="h-5 w-5 stroke-2"/>
+        <NuxtLink exact-active-class="active" active-class="active" href="/app/profile" class="text-primary">
+            <UserIcon class="h-5 w-5 stroke-2"/>
         </NuxtLink>
         <NuxtLink exact-active-class="active" active-class="active" href="/app/calendar" class="text-primary">
             <CalendarIcon class="h-5 w-5 stroke-2"/>
@@ -22,11 +22,11 @@
 </template>
 
 <script>
-import {HomeIcon, Cog6ToothIcon, MegaphoneIcon, CalendarIcon, TrophyIcon} from "@heroicons/vue/24/outline/index.js";
+import {HomeIcon, UserIcon, MegaphoneIcon, CalendarIcon, TrophyIcon} from "@heroicons/vue/24/outline/index.js";
 
 export default {
     components: {
-        HomeIcon, Cog6ToothIcon, MegaphoneIcon, CalendarIcon, TrophyIcon
+        HomeIcon, UserIcon, MegaphoneIcon, CalendarIcon, TrophyIcon
     }
 }
 </script>

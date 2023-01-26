@@ -7,9 +7,9 @@
                 :value="`${config.public.apiUrl}/game/eliminate?code=${code}`"
                 :size="256"
                 :margin="7"
-                class="absolute rounded-lg -top-8 left-0 right-0 mx-auto"
+                class="absolute rounded-lg -top-4 left-0 right-0 mx-auto"
             />
-            <p class="mt-52 mb-4 text-secondary">
+            <p class="mt-56 mb-4 text-secondary">
                 To get eliminated, have your eliminator scan the QR code above. If it isn't working, try typing in
                 the elimination code shown below.
             </p>
