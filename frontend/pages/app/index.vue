@@ -27,9 +27,7 @@
             </div>
             <h2 class="font-bold text-3xl text-center text-primary w-full align-middle my-auto">Left Hand</h2>
             <div class="my-auto flex gap-4">
-                <button class="btn btn-circle btn-primary">
-                    <QrCodeIcon class="h-6 w-6 stroke-2"/>
-                </button>
+                <KillCodeButton />
                 <button class="btn btn-circle btn-primary">
                     <CameraIcon class="h-6 w-6 stroke-2"/>
                 </button>

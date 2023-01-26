@@ -1,7 +1,7 @@
 <template>
     <input type="checkbox" id="install-modal" class="modal-toggle" :checked="checked" />
 
-    <label for="install-modal" class="modal modal-bottom sm:modal-middle cursor-pointer bg-black/40">
+    <label for="install-modal" class="modal modal-bottom sm:modal-middle bg-black/40">
         <label class="modal-box overflow-visible rounded-t-lg sm:rounded-lg" for="">
             <img
                 src="/icon.png"
@@ -12,7 +12,7 @@
                 It looks like you're playing elimination in the iOS Safari app.
             </h3>
             <hr class="border-secondary my-3" />
-            <section class="overflow-scroll scroll-smooth scrollbar-none pb-6">
+            <section class="pb-6">
                 <p class="mb-3">Elimination is best experienced when installed as a PWA.</p>
                 <p class="mb-3">To add elimination to your home screen,</p>
                 <ol class="list-decimal list-inside space-y-1 mb-3">

@@ -7,7 +7,11 @@
         <Spinner /> Loading app...
     </div>
     <!-- TODO: dummy target -->
-    <NuxtPage v-else :currentUser="currentUser" :target="currentUser" />
+    <NuxtPage
+        v-else
+        :currentUser="currentUser"
+        :target="currentUser"
+    />
 </template>
 
 <script setup lang="ts">
@@ -43,19 +47,13 @@ async function responseHandler({response}: { response: FetchResponse<any> }) {
 }
 
 // TODO: middleware?
-const {data: currentUser, pending: userPending} = useFetch(`${config.public.apiUrl}/me`, {
+const {data: currentUser, pending} = useFetch(`${config.public.apiUrl}/me`, {
     credentials: 'include',
     server: false,
     onResponse: responseHandler
 });
 
-const {data: target, pending: targetPending} = useFetch(`${config.public.apiUrl}/game/target`, {
-    credentials: 'include',
-    server: false,
-    onResponse: responseHandler
-});
-
-const {data: code, pending: codePending} = useFetch(`${config.public.apiUrl}/game/code`, {
+const {data: target} = useFetch(`${config.public.apiUrl}/game/target`, {
     credentials: 'include',
     server: false,
     onResponse: responseHandler

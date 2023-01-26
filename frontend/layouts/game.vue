@@ -12,4 +12,15 @@
     <client-only>
         <InstallModal />
     </client-only>
+    <KillCodeModal :code="code" />
 </template>
+
+<script setup lang="ts">
+const config = useRuntimeConfig();
+
+// TODO: it would be better to move this out of the layout, but the modal somewhat forces my hand.
+const {data: code} = useFetch(`${config.public.apiUrl}/game/code`, {
+    credentials: 'include',
+    server: false
+});
+</script>
