@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -23,48 +24,60 @@ import static net.gunn.elimination.auth.Roles.ADMIN;
 @RestController
 @CrossOrigin(originPatterns = "*")
 public class AnnouncementController {
-    private final AnnouncementRepository announcementRepository;
-    private final Set<SseEmitter> emitters = ConcurrentHashMap.newKeySet();
+	private final AnnouncementRepository announcementRepository;
+	private final Set<SseEmitter> emitters = ConcurrentHashMap.newKeySet();
 
-    public AnnouncementController(AnnouncementRepository announcementRepository) {
-        this.announcementRepository = announcementRepository;
-    }
+	private final EntityManagerFactory emf;
 
-    @GetMapping(value = "/announcements", produces = "application/json")
-    @SentrySpan
-    public List<Announcement> announcements() {
-        List<Announcement> result;
-        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof EliminationAuthentication auth
-            && auth.user().getRoles().contains(ADMIN))
-            result = announcementRepository.findAll();
-        else
-            result = announcementRepository.findAnnouncementsForCurrentTime();
+	public AnnouncementController(AnnouncementRepository announcementRepository, EntityManagerFactory emf) {
+		this.announcementRepository = announcementRepository;
+		this.emf = emf;
+	}
 
-        result.sort(Comparator.comparing(Announcement::getStartDate).reversed());
-        return result;
-    }
+	@GetMapping(value = "/announcements", produces = "application/json")
+	@SentrySpan
+	public List<Announcement> announcements() {
+		List<Announcement> result;
+		if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof EliminationAuthentication auth
+			&& auth.user().getRoles().contains(ADMIN))
+			result = announcementRepository.findAll();
+		else
+			result = announcementRepository.findAnnouncementsForCurrentTime();
 
-    @GetMapping(value = "/announcements", produces = "text/event-stream")
+		result.sort(Comparator.comparing(Announcement::getStartDate).reversed());
+		return result;
+	}
+
+	@GetMapping(value = "/announcements", produces = "text/event-stream")
 	@ResponseBody
-    public SseEmitter announcementsStream() throws IOException {
-        var emitter = new SseEmitter(-1L);
+	public SseEmitter announcementsStream() throws IOException {
+		var em = emf.createEntityManager();
+		em.getTransaction().begin();
+		em.getTransaction().setRollbackOnly();
 
-        emitters.add(emitter);
+		try {
+			var emitter = new SseEmitter(-1L);
 
-        emitter.send(announcements());
+			emitters.add(emitter);
 
-        emitter.onCompletion(() -> emitters.remove(emitter));
-        return emitter;
-    }
+			emitter.send(announcements());
 
-    public void pushAnnouncement(Announcement announcement) {
+			emitter.onCompletion(() -> emitters.remove(emitter));
+			return emitter;
+		} finally {
+			em.getTransaction().rollback();
+			em.close();
+		}
+	}
+
+	public void pushAnnouncement(Announcement announcement) {
 		var allAnnouncements = announcements();
-        for (var emitter : new HashSet<>(emitters)) {
-            try {
-                emitter.send(allAnnouncements);
-            } catch (IOException e) {
-                // Ignore
-            }
-        }
-    }
+		for (var emitter : new HashSet<>(emitters)) {
+			try {
+				emitter.send(allAnnouncements);
+			} catch (IOException e) {
+				// Ignore
+			}
+		}
+	}
 }
