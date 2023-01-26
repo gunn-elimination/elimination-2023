@@ -35,7 +35,8 @@ repositories {
 }
 
 dependencies {
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
 // https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
@@ -53,7 +54,7 @@ dependencies {
     implementation 'org.springframework.data:spring-data-jpa'
     implementation 'org.springframework:spring-aspects'
 
-    // https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy
+	// https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy
 
 
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'

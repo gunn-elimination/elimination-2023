@@ -1,26 +1,16 @@
 version: "3.9"
 services:
-    traefik:
-        image: traefik:v2.5
-        command:
-            - --api.insecure=true
-            - --providers.docker=true
-            - --providers.docker.exposedbydefault=false
-            - --entrypoints.web.address=:80
-            - --entryPoints.web.forwardedHeaders.trustedIPs=0.0.0.0/0
-            - --entryPoints.web.forwardedHeaders.insecure
-
-        ports:
-            - "${PORT}:80"
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
     backend:
+        restart: always
+
         labels:
             - "traefik.enable=true"
             - "traefik.http.routers.backend.rule=PathPrefix(`/api`)"
             - "traefik.http.routers.backend.entrypoints=web"
             - "traefik.http.services.backend.loadbalancer.server.port=80"
             - "traefik.frontend.headers.SSLProxyHeaders=X-Forwarded-Proto: https"
+            # sticky session
+            - "traefik.http.services.backend.loadbalancer.sticky=true"
             # cors credentials
         environment:
             PORT: 80
@@ -37,6 +27,10 @@ services:
         extra_hosts:
             -   "host.docker.internal:host-gateway"
         build: backend
+        deploy:
+            replicas: 5
+            restart_policy:
+                condition: on-failure
     frontend:
         labels:
             - "traefik.enable=true"
