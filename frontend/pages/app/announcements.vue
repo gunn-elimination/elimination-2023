@@ -2,7 +2,7 @@
     <div class="h-full overflow-auto flex flex-col">
         <h1 class="title sticky-header p-8">Announcements</h1>
 
-        <div v-for="announcement in store.announcements" :key="announcement.id" class="card w-full pt-6 pb-12 px-8">
+        <div v-for="announcement in store.announcements" :key="announcement.id" class="card w-full pt-6 pb-12 px-6 sm:px-8">
             <!-- TODO: date formatting? -->
             <Announcement
                 :title="announcement.title"

@@ -45,7 +45,8 @@
                 <span class="text-sm"><!-- #4 • -->{{ target.eliminated.length }} kills</span>
             </div>
         </div>
-        <div class="p-8 flex flex-col gap-4">
+
+        <div class="px-4 py-6 sm:p-8 flex flex-col gap-4">
             <KillFeedBlock v-for="n in 10" :key="n"/>
         </div>
     </div>
