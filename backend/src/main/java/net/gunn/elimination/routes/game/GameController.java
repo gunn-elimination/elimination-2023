@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManagerFactory;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -97,14 +98,17 @@ public class GameController {
 		var me_ = userRepository.findBySubject(me.subject()).orElseThrow();
 		var eliminatedBy = me_.getEliminatedBy();
 
-		if (eliminatedBy == null) {
-			response.setStatus(404);
-			return null;
+		Map user = null;
+		if (eliminatedBy != null) {
+			user = Map.of(
+				"email", eliminatedBy.getEmail(),
+				"forename", eliminatedBy.getForename(),
+				"surname", eliminatedBy.getSurname()
+			);
 		}
-		return Map.of(
-			"email", eliminatedBy.getEmail(),
-			"forename", eliminatedBy.getForename(),
-			"surname", eliminatedBy.getSurname()
-		);
+
+		var result = new HashMap<>();
+		result.put("user", user);
+		return result;
 	}
 }
