@@ -78,6 +78,9 @@ public class GameController {
 	public Map target(@AuthenticationPrincipal EliminationAuthentication me_) {
 		var me = userRepository.findBySubject(me_.subject()).orElseThrow();
 		var target = me.getTarget();
+		if (target == null) {
+			return null;
+		}
 		return Map.of(
 			"email", target.getEmail(),
 			"forename", target.getForename(),
@@ -94,7 +97,7 @@ public class GameController {
 		var eliminatedBy = me_.getEliminatedBy();
 
 		if (eliminatedBy == null) {
-			return Map.of();
+			return null;
 		}
 		return Map.of(
 			"email", eliminatedBy.getEmail(),
