@@ -61,6 +61,6 @@ management:
     endpoints.web.exposure.include: "*"
     endpoint.health.probes.enabled: true
 
-logging:
-    level:
-        com.zaxxer.hikari: TRACE
+#logging:
+#    level:
+#        com.zaxxer.hikari: TRACE

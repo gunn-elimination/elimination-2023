@@ -38,7 +38,6 @@ public class EliminationUser implements Serializable {
     @OneToOne(mappedBy = "target", fetch = FetchType.LAZY)
     @JsonIgnore
     @LazyToOne(value = LazyToOneOption.NO_PROXY)
-	@Cascade(org.hibernate.annotations.CascadeType.ALL)
     private EliminationUser targettedBy;
 
     @OneToOne(fetch = FetchType.LAZY)
