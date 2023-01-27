@@ -75,10 +75,11 @@ public class GameController {
 	@SentrySpan
 	@ResponseBody
 	@Transactional
-	public Map target(@AuthenticationPrincipal EliminationAuthentication me_) {
+	public Map target(@AuthenticationPrincipal EliminationAuthentication me_, HttpServletResponse response) {
 		var me = userRepository.findBySubject(me_.subject()).orElseThrow();
 		var target = me.getTarget();
 		if (target == null) {
+			response.setStatus(404);
 			return null;
 		}
 		return Map.of(
@@ -92,11 +93,12 @@ public class GameController {
 	@SentrySpan
 	@ResponseBody
 	@Transactional
-	public Map eliminatedBy(@AuthenticationPrincipal EliminationAuthentication me) {
+	public Map eliminatedBy(@AuthenticationPrincipal EliminationAuthentication me, HttpServletResponse response) {
 		var me_ = userRepository.findBySubject(me.subject()).orElseThrow();
 		var eliminatedBy = me_.getEliminatedBy();
 
 		if (eliminatedBy == null) {
+			response.setStatus(404);
 			return null;
 		}
 		return Map.of(
