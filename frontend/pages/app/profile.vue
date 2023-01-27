@@ -26,11 +26,14 @@
         </div>
         <div class="p-8 sm:px-12">
             <h3 class="text-lg font-semibold text-secondary">Your eliminations:</h3>
-            <p class="mt-6 sm:mt-12 text-secondary text-center italic" v-if="store.currentUser.eliminated.length === 0">
+            <p class="mt-6 sm:mt-12 text-secondary text-center italic" v-if="!store.currentUser.eliminated.length">
                 You have not eliminated anyone yet.
             </p>
-            <div v-else>
-                <!-- TODO -->
+            <div v-else class="mt-6 flex flex-wrap gap-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
+                <ProfileEliminatedUser
+                    v-for="user in store.currentUser.eliminated"
+                    :user="user"
+                />
             </div>
         </div>
     </div>
