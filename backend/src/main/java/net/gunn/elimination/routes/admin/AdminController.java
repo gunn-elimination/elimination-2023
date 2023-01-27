@@ -107,13 +107,14 @@ public class AdminController {
 
 	@GetMapping("/regenerateCodes")
 	@Transactional
-	public void regenerateCodes(
+	public String regenerateCodes(
 		HttpServletRequest req,
 		HttpServletResponse response
 	) throws IOException {
 		eliminationManager.regenerateCodes();
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.sendRedirect(req.getHeader("Referer"));
+		return "OK";
 	}
 
 	@GetMapping("/test/announcement")
