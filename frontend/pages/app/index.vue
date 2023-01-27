@@ -24,8 +24,8 @@
                     -->
                     <Avatar
                         ring
-                        :user="currentUser"
-                        v-if="currentUser"
+                        :user="store.currentUser"
+                        v-if="store.currentUser"
                     />
                 </div>
             </div>
@@ -43,10 +43,10 @@
                 <ViewfinderCircleIcon class="w-5 h-5 stroke-2 my-auto" />
                 Your Target
             </h2>
-            <div class="text-center flex flex-col items-center" v-if="target">
-                <Avatar :user="target" large />
-                <span class="font-bold text-lg">{{ target.forename }} {{ target.surname }}</span>
-                <span class="text-sm"><!-- #4 • -->{{ target.eliminated.length }} kills</span>
+            <div class="text-center flex flex-col items-center" v-if="store.target">
+                <Avatar :user="store.target" large />
+                <span class="font-bold text-lg">{{ store.target.forename }} {{ store.target.surname }}</span>
+                <span class="text-sm"><!-- #4 • -->{{ store.target.eliminated.length }} kills</span>
             </div>
         </div>
 
@@ -57,15 +57,15 @@
 </template>
 
 <script lang="ts">
-import type {PropType} from 'vue';
-import type {EliminationUser} from '@/utils/types';
 import {ChevronDownIcon, QrCodeIcon, CameraIcon, ViewfinderCircleIcon} from "@heroicons/vue/24/outline/index.js";
 
 export default {
-    components: {ChevronDownIcon, QrCodeIcon, CameraIcon, ViewfinderCircleIcon},
-    props: {
-        currentUser: Object as PropType<EliminationUser>,
-        target: Object as PropType<EliminationUser>
-    }
+    components: {ChevronDownIcon, QrCodeIcon, CameraIcon, ViewfinderCircleIcon}
 };
+</script>
+
+<script setup lang="ts">
+import {useUserStore} from '@/store/user';
+
+const store = useUserStore();
 </script>
