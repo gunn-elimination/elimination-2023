@@ -12,6 +12,13 @@ jobs:
     build-frontend:
         runs-on: ubuntu-latest
         steps:
+            -   name: Login to to the Container registry
+                uses: docker/login-action@v1
+                with:
+                    registry: ghcr.io
+                    username: ${{ github.actor }}
+                    password: ${{ secrets.GITHUB_TOKEN }}
+
             -   uses: actions/checkout@v2
             -   name: Build the frontend image
                 run: |
