@@ -13,7 +13,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 @Component
-class EliminationCodeGenerator {
+public class EliminationCodeGenerator {
     private final Random random = new Random();
 
     private final List<String> words;

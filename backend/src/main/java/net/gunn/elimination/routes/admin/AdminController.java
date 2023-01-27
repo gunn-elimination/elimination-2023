@@ -105,6 +105,17 @@ public class AdminController {
         response.sendRedirect(req.getHeader("Referer"));
     }
 
+	@GetMapping("/regenerateCodes")
+	@Transactional
+	public void regenerateCodes(
+		HttpServletRequest req,
+		HttpServletResponse response
+	) throws IOException {
+		eliminationManager.regenerateCodes();
+		response.setStatus(HttpServletResponse.SC_OK);
+		response.sendRedirect(req.getHeader("Referer"));
+	}
+
 	@GetMapping("/test/announcement")
 	@ConditionalOnProperty(name = "elimination.sse.enabled", havingValue = "true")
 	public String testAnnouncement(HttpServletRequest req, HttpServletResponse response) throws IOException {
