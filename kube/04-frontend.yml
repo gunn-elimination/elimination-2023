@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: frontend
+    labels:
+        app: elimination
+        task: frontend
+
+spec:
+    replicas: 2
+    selector:
+        matchLabels:
+            app: elimination
+            task: frontend
+
+    template:
+        metadata:
+            labels:
+                app: elimination
+                task: frontend
+        spec:
+            imagePullSecrets:
+                -   name: regcred
+            containers:
+                -   name: frontend
+                    image: ghcr.io/gunn-elimination/elimination-2023/frontend:latest
+                    ports:
+                        -   containerPort: 80
+                    env:
+                        -   name: PORT
+                            value: "80"
+                    resources:
+                        requests:
+                            memory: "128Mi"
+                            cpu: "100m"
+                        limits:
+                            memory: "256Mi"
+                            cpu: "200m"
+
+                    readinessProbe:
+                        httpGet:
+                            path: /
+                            port: 80
+                        initialDelaySeconds: 60
+                        periodSeconds: 10
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: frontend-service
+
+spec:
+    type: NodePort
+    ports:
+        -   name: http
+            port: 80
+    selector:
+        app: elimination
+        task: frontend

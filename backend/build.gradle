@@ -1,103 +1,104 @@
 buildscript {
-    dependencies {
-        classpath "org.hibernate:hibernate-gradle-plugin:6.0.0.Alpha6"
-        classpath (group: 'net.bytebuddy', name: 'byte-buddy') {
-            version {
-                strictly '1.12.22'
-            }
-        }
-    }
+	dependencies {
+		classpath "org.hibernate:hibernate-gradle-plugin:6.0.0.Alpha6"
+		classpath(group: 'net.bytebuddy', name: 'byte-buddy') {
+			version {
+				strictly '1.12.22'
+			}
+		}
+	}
 }
 plugins {
-    id 'org.springframework.boot' version '2.7.3'
-    id 'io.spring.dependency-management' version '1.0.13.RELEASE'
-    id "org.springdoc.openapi-gradle-plugin" version "1.4.0"
+	id 'org.springframework.boot' version '2.7.3'
+	id 'io.spring.dependency-management' version '1.0.13.RELEASE'
+	id "org.springdoc.openapi-gradle-plugin" version "1.4.0"
 
-    id 'java'
+	id 'java'
 }
 
 apply plugin: 'org.hibernate.orm'
 
 hibernate {
-    enhance {
-        enableLazyInitialization = true
-        enableDirtyTracking = false
-        enableAssociationManagement = true
-        enableExtendedEnhancement = true
-    }
+	enhance {
+		enableLazyInitialization = true
+		enableDirtyTracking = false
+		enableAssociationManagement = true
+		enableExtendedEnhancement = true
+	}
 }
 group = 'net.gunn'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
 dependencies {
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
 // https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
 //    implementation 'org.hibernate.orm:hibernate-core:6.1.6.Final'
 
-    // spring-orm-jpa
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	// spring-orm-jpa
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    implementation 'org.springframework.boot:spring-boot-starter-aop'
-    implementation 'org.springframework.session:spring-session-jdbc'
-    implementation 'org.springframework.data:spring-data-jpa'
-    implementation 'org.springframework:spring-aspects'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	implementation 'org.springframework.session:spring-session-jdbc'
+	implementation 'org.springframework.data:spring-data-jpa'
+	implementation 'org.springframework:spring-aspects'
 
-    // https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy
-
-
-    implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
-    implementation 'org.postgresql:postgresql'
-    implementation 'org.xerial:sqlite-jdbc:3.39.2.1'
-
-    implementation 'org.thymeleaf:thymeleaf'
-    implementation 'org.thymeleaf:thymeleaf-spring5'
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
 
-    implementation 'com.h2database:h2:2.1.214'
-    testImplementation 'org.mockito:mockito-core:4.7.0'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
+	implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
+	implementation 'org.postgresql:postgresql'
+	implementation 'org.xerial:sqlite-jdbc:3.39.2.1'
 
-    implementation 'org.springframework:spring-webflux:6.0.4'
-    implementation 'io.sentry:sentry-spring-boot-starter:6.12.1'
+	implementation 'org.thymeleaf:thymeleaf'
+	implementation 'org.thymeleaf:thymeleaf-spring5'
 
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7.1'
+
+	implementation 'com.h2database:h2:2.1.214'
+	testImplementation 'org.mockito:mockito-core:4.7.0'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	implementation 'org.springframework:spring-webflux:6.0.4'
+	implementation 'io.sentry:sentry-spring-boot-starter:6.12.1'
+
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7.1'
 }
 
 jar {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+	duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
-    manifest {
-        attributes(
-            'Main-Class': 'net.gunn.elimination.EliminationApplication'
-        )
-    }
+	manifest {
+		attributes(
+			'Main-Class': 'net.gunn.elimination.EliminationApplication'
+		)
+	}
 
 }
 dependencyManagement {
-    imports {
-        mavenBom 'org.springframework.session:spring-session-bom:2020.0.3'
-    }
+	imports {
+		mavenBom 'org.springframework.session:spring-session-bom:2020.0.3'
+	}
 }
 
 tasks.named('test') {
-    useJUnitPlatform()
+	useJUnitPlatform()
 }
 
 openApi {
-    outputDir.set(file("docs"))
-    outputFileName.set("elimination-api.json")
+	outputDir.set(file("docs"))
+	outputFileName.set("elimination-api.json")
 }
 
 

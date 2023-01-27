@@ -583,7 +583,6 @@ adult
 index
 nails
 horns
-balls
 flame
 rates
 drill
@@ -1977,7 +1976,6 @@ strut
 sloop
 prowl
 roach
-cocks
 bland
 dials
 plume
@@ -2232,7 +2230,6 @@ goody
 gazes
 dowel
 calms
-bitch
 scowl
 gulps
 coded
@@ -3743,7 +3740,6 @@ troth
 testy
 balky
 crimp
-chink
 abets
 splat
 abaci
@@ -3895,7 +3891,6 @@ moire
 scion
 henna
 kraut
-dicks
 lifer
 prigs
 bebop
@@ -4807,7 +4802,6 @@ curia
 kebob
 cycad
 talky
-fucks
 tapis
 amide
 dolce
@@ -5067,7 +5061,6 @@ ousel
 umiak
 cuppy
 hames
-shits
 azine
 glads
 tacet
@@ -5389,7 +5382,6 @@ weald
 sexed
 folic
 poxed
-cunts
 anile
 kiths
 becks
