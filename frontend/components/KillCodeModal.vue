@@ -4,7 +4,7 @@
     <label for="code-modal" class="modal modal-middle bg-black/40">
         <label class="modal-box flex flex-col overflow-visible rounded-t-lg sm:rounded-lg" for="">
             <QrcodeVue
-                :value="`https://elimination.gunn.one/api/game/eliminate?code=${code}`"
+                :value="`https://elimination.gunn.one/api/game/eliminate?code=${store.code}`"
                 :size="256"
                 :margin="7"
                 class="absolute rounded-lg -top-4 left-0 right-0 mx-auto"
