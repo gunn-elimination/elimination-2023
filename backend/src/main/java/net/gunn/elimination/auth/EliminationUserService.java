@@ -140,14 +140,15 @@ class EliminationUserService implements OAuth2UserService<OidcUserRequest, OidcU
 			user = userRepository.save(user);
 		}
 
-		user.setTarget(new EliminationUser(
-			user.getTarget().getSubject(),
-			user.getTarget().getEmail(),
-			user.getTarget().getForename(),
-			user.getTarget().getSurname(),
-			user.getTarget().getEliminationCode(),
-			new HashSet<>(user.getTarget().getRoles())
-		));
+		if (user.getTarget() != null)
+			user.setTarget(new EliminationUser(
+				user.getTarget().getSubject(),
+				user.getTarget().getEmail(),
+				user.getTarget().getForename(),
+				user.getTarget().getSurname(),
+				user.getTarget().getEliminationCode(),
+				new HashSet<>(user.getTarget().getRoles())
+			));
 
 		return new EliminationOauthAuthenticationImpl(user, oidcUser);
 	}
