@@ -15,11 +15,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.Random;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -37,19 +33,15 @@ class EliminationUserService implements OAuth2UserService<OidcUserRequest, OidcU
     private final UserRepository userRepository;
     private final LocalDateTime registrationDeadline;
     private final EliminationManager eliminationManager;
-    @PersistenceContext
-    private final EntityManager entityManager;
 
-    public EliminationUserService(
-        EntityManager entityManager,
+	public EliminationUserService(
         UserRepository userRepository,
         EliminationCodeGenerator eliminationCodeGenerator,
 
         AdminList admins,
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") @Value("${elimination.registration-deadline}") LocalDateTime registrationDeadline,
         EliminationManager eliminationManager) {
-        this.entityManager = entityManager;
-        this.userRepository = userRepository;
+		this.userRepository = userRepository;
         this.eliminationCodeGenerator = eliminationCodeGenerator;
 
         this.admins = admins;

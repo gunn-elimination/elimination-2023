@@ -27,7 +27,7 @@ public class Index {
     }
 
     @RequestMapping("/")
-	@Transactional
+	@Transactional(readOnly = true)
     public String index(@AuthenticationPrincipal EliminationAuthentication user, Model model) {
         if (user == null)
             return "redirect:/login";

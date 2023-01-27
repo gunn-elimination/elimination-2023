@@ -4,7 +4,13 @@ import io.sentry.spring.tracing.SentrySpan;
 import net.gunn.elimination.auth.EliminationAuthentication;
 import net.gunn.elimination.model.Announcement;
 import net.gunn.elimination.repository.AnnouncementRepository;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -12,10 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static net.gunn.elimination.auth.Roles.ADMIN;
@@ -24,17 +27,17 @@ import static net.gunn.elimination.auth.Roles.ADMIN;
 @CrossOrigin(originPatterns = "*")
 public class AnnouncementController {
     private final AnnouncementRepository announcementRepository;
-    private final Set<SseEmitter> emitters = ConcurrentHashMap.newKeySet();
 
-    public AnnouncementController(AnnouncementRepository announcementRepository) {
+    public AnnouncementController(AnnouncementRepository announcementRepository, Optional<RabbitTemplate> rabbitTemplate) {
         this.announcementRepository = announcementRepository;
-    }
+	}
 
     @GetMapping(value = "/announcements", produces = "application/json")
     @SentrySpan
+	@Transactional(readOnly = true)
     public List<Announcement> announcements() {
         List<Announcement> result;
-        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof EliminationAuthentication auth
+        if (SecurityContextHolder.getContext().getAuthentication() != null && SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof EliminationAuthentication auth
             && auth.user().getRoles().contains(ADMIN))
             result = announcementRepository.findAll();
         else
@@ -42,29 +45,5 @@ public class AnnouncementController {
 
         result.sort(Comparator.comparing(Announcement::getStartDate).reversed());
         return result;
-    }
-
-    @GetMapping(value = "/announcements", produces = "text/event-stream")
-	@ResponseBody
-    public SseEmitter announcementsStream() throws IOException {
-        var emitter = new SseEmitter(-1L);
-
-        emitters.add(emitter);
-
-        emitter.send(announcements());
-
-        emitter.onCompletion(() -> emitters.remove(emitter));
-        return emitter;
-    }
-
-    public void pushAnnouncement(Announcement announcement) {
-		var allAnnouncements = announcements();
-        for (var emitter : new HashSet<>(emitters)) {
-            try {
-                emitter.send(allAnnouncements);
-            } catch (IOException e) {
-                // Ignore
-            }
-        }
     }
 }
