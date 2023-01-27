@@ -1,11 +1,11 @@
 <template>
     <div class="h-full overflow-auto flex flex-col">
-        <div class="flex sticky-header flex-row gap-8 p-8">
+        <header class="flex sticky-header flex-row gap-8 p-8">
             <div class="my-auto flex hidden sm:block">
                 <Avatar
                     ring
-                    :user="store.currentUser"
-                    v-if="store.currentUser"
+                    :user="userStore.currentUser"
+                    v-if="userStore.currentUser"
                 />
             </div>
             <h2 class="font-bold text-3xl text-center text-primary w-full align-middle my-auto">
@@ -15,19 +15,35 @@
                 <KillCodeButton />
                 <EliminateButton />
             </div>
-        </div>
+        </header>
 
-        <div class="p-8 bg-secondary text-secondary-content">
+        <section class="p-8 bg-secondary text-secondary-content">
             <h2 class="font-bold text-xl flex flex-row gap-2 mb-2">
                 <ViewfinderCircleIcon class="w-5 h-5 stroke-2 my-auto" />
                 Your Target
             </h2>
-            <div class="text-center flex flex-col items-center" v-if="store.target">
-                <Avatar :user="store.target" large />
-                <span class="font-bold text-lg">{{ store.target.forename }} {{ store.target.surname }}</span>
-                <span class="text-sm"><!-- #4 • -->{{ store.target.eliminated.length }} kills</span>
+            <div class="text-center flex flex-col items-center" v-if="userStore.target">
+                <Avatar :user="userStore.target" large />
+                <span class="font-bold text-lg">{{ userStore.target.forename }} {{ userStore.target.surname }}</span>
+                <span class="text-sm"><!-- #4 • -->{{ userStore.target.eliminated.length }} kills</span>
             </div>
-        </div>
+        </section>
+
+        <section class="px-8 py-6">
+            <h3 class="font-semibold text-secondary mb-4">
+                Restrictions for {{ currentTimeStore.time.toLocaleString({ weekday: 'long', month: 'long', day: '2-digit' }) }}:
+            </h3>
+            <div class="flex flex-col gap-2 px-4">
+                <div v-if="info.announcement" class="flex gap-4">
+                    <MegaphoneIcon class="h-6 w-6 text-primary flex-none" />
+                    <strong>{{ info.announcement }}</strong>
+                </div>
+                <div v-if="info.restriction" class="flex gap-4">
+                    <LockClosedIcon class="h-6 w-6 text-primary flex-none" />
+                    {{ info.restriction }}
+                </div>
+            </div>
+        </section>
 
         <!--
         <div class="px-4 py-6 sm:p-8 flex flex-col gap-4">
@@ -39,14 +55,19 @@
 
 <script lang="ts">
 import {ChevronDownIcon, QrCodeIcon, ViewfinderCircleIcon} from "@heroicons/vue/24/outline/index.js";
+import {MegaphoneIcon, LockClosedIcon} from "@heroicons/vue/24/solid/index.js";
 
 export default {
-    components: {ChevronDownIcon, QrCodeIcon, ViewfinderCircleIcon}
+    components: {ChevronDownIcon, QrCodeIcon, ViewfinderCircleIcon, MegaphoneIcon, LockClosedIcon}
 };
 </script>
 
 <script setup lang="ts">
 import {useUserStore} from '@/store/user';
+import {useCurrentTimeStore} from '@/store/time';
 
-const store = useUserStore();
+const userStore = useUserStore();
+const currentTimeStore = useCurrentTimeStore();
+
+const info = computed(() => calendar[currentTimeStore.time.toISODate()])
 </script>
