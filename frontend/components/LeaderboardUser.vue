@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import type {PropType} from 'vue';
-import type {EliminationUser} from '~/utils/types';
+import type {EliminationUser} from '@/utils/types';
 
 export default {
     name: "LeaderboardUser",
