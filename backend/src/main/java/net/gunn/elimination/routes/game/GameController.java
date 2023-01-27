@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManagerFactory;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -74,10 +75,10 @@ public class GameController {
 	@SentrySpan
 	@ResponseBody
 	@Transactional
-	public Set target(@AuthenticationPrincipal EliminationAuthentication me_) {
+	public Map target(@AuthenticationPrincipal EliminationAuthentication me_) {
 		var me = userRepository.findBySubject(me_.subject()).orElseThrow();
 		var target = me.getTarget();
-		return Set.of(
+		return Map.of(
 			"email", target.getEmail(),
 			"forename", target.getForename(),
 			"surname", target.getSurname()
@@ -88,14 +89,14 @@ public class GameController {
 	@SentrySpan
 	@ResponseBody
 	@Transactional
-	public Set eliminatedBy(@AuthenticationPrincipal EliminationAuthentication me) {
+	public Map eliminatedBy(@AuthenticationPrincipal EliminationAuthentication me) {
 		var me_ = userRepository.findBySubject(me.subject()).orElseThrow();
 		var eliminatedBy = me_.getEliminatedBy();
 
 		if (eliminatedBy == null) {
-			return Set.of();
+			return Map.of();
 		}
-		return Set.of(
+		return Map.of(
 			"email", eliminatedBy.getEmail(),
 			"forename", eliminatedBy.getForename(),
 			"surname", eliminatedBy.getSurname()
