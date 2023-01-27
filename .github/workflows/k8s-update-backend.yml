@@ -3,7 +3,7 @@ name: Rebuild and redeploy backend
 on:
     push:
         branches:
-            - main
+            - k8s
         paths:
             - 'backend/**'
             - '.github/workflows/k8s-update-backend.yml'

@@ -46,8 +46,3 @@ spec:
                             port: 80
                         initialDelaySeconds: 60
                         periodSeconds: 10
-
-                    volumeMounts:
-                        -   name: spring-yml-config
-                            mountPath: /app
-                            subPath: application.yml

@@ -59,6 +59,11 @@ spec:
                             mountPath: /app
                             subPath: application.yml
 
+                    volumes:
+                        -   name: spring-yml-config
+                            configMap:
+                                name: spring-yml-config
+
 ---
 apiVersion: v1
 kind: Service

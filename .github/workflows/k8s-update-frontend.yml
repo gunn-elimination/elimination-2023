@@ -3,7 +3,7 @@ name: Rebuild and redeploy frontend
 on:
     push:
         branches:
-            - main
+            - k8s
         paths:
             - 'frontend/**'
             - '.github/workflows/k8s-update-frontend.yml'
