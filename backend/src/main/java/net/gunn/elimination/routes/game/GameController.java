@@ -68,40 +68,18 @@ public class GameController {
 	@GetMapping("/target")
 	@SentrySpan
 	@ResponseBody
+	@Transactional
 	public EliminationUser target(@AuthenticationPrincipal EliminationAuthentication me) {
 		var target = me.user().getTarget();
-		if (target != null) {
-			var em = this.emf.createEntityManager();
-			em.getTransaction().begin();
-			em.getTransaction().setRollbackOnly();
-
-			try {
-				Hibernate.initialize(target);
-			} finally {
-				em.getTransaction().rollback();
-				em.close();
-			}
-		}
-		return target;
+		return (EliminationUser) Hibernate.unproxy(target);
 	}
 
 	@GetMapping("/eliminatedBy")
 	@SentrySpan
 	@ResponseBody
+	@Transactional
 	public EliminationUser eliminatedBy(@AuthenticationPrincipal EliminationAuthentication me) {
 		var eliminatedBy = me.user().getEliminatedBy();
-		if (eliminatedBy != null) {
-			var em = this.emf.createEntityManager();
-			em.getTransaction().begin();
-			em.getTransaction().setRollbackOnly();
-
-			try {
-				Hibernate.initialize(eliminatedBy);
-			} finally {
-				em.getTransaction().rollback();
-				em.close();
-			}
-		}
-		return eliminatedBy;
+		return (EliminationUser) Hibernate.unproxy(eliminatedBy);
 	}
 }
