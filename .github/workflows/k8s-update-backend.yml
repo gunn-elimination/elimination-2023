@@ -15,7 +15,7 @@ jobs:
             -   uses: actions/checkout@v2
             -   name: Build the backend image
                 run: |
-                    cd frontend
+                    cd backend
                     docker build -t ghcr.io/gunn-elimination/elimination-2023/backend:${{ github.sha }} .
                     docker push ghcr.io/gunn-elimination/elimination-2023/backend:${{ github.sha }}
 
