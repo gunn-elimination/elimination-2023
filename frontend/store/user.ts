@@ -18,11 +18,12 @@ export const useUserStore = defineStore('user', () => {
         onResponse: responseHandler
     });
 
-    const {data: target} = useFetch(`${config.public.apiUrl}/game/target`, {
+    const {data: targetRaw} = useFetch(`${config.public.apiUrl}/game/target`, {
         credentials: 'include',
         server: false,
         onResponse: responseHandler
     });
+    const target = computed(() => targetRaw.value && (targetRaw.value as {user: EliminationUser | null}).user);
 
     const {data: code} = useFetch(`${config.public.apiUrl}/game/code`, {
         credentials: 'include',
@@ -35,7 +36,7 @@ export const useUserStore = defineStore('user', () => {
         server: false,
         onResponse: responseHandler
     });
-    const eliminatedBy = computed(() => eliminatedByRaw && (eliminatedByRaw.value as {user: EliminationUser}).user);
+    const eliminatedBy = computed(() => eliminatedByRaw.value && (eliminatedByRaw.value as {user: EliminationUser | null}).user);
 
     return {currentUser, target, code, eliminatedBy, pending};
 });
