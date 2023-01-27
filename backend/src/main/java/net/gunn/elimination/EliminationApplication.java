@@ -13,6 +13,7 @@ import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @SpringBootApplication
@@ -32,7 +33,7 @@ public class EliminationApplication {
 			.addScript("org/springframework/session/jdbc/schema-h2.sql").build();
 	}
 
-	@ExceptionHandler(DataAccessResourceFailureException.class)
+	@ExceptionHandler(CannotCreateTransactionException.class)
 	public String handleDataAccessResourceFailureException() {
 		System.exit(1);
 		return "try again"; // trololol

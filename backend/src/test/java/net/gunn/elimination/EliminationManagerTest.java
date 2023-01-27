@@ -2,6 +2,7 @@ package net.gunn.elimination;
 
 import net.gunn.elimination.model.EliminationUser;
 import net.gunn.elimination.repository.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,10 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 import java.time.LocalDateTime;
 
@@ -19,17 +22,21 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
-@Sql(scripts = "classpath:setup.sql")
+@Sql(scripts = "classpath:setup.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(scripts = "classpath:teardown.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class EliminationManagerTest {
-    @Autowired
-    EntityManager entityManager;
+	@Autowired
+	EntityManagerFactory emf;
+
     @Autowired
         UserRepository userRepository;
 
     EliminationManager manager;
+	EntityManager entityManager;
     @BeforeEach
     void setUp() {
+		entityManager = emf.createEntityManager();
+		entityManager.getTransaction().begin();
         manager = new EliminationManager(
             userRepository,
             entityManager,
@@ -37,6 +44,11 @@ class EliminationManagerTest {
             LocalDateTime.now().plus(1, java.time.temporal.ChronoUnit.DAYS)
         );
     }
+
+	@AfterEach
+	void tearDown() {
+		entityManager.getTransaction().commit();
+	}
 
     @Test
     void attemptElimination() {
@@ -84,6 +96,7 @@ class EliminationManagerTest {
     }
 
     @Test
+	@Transactional
     void gameHasEnoughPlayers() {
         assertTrue(manager.gameHasEnoughPlayers());
         var testUser1 = userRepository.findBySubject("subject1").orElseThrow();
