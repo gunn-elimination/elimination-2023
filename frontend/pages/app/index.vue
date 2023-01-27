@@ -72,5 +72,5 @@ import {useCurrentTimeStore} from '@/store/time';
 const userStore = useUserStore();
 const currentTimeStore = useCurrentTimeStore();
 
-const info = computed(() => calendar[currentTimeStore.time.toISODate()])
+const info = computed(() => calendar[currentTimeStore.time.toString().slice(0, 10)])
 </script>
