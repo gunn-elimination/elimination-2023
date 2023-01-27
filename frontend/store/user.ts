@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import {FetchResponse} from 'ofetch';
+import {EliminationUser} from '~/utils/types';
 
 
 export const useUserStore = defineStore('user', () => {
@@ -29,11 +30,12 @@ export const useUserStore = defineStore('user', () => {
         onResponse: responseHandler
     });
 
-    const {data: eliminatedBy} = useFetch(`${config.public.apiUrl}/game/eliminatedBy`, {
+    const {data: eliminatedByRaw} = useFetch(`${config.public.apiUrl}/game/eliminatedBy`, {
         credentials: 'include',
         server: false,
         onResponse: responseHandler
     });
+    const eliminatedBy = computed(() => eliminatedByRaw && (eliminatedByRaw.value as {user: EliminationUser}).user);
 
     return {currentUser, target, code, eliminatedBy, pending};
 });
