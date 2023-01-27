@@ -16,7 +16,7 @@
                 <span class="text-sm"><!-- #4 • -->{{ currentUser.eliminated.length }} eliminations</span>
             </div>
         </div>
-        <div class="px-12 mt-6 pb-12">
+        <div class="px-6 sm:px-12 mt-6 pb-12">
             <client-only>
                 <Leaderboard />
             </client-only>
