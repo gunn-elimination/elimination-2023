@@ -29,5 +29,5 @@ export const useUserStore = defineStore('user', () => {
         onResponse: responseHandler
     });
 
-    return {currentUser, target: currentUser, code, pending};
+    return {currentUser, target, code, pending};
 });
