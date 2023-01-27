@@ -34,7 +34,6 @@ public class AnnouncementController {
 
     @GetMapping(value = "/announcements", produces = "application/json")
     @SentrySpan
-	@Transactional(readOnly = true)
     public List<Announcement> announcements() {
         List<Announcement> result;
         if (SecurityContextHolder.getContext().getAuthentication() != null && SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof EliminationAuthentication auth
