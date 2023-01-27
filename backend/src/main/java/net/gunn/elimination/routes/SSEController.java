@@ -45,7 +45,6 @@ public class SSEController {
 	}
 
 	@GetMapping(value = "/announcements", produces = "text/event-stream")
-	@ResponseBody
 	public SseEmitter announcementsStream() throws IOException {
 		var emitter = new SseEmitter(-1L);
 
