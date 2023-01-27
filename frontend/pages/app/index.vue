@@ -2,39 +2,18 @@
     <div class="h-full overflow-auto flex flex-col">
         <div class="flex sticky-header flex-row gap-8 p-8">
             <div class="my-auto flex hidden sm:block">
-                <div class="indicator">
-                    <!--
-                    <div class="indicator-item indicator-bottom">
-                        <div class="dropdown">
-                            <label
-                                tabindex="0"
-                                class="btn btn-circle btn-xs m-1 bg-base-100 hover:bg-base-200 border-0"
-                            >
-                                <ChevronDownIcon class="h-3 w-3 stroke-[3px] text-primary"/>
-                            </label>
-                            <ul
-                                tabindex="0"
-                                class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 "
-                            >
-                                <li><a>Item 1</a></li>
-                                <li><a>Item 2</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    -->
-                    <Avatar
-                        ring
-                        :user="store.currentUser"
-                        v-if="store.currentUser"
-                    />
-                </div>
+                <Avatar
+                    ring
+                    :user="store.currentUser"
+                    v-if="store.currentUser"
+                />
             </div>
-            <h2 class="font-bold text-3xl text-center text-primary w-full align-middle my-auto">Left Hand</h2>
+            <h2 class="font-bold text-3xl text-center text-primary w-full align-middle my-auto">
+                Dashboard
+            </h2>
             <div class="my-auto flex gap-4">
                 <KillCodeButton />
-                <button class="btn btn-circle btn-primary">
-                    <CameraIcon class="h-6 w-6 stroke-2"/>
-                </button>
+                <EliminateButton />
             </div>
         </div>
 
@@ -50,17 +29,19 @@
             </div>
         </div>
 
+        <!--
         <div class="px-4 py-6 sm:p-8 flex flex-col gap-4">
             <KillFeedBlock v-for="n in 10" :key="n"/>
         </div>
+        -->
     </div>
 </template>
 
 <script lang="ts">
-import {ChevronDownIcon, QrCodeIcon, CameraIcon, ViewfinderCircleIcon} from "@heroicons/vue/24/outline/index.js";
+import {ChevronDownIcon, QrCodeIcon, ViewfinderCircleIcon} from "@heroicons/vue/24/outline/index.js";
 
 export default {
-    components: {ChevronDownIcon, QrCodeIcon, CameraIcon, ViewfinderCircleIcon}
+    components: {ChevronDownIcon, QrCodeIcon, ViewfinderCircleIcon}
 };
 </script>
 

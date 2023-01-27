@@ -13,6 +13,7 @@
         <InstallModal />
     </client-only>
     <KillCodeModal :code="store.code" />
+    <EliminateModal />
 </template>
 
 <script setup lang="ts">
