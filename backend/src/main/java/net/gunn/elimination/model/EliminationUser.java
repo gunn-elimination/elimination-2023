@@ -11,6 +11,7 @@ import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -177,4 +178,25 @@ public class EliminationUser implements Serializable {
     public boolean equals(Object obj) {
         return obj instanceof EliminationUser && ((EliminationUser) obj).getSubject().equals(getSubject());
     }
+
+	// idfk what to cll thism ethod
+	public Map decompose() {
+		var targetEliminations = new HashSet<>();
+		for (var eliminatee : this.eliminated()) {
+			targetEliminations.add(
+				Map.of(
+					"forename", eliminatee.getForename(),
+					"surname", eliminatee.getSurname(),
+					"email", eliminatee.getEmail()
+				)
+			);
+		}
+
+		return Map.of(
+			"forename", getForename(),
+			"surname", getSurname(),
+			"email", getEmail(),
+			"eliminated", targetEliminations
+		);
+	}
 }

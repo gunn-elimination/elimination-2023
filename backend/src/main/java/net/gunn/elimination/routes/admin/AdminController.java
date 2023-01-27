@@ -7,7 +7,7 @@ import net.gunn.elimination.repository.AnnouncementRepository;
 import net.gunn.elimination.repository.UserRepository;
 import net.gunn.elimination.routes.AnnouncementController;
 import net.gunn.elimination.routes.SSEController;
-import net.gunn.elimination.routes.game.Kill;
+import net.gunn.elimination.model.Kill;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;

@@ -6,7 +6,8 @@ import io.sentry.spring.tracing.SentrySpan;
 import net.gunn.elimination.auth.Roles;
 import net.gunn.elimination.model.Announcement;
 import net.gunn.elimination.repository.UserRepository;
-import net.gunn.elimination.routes.game.Kill;
+import net.gunn.elimination.model.Kill;
+import net.gunn.elimination.routes.game.KillfeedController;
 import net.gunn.elimination.routes.game.ScoreboardController;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
@@ -34,6 +35,7 @@ public class SSEController {
 
 	private final AnnouncementController announcementController;
 	private final ScoreboardController scoreboardController;
+	private final KillfeedController killfeedController;
 
 	private final UserRepository userRepository;
 
@@ -43,10 +45,11 @@ public class SSEController {
 
 	private final EntityManagerFactory emf;
 
-	public SSEController(RabbitTemplate rabbitTemplate, AnnouncementController announcementController, ScoreboardController scoreboardController, UserRepository userRepository, EntityManagerFactory emf) {
+	public SSEController(RabbitTemplate rabbitTemplate, AnnouncementController announcementController, ScoreboardController scoreboardController, KillfeedController killfeedController, UserRepository userRepository, EntityManagerFactory emf) {
 		this.rabbitTemplate = rabbitTemplate;
 		this.announcementController = announcementController;
 		this.scoreboardController = scoreboardController;
+		this.killfeedController = killfeedController;
 		this.userRepository = userRepository;
 		this.emf = emf;
 	}
@@ -94,11 +97,22 @@ public class SSEController {
 	}
 
 	@GetMapping(value = "/game/eliminations", produces = "text/event-stream")
-	public SseEmitter kills() {
+	public SseEmitter kills() throws IOException {
+		var em = emf.createEntityManager();
 		var emitter = new SseEmitter(-1L);
 
 		killEmitters.add(emitter);
+
 		emitter.onCompletion(() -> killEmitters.remove(emitter));
+
+		em.getTransaction().begin();
+		em.getTransaction().setRollbackOnly();
+		try {
+			emitter.send(killfeedController.killfeed0());
+		} finally {
+			em.getTransaction().rollback();
+			em.close();
+		}
 
 		return emitter;
 	}
@@ -180,7 +194,7 @@ public class SSEController {
 	void sendKillToConnectedClients(Kill kill) {
 		for (var emitter : new HashSet<>(killEmitters)) {
 			try {
-				emitter.send(kill);
+				emitter.send(killfeedController.killfeed0());
 			} catch (IOException e) {
 				// ignore
 			}
