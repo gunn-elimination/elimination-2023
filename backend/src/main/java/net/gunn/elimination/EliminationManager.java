@@ -1,5 +1,6 @@
 package net.gunn.elimination;
 
+import net.gunn.elimination.auth.EliminationCodeGenerator;
 import net.gunn.elimination.model.EliminationUser;
 import net.gunn.elimination.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,19 +26,21 @@ public class EliminationManager {
     private final UserRepository userRepository;
 
     private final Instant gameStartTime, gameEndTime;
+	private final EliminationCodeGenerator eliminationCodeGenerator;
 
     public EliminationManager(
         UserRepository userRepository,
         EntityManager entityManager,
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") @Value("${elimination.game-start-time}") LocalDateTime gameStartTime,
-        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") @Value("${elimination.game-end-time}") LocalDateTime gameEndTime
-    ) {
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") @Value("${elimination.game-end-time}") LocalDateTime gameEndTime,
+		EliminationCodeGenerator eliminationCodeGenerator) {
         this.userRepository = userRepository;
         this.entityManager = entityManager;
 
         this.gameStartTime = gameStartTime.toInstant(ZonedDateTime.now().getOffset());
         this.gameEndTime = gameEndTime.toInstant(ZonedDateTime.now().getOffset());
-    }
+		this.eliminationCodeGenerator = eliminationCodeGenerator;
+	}
 
     public EliminationUser attemptElimination(EliminationUser eliminator, String code) throws IncorrectEliminationCodeException, EmptyGameException {
         var expectedCode = entityManager.createQuery("SELECT u.target.eliminationCode from EliminationUser u WHERE u.subject = :subject", String.class)
@@ -117,4 +120,13 @@ public class EliminationManager {
             .findFirst()
             .orElse(null);
     }
+
+	public void regenerateCodes() {
+		var users = entityManager.createQuery("SELECT u FROM EliminationUser u WHERE u.eliminationCode IS NOT NULL", EliminationUser.class)
+			.getResultList();
+		for (var user : users) {
+			user.setEliminationCode(eliminationCodeGenerator.randomCode());
+			userRepository.save(user);
+		}
+	}
 }

@@ -30,6 +30,8 @@ server.servlet.session.timeout: 4320m
 server.servlet.context-path: /api
 
 spring:
+    jpa:
+        open-in-view: false
     datasource.hikari.maximum-pool-size: 20
     datasource.hikari.leak-detection-threshold: 30000
 

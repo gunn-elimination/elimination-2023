@@ -2,7 +2,9 @@ package net.gunn.elimination.routes;
 
 import io.sentry.Sentry;
 import io.sentry.spring.tracing.SentrySpan;
+import net.gunn.elimination.auth.Roles;
 import net.gunn.elimination.model.Announcement;
+import net.gunn.elimination.repository.UserRepository;
 import net.gunn.elimination.routes.game.Kill;
 import net.gunn.elimination.routes.game.ScoreboardController;
 import org.springframework.amqp.rabbit.annotation.Exchange;
@@ -31,21 +33,23 @@ public class SSEController {
 	private final AnnouncementController announcementController;
 	private final ScoreboardController scoreboardController;
 
+	private final UserRepository userRepository;
+
 	private final Set<SseEmitter> announcementEmitters = ConcurrentHashMap.newKeySet();
 	private final Set<ScoreboardController.ScoreboardSubscription> scoreboardEmitters = ConcurrentHashMap.newKeySet();
 	private final Set<SseEmitter> killEmitters = ConcurrentHashMap.newKeySet();
 
 	private final EntityManagerFactory emf;
 
-	public SSEController(RabbitTemplate rabbitTemplate, AnnouncementController announcementController, ScoreboardController scoreboardController, EntityManagerFactory emf) {
+	public SSEController(RabbitTemplate rabbitTemplate, AnnouncementController announcementController, ScoreboardController scoreboardController, UserRepository userRepository, EntityManagerFactory emf) {
 		this.rabbitTemplate = rabbitTemplate;
 		this.announcementController = announcementController;
 		this.scoreboardController = scoreboardController;
+		this.userRepository = userRepository;
 		this.emf = emf;
 	}
 
 	@GetMapping(value = "/announcements", produces = "text/event-stream")
-	@ResponseBody
 	public SseEmitter announcementsStream() throws IOException {
 		var emitter = new SseEmitter(-1L);
 
@@ -141,9 +145,11 @@ public class SSEController {
 		em.getTransaction().setRollbackOnly();
 
 		ScoreboardController.Scoreboard scoreboard;
+		int countUsers;
 		try {
 			var maxLimit = new HashSet<>(scoreboardEmitters).stream().max(Comparator.comparingInt(ScoreboardController.ScoreboardSubscription::limit)).get().limit();
 			scoreboard = scoreboardController.scoreboard(maxLimit);
+			countUsers = userRepository.countEliminationUsersByRolesContaining(Roles.PLAYER);
 		} catch (Exception e) {
 			Sentry.captureException(e);
 			return;
@@ -155,7 +161,7 @@ public class SSEController {
 		for (var sub : new HashSet<>(scoreboardEmitters)) {
 			try {
 				var sublist = scoreboard.users().subList(0, Math.min(sub.limit(), scoreboard.users().size()));
-				sub.emitter().send(new ScoreboardController.Scoreboard(sublist));
+				sub.emitter().send(new ScoreboardController.Scoreboard(sublist, countUsers));
 			} catch (IOException e) {
 				// ignore, spring should call onCompletion
 			}

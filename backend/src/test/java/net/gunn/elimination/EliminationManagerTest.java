@@ -1,5 +1,6 @@
 package net.gunn.elimination;
 
+import net.gunn.elimination.auth.EliminationCodeGenerator;
 import net.gunn.elimination.model.EliminationUser;
 import net.gunn.elimination.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -7,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +18,6 @@ import javax.persistence.EntityManagerFactory;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -34,15 +33,16 @@ class EliminationManagerTest {
     EliminationManager manager;
 	EntityManager entityManager;
     @BeforeEach
-    void setUp() {
+    void setUp(EliminationCodeGenerator eliminationCodeGenerator) {
 		entityManager = emf.createEntityManager();
 		entityManager.getTransaction().begin();
         manager = new EliminationManager(
             userRepository,
             entityManager,
             LocalDateTime.now(),
-            LocalDateTime.now().plus(1, java.time.temporal.ChronoUnit.DAYS)
-        );
+            LocalDateTime.now().plus(1, java.time.temporal.ChronoUnit.DAYS),
+			eliminationCodeGenerator
+		);
     }
 
 	@AfterEach
