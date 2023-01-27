@@ -64,6 +64,7 @@ public class GameController {
 	@GetMapping("/target")
 	@SentrySpan
 	@ResponseBody
+	@Transactional(readOnly = true)
 	public EliminationUser target(@AuthenticationPrincipal EliminationAuthentication me) {
 		var target = me.user().getTarget();
 		if (target != null) {
@@ -75,6 +76,7 @@ public class GameController {
 	@GetMapping("/eliminatedBy")
 	@SentrySpan
 	@ResponseBody
+	@Transactional(readOnly = true)
 	public EliminationUser eliminatedBy(@AuthenticationPrincipal EliminationAuthentication me) {
 		var eliminatedBy = me.user().getEliminatedBy();
 		if (eliminatedBy != null) {
