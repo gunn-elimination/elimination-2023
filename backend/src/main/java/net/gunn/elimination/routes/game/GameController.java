@@ -79,27 +79,31 @@ public class GameController {
 	public Map target(@AuthenticationPrincipal EliminationAuthentication me_, HttpServletResponse response) {
 		var me = userRepository.findBySubject(me_.subject()).orElseThrow();
 		var target = me.getTarget();
-		if (target == null) {
-			response.setStatus(404);
-			return null;
-		}
-		var targetEliminations = new HashSet<>();
-		for (var eliminatee : target.eliminated()) {
-			targetEliminations.add(
-				Map.of(
-					"forename", eliminatee.getForename(),
-					"surname", eliminatee.getSurname(),
-					"email", eliminatee.getEmail()
-				)
+
+		Map userObj = null;
+		if (target != null) {
+			var targetEliminations = new HashSet<>();
+			for (var eliminatee : target.eliminated()) {
+				targetEliminations.add(
+					Map.of(
+						"forename", eliminatee.getForename(),
+						"surname", eliminatee.getSurname(),
+						"email", eliminatee.getEmail()
+					)
+				);
+			}
+
+			userObj = Map.of(
+				"email", target.getEmail(),
+				"forename", target.getForename(),
+				"surname", target.getSurname(),
+				"eliminated", targetEliminations
 			);
 		}
 
-		return Map.of(
-			"email", target.getEmail(),
-			"forename", target.getForename(),
-			"surname", target.getSurname(),
-			"eliminated", targetEliminations
-		);
+		var result = new HashMap<>();
+		result.put("user", userObj);
+		return result;
 	}
 
 	@GetMapping("/eliminatedBy")
