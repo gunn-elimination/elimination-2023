@@ -56,7 +56,7 @@ spec:
 
                     volumeMounts:
                         -   name: spring-yml-config
-                            mountPath: /app/application.yml
+                            mountPath: /app/config/application.yml
 
             volumes:
                 -   name: spring-yml-config
