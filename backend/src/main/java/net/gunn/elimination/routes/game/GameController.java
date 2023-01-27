@@ -71,7 +71,7 @@ public class GameController {
 	@ResponseBody
 	@Transactional
 	public Set target(@AuthenticationPrincipal EliminationAuthentication me) {
-		var target = me.user().getTarget();
+		var target = me.user().target;
 		return Set.of(
 			"email", target.getEmail(),
 			"forename", target.getForename(),
