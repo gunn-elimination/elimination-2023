@@ -13,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManagerFactory;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
@@ -30,10 +31,13 @@ public class GameController {
 	public final EliminationManager eliminationManager;
 	private final Optional<SSEController> sseController;
 
+	private final EntityManagerFactory emf;
 
-	public GameController(EliminationManager eliminationManager, Optional<SSEController> sseController) {
+
+	public GameController(EliminationManager eliminationManager, Optional<SSEController> sseController, EntityManagerFactory emf) {
 		this.eliminationManager = eliminationManager;
 		this.sseController = sseController;
+		this.emf = emf;
 	}
 
 	/**
@@ -64,11 +68,19 @@ public class GameController {
 	@GetMapping("/target")
 	@SentrySpan
 	@ResponseBody
-	@Transactional(readOnly = true)
 	public EliminationUser target(@AuthenticationPrincipal EliminationAuthentication me) {
 		var target = me.user().getTarget();
 		if (target != null) {
-			Hibernate.initialize(target);
+			var em = this.emf.createEntityManager();
+			em.getTransaction().begin();
+			em.getTransaction().setRollbackOnly();
+
+			try {
+				Hibernate.initialize(target);
+			} finally {
+				em.getTransaction().rollback();
+				em.close();
+			}
 		}
 		return target;
 	}
@@ -76,11 +88,19 @@ public class GameController {
 	@GetMapping("/eliminatedBy")
 	@SentrySpan
 	@ResponseBody
-	@Transactional(readOnly = true)
 	public EliminationUser eliminatedBy(@AuthenticationPrincipal EliminationAuthentication me) {
 		var eliminatedBy = me.user().getEliminatedBy();
 		if (eliminatedBy != null) {
-			Hibernate.initialize(eliminatedBy);
+			var em = this.emf.createEntityManager();
+			em.getTransaction().begin();
+			em.getTransaction().setRollbackOnly();
+
+			try {
+				Hibernate.initialize(eliminatedBy);
+			} finally {
+				em.getTransaction().rollback();
+				em.close();
+			}
 		}
 		return eliminatedBy;
 	}
