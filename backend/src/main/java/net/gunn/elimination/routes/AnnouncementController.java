@@ -4,6 +4,7 @@ import io.sentry.spring.tracing.SentrySpan;
 import net.gunn.elimination.auth.EliminationAuthentication;
 import net.gunn.elimination.model.Announcement;
 import net.gunn.elimination.repository.AnnouncementRepository;
+import org.hibernate.Hibernate;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -43,6 +44,7 @@ public class AnnouncementController {
             result = announcementRepository.findAnnouncementsForCurrentTime();
 
         result.sort(Comparator.comparing(Announcement::getStartDate).reversed());
-        return new ArrayList<>(result);
+		Hibernate.initialize(result);
+        return result;
     }
 }
