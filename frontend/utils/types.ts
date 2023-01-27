@@ -13,3 +13,9 @@ export type Announcement = {
     startDate: number,
     endDate: number
 }
+
+export type EliminationFeedItem = {
+    eliminated: EliminationUser,
+    eliminator: EliminationUser,
+    timestamp: string
+}

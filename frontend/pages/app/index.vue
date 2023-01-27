@@ -40,7 +40,7 @@
             </div>
         </section>
 
-        <section class="px-8 py-6">
+        <section class="px-8 py-8 bg-base-200">
             <h3 class="font-semibold text-secondary mb-4">
                 Restrictions for {{ currentTimeStore.time.toLocaleString({ weekday: 'long', month: 'long', day: '2-digit' }) }}:
             </h3>
@@ -59,11 +59,16 @@
             </p>
         </section>
 
-        <!--
-        <div class="px-4 py-6 sm:p-8 flex flex-col gap-4">
-            <KillFeedBlock v-for="n in 10" :key="n"/>
+        <div class="px-4 pt-6 pb-12 sm:p-8 flex flex-col gap-4">
+            <h3 class="font-semibold text-secondary">
+                Elimination feed:
+            </h3>
+            <KillFeedBlock
+                v-for="n in 10"
+                :key="n"
+                :item="{eliminated: userStore.currentUser, eliminator: userStore.currentUser, timestamp: '2023-01-27T11:37:16.345-08:00'}"
+            />
         </div>
-        -->
     </div>
 </template>
 
