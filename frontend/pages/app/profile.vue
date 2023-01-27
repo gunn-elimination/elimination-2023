@@ -14,11 +14,11 @@
                     </h2>
                     <span class="mb-2">{{ store.currentUser.email }}</span>
 
-                    <span><strong>Eliminated:</strong> {{ !!store.currentUser.eliminatedBy }}</span>
-                    <span v-if="store.currentUser.eliminatedBy">
+                    <span><strong>Eliminated:</strong> {{ !!store.eliminatedBy }}</span>
+                    <span v-if="store.eliminatedBy">
                         <strong>Eliminated by:</strong>
                         <!-- TODO: fancier display -->
-                        {{ store.currentUser.eliminatedBy.forename }} {{ store.currentUser.eliminatedBy.surname }}
+                        {{ store.eliminatedBy.forename }} {{ store.eliminatedBy.surname }}
                     </span>
                     <span><strong>EER (elimination-eliminated-ratio):</strong> {{ store.currentUser.eliminated.length }}.0</span>
                 </div>

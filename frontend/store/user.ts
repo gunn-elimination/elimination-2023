@@ -29,5 +29,11 @@ export const useUserStore = defineStore('user', () => {
         onResponse: responseHandler
     });
 
-    return {currentUser, target, code, pending};
+    const {data: eliminatedBy} = useFetch(`${config.public.apiUrl}/game/eliminatedBy`, {
+        credentials: 'include',
+        server: false,
+        onResponse: responseHandler
+    });
+
+    return {currentUser, target, code, eliminatedBy, pending};
 });
