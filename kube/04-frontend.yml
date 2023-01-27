@@ -29,9 +29,6 @@ spec:
                     env:
                         -   name: PORT
                             value: "80"
-                    envFrom:
-                        -   secretRef:
-                                name: elimination-2023-frontend
                     resources:
                         requests:
                             memory: "128Mi"
