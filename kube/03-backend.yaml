@@ -1,51 +1,70 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend
-  labels:
-    app: backend
+    name: backend
+    labels:
+        app: elimination
+        task: backend
 
 spec:
     replicas: 5
     selector:
-      matchLabels:
-        app: backend
+        matchLabels:
+            app: elimination
+            task: backend
+
     template:
         metadata:
             labels:
-             app: backend
+                app: elimination
+                task: backend
         spec:
             imagePullSecrets:
                 -   name: regcred
             containers:
-            - name: backend
-              image: ghcr.io/gunn-elimination/elimination-2023/backend:v0.01
-              ports:
-              - containerPort: 80
-              env:
-              - name: PORT
-                value: "80"
+                -   name: backend
+                    image: ghcr.io/gunn-elimination/elimination-2023/backend:v0.03
+                    ports:
+                        -   containerPort: 80
+                    env:
+                        -   name: PORT
+                            value: "80"
 
-              envFrom:
-                - secretRef:
-                    name: elimination-2023-backend
-              resources:
-                  requests:
-                      memory: "512Mi"
-                      cpu: "500m"
-                  limits:
-                      memory: "1024Mi"
-                      cpu: "1000m"
-              livenessProbe:
-                  httpGet:
-                      path: /api/actuator/health/livenessstate
-                      port: 80
-                  initialDelaySeconds: 60
-                  periodSeconds: 10
+                    envFrom:
+                        -   secretRef:
+                                name: elimination-2023-backend
+                    resources:
+                        requests:
+                            memory: "512Mi"
+                            cpu: "500m"
+                        limits:
+                            memory: "1024Mi"
+                            cpu: "1000m"
+                    livenessProbe:
+                        httpGet:
+                            path: /api/actuator/health/liveness
+                            port: 80
+                        initialDelaySeconds: 60
+                        periodSeconds: 10
 
-              readinessProbe:
-                  httpGet:
-                      path: /api/actuator/health/readinessstate
-                      port: 80
-                  initialDelaySeconds: 60
-                  periodSeconds: 10
+                    readinessProbe:
+                        httpGet:
+                            path: /api/actuator/health/readiness
+                            port: 80
+                        initialDelaySeconds: 60
+                        periodSeconds: 10
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: backend-service
+
+spec:
+    type: NodePort
+    ports:
+        -   name: http
+            port: 80
+    selector:
+        app: elimination
+        task: backend
