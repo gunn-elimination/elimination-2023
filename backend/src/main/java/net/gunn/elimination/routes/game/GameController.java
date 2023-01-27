@@ -56,4 +56,10 @@ public class GameController {
     public EliminationUser target(@AuthenticationPrincipal EliminationAuthentication me) {
         return me.user().getTarget();
     }
+
+	@GetMapping("/eliminatedBy")
+	@SentrySpan
+	public EliminationUser eliminatedBy(@AuthenticationPrincipal EliminationAuthentication me) {
+		return me.user().getEliminatedBy();
+	}
 }
