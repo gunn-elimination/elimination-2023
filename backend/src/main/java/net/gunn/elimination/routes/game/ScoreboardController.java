@@ -2,7 +2,10 @@ package net.gunn.elimination.routes.game;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.sentry.spring.tracing.SentrySpan;
+import net.gunn.elimination.auth.Roles;
+import net.gunn.elimination.auth.Roles;
 import net.gunn.elimination.model.EliminationUser;
+import net.gunn.elimination.model.Role;
 import net.gunn.elimination.repository.UserRepository;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Pageable;
@@ -35,10 +38,13 @@ public class ScoreboardController {
 	private Scoreboard scoreboard0(@RequestParam(defaultValue = "20") int limit) {
 		var users = userRepository.findTopByNumberOfEliminations(Pageable.ofSize(limit));
 		Hibernate.initialize(users);
-		return new Scoreboard(users);
+		return new Scoreboard(
+			users
+			, userRepository.countEliminationUsersByRolesContaining(Roles.PLAYER)
+		);
 	}
 
-	public record Scoreboard(@JsonProperty List<EliminationUser> users) {
+	public record Scoreboard(@JsonProperty List<EliminationUser> users, @JsonProperty int numParticipants) {
 	}
 
 	public record ScoreboardSubscription(SseEmitter emitter, int limit) {
