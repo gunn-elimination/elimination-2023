@@ -13,7 +13,11 @@
                 />
 
                 <span class="font-bold text-lg">{{ store.currentUser.forename }} {{ store.currentUser.surname }}</span>
-                <span class="text-sm"><!-- #4 • -->{{ store.currentUser.eliminated.length }} eliminations</span>
+                <span class="text-sm">
+                    <!-- #4 • -->
+                    {{ store.currentUser.eliminated.length }}
+                    elimination<template v-if="store.currentUser.eliminated.length !== 1">s</template>
+                </span>
             </div>
         </div>
         <div class="px-6 sm:px-12 mt-6 pb-12">

@@ -2,7 +2,10 @@
     <li class="flex gap-4 items-center">
         <Avatar :user="user" />
         <p class="font-medium">{{ user.forename }} {{ user.surname }}</p>
-        <p class="text-secondary italic">{{ user.eliminated.length }} eliminations</p>
+        <p class="text-secondary italic">
+            {{ user.eliminated.length }}
+            elimination<template v-if="user.eliminated.length !== 1">s</template>
+        </p>
     </li>
 </template>
 
