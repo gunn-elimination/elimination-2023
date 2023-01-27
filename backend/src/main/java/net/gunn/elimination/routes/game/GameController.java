@@ -1,6 +1,7 @@
 package net.gunn.elimination.routes.game;
 
 import io.sentry.spring.tracing.SentrySpan;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import net.gunn.elimination.EliminationManager;
 import net.gunn.elimination.EmptyGameException;
 import net.gunn.elimination.IncorrectEliminationCodeException;
@@ -40,6 +41,7 @@ public class GameController {
      */
     @GetMapping(value = "/code", produces = "application/json")
     @SentrySpan
+	@ResponseBody
     public String code(@AuthenticationPrincipal EliminationAuthentication user) {
         return user.user().getEliminationCode();
     }
@@ -61,12 +63,14 @@ public class GameController {
 
     @GetMapping("/target")
     @SentrySpan
+	@ResponseBody
     public EliminationUser target(@AuthenticationPrincipal EliminationAuthentication me) {
         return me.user().getTarget();
     }
 
 	@GetMapping("/eliminatedBy")
 	@SentrySpan
+	@ResponseBody
 	public EliminationUser eliminatedBy(@AuthenticationPrincipal EliminationAuthentication me) {
 		return me.user().getEliminatedBy();
 	}
