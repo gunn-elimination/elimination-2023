@@ -1,0 +1,36 @@
+name: Rebuild and redeploy backend
+
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - 'backend/**'
+            - '.github/workflows/k8s-update-backend.yml'
+
+jobs:
+    build-backend:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+            -   name: Build the backend image
+                run: |
+                    cd frontend
+                    docker build -t ghcr.io/gunn-elimination/elimination-2023/backend:${{ github.sha }} .
+                    docker push ghcr.io/gunn-elimination/elimination-2023/backend:${{ github.sha }}
+
+            -   name: Update the backend image
+                uses: actions-hub/kubectl@master
+                env:
+                    KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+
+                with:
+                    args: set image deployment/backend backend=ghcr.io/gunn-elimination/elimination-2023/backend:${{ github.sha }}
+
+            -   name: Update the backend deployment
+                uses: actions-hub/kubectl@master
+                env:
+                    KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+
+                with:
+                    args: rollout restart deployment/backend

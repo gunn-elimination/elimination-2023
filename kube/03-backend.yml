@@ -23,7 +23,7 @@ spec:
                 -   name: regcred
             containers:
                 -   name: backend
-                    image: ghcr.io/gunn-elimination/elimination-2023/backend:v0.03
+                    image: ghcr.io/gunn-elimination/elimination-2023/backend:${{ env.BACKEND_VERSION }}
                     ports:
                         -   containerPort: 80
                     env:
@@ -52,7 +52,12 @@ spec:
                             path: /api/actuator/health/readiness
                             port: 80
                         initialDelaySeconds: 60
-                        periodSeconds: 10
+                        periodSeconds: 2
+
+                    volumeMounts:
+                        -   name: spring-yml-config
+                            mountPath: /app
+                            subPath: application.yml
 
 ---
 apiVersion: v1
