@@ -4,6 +4,7 @@ import net.gunn.elimination.EliminationManager;
 import net.gunn.elimination.exceptions.NonPAUSDUserException;
 import net.gunn.elimination.model.EliminationUser;
 import net.gunn.elimination.repository.UserRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -138,6 +139,8 @@ class EliminationUserService implements OAuth2UserService<OidcUserRequest, OidcU
 			user.addRole(ADMIN);
 			user = userRepository.save(user);
 		}
+
+		Hibernate.initialize(user);
 
 		return new EliminationOauthAuthenticationImpl(user, oidcUser);
 	}

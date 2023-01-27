@@ -83,8 +83,12 @@ public class GameController {
 	@SentrySpan
 	@ResponseBody
 	@Transactional
-	public Set eliminatedBy(@AuthenticationPrincipal EliminationAuthentication me) {
+	public Set eliminatedBy(@AuthenticationPrincipal EliminationAuthentication me, HttpServletResponse r) {
 		var eliminatedBy = me.user().getEliminatedBy();
+		if (eliminatedBy == null) {
+			r.setStatus(404);
+			return Set.of();
+		}
 
 		return Set.of(
 			"email", eliminatedBy.getEmail(),
