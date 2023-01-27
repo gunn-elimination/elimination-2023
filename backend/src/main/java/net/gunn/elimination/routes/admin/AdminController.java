@@ -10,6 +10,7 @@ import net.gunn.elimination.repository.UserRepository;
 import net.gunn.elimination.routes.AnnouncementController;
 import net.gunn.elimination.routes.SSEController;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.Instant;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
 
 import static net.gunn.elimination.auth.Roles.BANNED;
 import static net.gunn.elimination.auth.Roles.PLAYER;
@@ -176,76 +179,17 @@ public class AdminController {
 		}
 	}
 
-	@GetMapping("/validateGame")
-	public Map validateGame() {
-		boolean valid = true;
-
-		List<EliminationUser> allUsers = userRepository.findAll();
-
-		Set<EliminationUser> visitedActiveUsers = new HashSet<>();
-		Set<EliminationUser> eliminated = new HashSet<>();
-
-		for (EliminationUser user : allUsers) {
-			if (user.isEliminated()) {
-				// make sure not in the elimination chain.. lol
-				if (visitedActiveUsers.contains(user)) {
-					valid = false;
-				}
-
-				if (eliminated.add(user)) {
-					// already added??
-					// is this invalid lol
-					// if this happens then there are duplicates in allUsers?
-				}
-			} else {
-				// check if user is already in chain
-				if (visitedActiveUsers.contains(user)) {
-					// all gucchi
-				} else {
-					// if not, this should be our first chain
-					// otherwise we'll have separate chains which is Bad
-					if (visitedActiveUsers.size() > 0) {
-						// check that we're in the chain
-						if (!visitedActiveUsers.contains(user)) {
-							valid = false;
-						}
-
-						// add all active users anyway for accurate counts
-						visitedActiveUsers.add(user);
-					} else {
-						// traverse chain and mark all users as visited
-						visitedActiveUsers.add(user);
-
-						EliminationUser current = user.getTarget();
-						while (current != user) { // keep going until back at start user
-							// add to list of active users
-							// if already in there, something is wrong
-							if (!visitedActiveUsers.add(current)) {
-								valid = false;
-							}
-
-							// go next
-							current = current.getTarget();
-						}
-					}
-				}
-			}
-		}
-
-		List<String> activeChain = new ArrayList<>();
-		for (EliminationUser user : visitedActiveUsers) {
-			activeChain.add(user.getForename() + " " + user.getSurname() + "->" + user.getTarget().getForename() + " " + user.getTarget().getSurname());
-		}
-
-		return Map.of(
-			"users", allUsers.size(),
-			"eliminated", eliminated.size(),
-			"active", visitedActiveUsers.size(),
-			"valid game", valid,
-			"elim chain", activeChain
-		);
+	@GetMapping("/reshuffleAllTargetsYesImVerySure")
+	public void reshuffleTargets() {
+		eliminationManager.reshuffleChain();
 	}
 
+	@GetMapping("/validateGame")
+	public Map validateGame() {
+		return eliminationManager.validateGame();
+	}
+
+	@Profile(value = "test")
 	@GetMapping("/insertTestDataAAAA")
 	public void insertTestData() {
 		userService.setupNewUser(new EliminationUser(

@@ -37,7 +37,6 @@ public class EliminationUserService implements OAuth2UserService<OidcUserRequest
 	public EliminationUserService(
 		UserRepository userRepository,
 		EliminationCodeGenerator eliminationCodeGenerator,
-
 		AdminList admins,
 		@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") @Value("${elimination.registration-deadline}") LocalDateTime registrationDeadline,
 		EliminationManager eliminationManager) {
@@ -57,8 +56,7 @@ public class EliminationUserService implements OAuth2UserService<OidcUserRequest
 	@Override
 	public EliminationOauthAuthenticationImpl loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
 		OidcUser oidcUser = delegate.loadUser(userRequest);
-		if (!isValidEmail(oidcUser.getEmail()))
-			throw new NonPAUSDUserException(oidcUser.getEmail());
+		if (!isValidEmail(oidcUser.getEmail())) throw new NonPAUSDUserException(oidcUser.getEmail());
 
 		try {
 			return processOidcUser(oidcUser);
@@ -82,11 +80,7 @@ public class EliminationUserService implements OAuth2UserService<OidcUserRequest
 
 		var page = random.nextInt((int) (userRepository.count() - 1));
 		var pageRequest = PageRequest.of(page, 1);
-		var insertionPoint = userRepository.findEliminationUsersByRolesContainingAndSubjectNot(
-			PLAYER,
-			user.getSubject(),
-			pageRequest
-		).getContent().get(0);
+		var insertionPoint = userRepository.findEliminationUsersByRolesContainingAndSubjectNot(PLAYER, user.getSubject(), pageRequest).getContent().get(0);
 
 		user.setTarget(insertionPoint.getTarget());
 		user.getTarget().setTargettedBy(user);
@@ -113,8 +107,7 @@ public class EliminationUserService implements OAuth2UserService<OidcUserRequest
 
 		userRepository.save(user);
 
-		if (!eliminationManager.gameHasEnded())
-			insertUserRandomly(user);
+		if (!eliminationManager.gameHasEnded()) eliminationManager.insertUserToChain(user);
 	}
 
 	private void setupNewUser(OidcUser oidcUser) {
@@ -126,13 +119,6 @@ public class EliminationUserService implements OAuth2UserService<OidcUserRequest
 			eliminationCodeGenerator.randomCode(),
 			Set.of(USER)
 		);
-		if (userRepository.count() == 1) {
-			// Start the game
-			userRepository.findAll().forEach(u -> {
-				u.addRole(PLAYER);
-				userRepository.save(u);
-			});
-		}
 		setupNewUser(user);
 	}
 
