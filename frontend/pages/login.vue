@@ -8,6 +8,6 @@
 
 <script>
 definePageMeta({
-    layout: "login",
+    layout: "centered",
 });
 </script>
