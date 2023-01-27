@@ -6,12 +6,15 @@ import net.gunn.elimination.EmptyGameException;
 import net.gunn.elimination.IncorrectEliminationCodeException;
 import net.gunn.elimination.auth.EliminationAuthentication;
 import net.gunn.elimination.model.EliminationUser;
+import net.gunn.elimination.routes.SSEController;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 
 @RestController
@@ -24,13 +27,13 @@ import java.io.IOException;
 )
 public class GameController {
     public final EliminationManager eliminationManager;
-    private final ScoreboardController scoreboardController;
+	private final Optional<SSEController> sseController;
 
 
-    public GameController(EliminationManager eliminationManager, ScoreboardController scoreboardController) {
+    public GameController(EliminationManager eliminationManager, Optional<SSEController> sseController) {
         this.eliminationManager = eliminationManager;
-        this.scoreboardController = scoreboardController;
-    }
+		this.sseController = sseController;
+	}
 
     /**
      * @apiNote Gets the current user's elimination code.
@@ -44,10 +47,15 @@ public class GameController {
     @GetMapping("/eliminate")
     @PostMapping("/eliminate")
     @SentrySpan
+	@Transactional
     public void eliminate(HttpServletResponse response,  @AuthenticationPrincipal EliminationAuthentication me, @RequestParam("code") String code) throws IncorrectEliminationCodeException, EmptyGameException, IOException {
         var eliminated = eliminationManager.attemptElimination(me.user(), code);
-        scoreboardController.pushKill(new Kill(me.user(), eliminated));
-		scoreboardController.pushScoreboard();
+
+		sseController.ifPresent(sseController -> {
+			sseController.signalKill(new Kill(me.user(), eliminated));
+			sseController.signalScoreboardChange();
+		});
+
         response.sendRedirect("/");
     }
 

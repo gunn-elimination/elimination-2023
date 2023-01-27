@@ -12,35 +12,35 @@
     <h1>Winner: <span style="color: gold" th:text="${winner}"></span></h1>
 </div>
 
-<div id="playerWindow" th:if="${eliminationManager.gameIsOngoing() && !currentUser.isEliminated()}">
-    <table id="criticalInfoTable">
-        <tr>
-            <th>
-                Your current target
-            </th>
-            <td style="color: blueviolet; "
-                th:text="${currentUser.getTarget()}">
-            </td>
-        </tr>
+<!--<div id="playerWindow" th:if="${eliminationManager.gameIsOngoing() && !currentUser.isEliminated()}">-->
+<!--    <table id="criticalInfoTable">-->
+<!--        <tr>-->
+<!--            <th>-->
+<!--                Your current target-->
+<!--            </th>-->
+<!--            <td style="color: blueviolet; "-->
+<!--                th:text="${currentUser.getTarget()}">-->
+<!--            </td>-->
+<!--        </tr>-->
 
-        <tr>
-            <th>Your secret code</th>
-            <td style="color: red "
-                th:text="${currentUser.getEliminationCode()}"></td>
-        </tr>
-    </table>
+<!--        <tr>-->
+<!--            <th>Your secret code</th>-->
+<!--            <td style="color: red "-->
+<!--                th:text="${currentUser.getEliminationCode()}"></td>-->
+<!--        </tr>-->
+<!--    </table>-->
 
-    <div id="eliminationBox">
-        <p style="color: darkblue; margin: .3em 1em .5em;">
-            Caught your target?
-        </p>
-        <form action="/game/eliminate" method="get">
-            <input type="text" id="eliminationCode" name="code" placeholder="Target's code"/>
-            <input type="submit" value="eliminate"/>
-        </form>
-    </div>
+<!--    <div id="eliminationBox">-->
+<!--        <p style="color: darkblue; margin: .3em 1em .5em;">-->
+<!--            Caught your target?-->
+<!--        </p>-->
+<!--        <form action="/game/eliminate" method="get">-->
+<!--            <input type="text" id="eliminationCode" name="code" placeholder="Target's code"/>-->
+<!--            <input type="submit" value="eliminate"/>-->
+<!--        </form>-->
+<!--    </div>-->
 
-</div>
+<!--</div>-->
 
 
 <h1 th:if="${currentUser.isEliminated()}"
@@ -53,26 +53,6 @@
 </div>
 
 <div th:replace="announcement-fragments :: announcements">
-
-<hr/>
-<h1>Scoreboard</h1>
-<table class="fancy">
-    <tbody>
-    <tr>
-        <td>Email</td>
-        <td>Forename</td>
-        <td>Surname</td>
-        <td>Number of eliminations</td>
-    </tr>
-
-    <tr th:each="user : ${scoreboard.users()}" th:style="${user.isWinner() ? 'color: gold' : ''}">
-        <td><p th:text="${user.getEmail()}"></p></td>
-        <td><p th:text="${user.getForename()}"></p></td>
-        <td><p th:text="${user.getSurname()}"></p></td>
-        <td><p th:text="${user.getPreviousVictims().size()}"></p></td>
-    </tr>
-    </tbody>
-</table>
 
 </body>
 </html>

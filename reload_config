@@ -1,0 +1,3 @@
+#!/bin/bash
+kubectl create configmap spring-yml-config --from-file=application.yml --dry-run -o yaml | kubectl apply -f -
+kubectl rollout restart deployments/backend
