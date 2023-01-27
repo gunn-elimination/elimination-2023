@@ -23,7 +23,7 @@ spec:
                 -   name: regcred
             containers:
                 -   name: frontend
-                    image: ghcr.io/gunn-elimination/elimination-2023/frontend:${{ env.FRONTEND_VERSION }}
+                    image: ghcr.io/gunn-elimination/elimination-2023/frontend:latest
                     ports:
                         -   containerPort: 80
                     env:

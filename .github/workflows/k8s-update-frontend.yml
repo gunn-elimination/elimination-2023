@@ -24,7 +24,9 @@ jobs:
                 run: |
                     cd frontend
                     docker build -t ghcr.io/gunn-elimination/elimination-2023/frontend:${{ github.sha }} .
+                    docker tag ghcr.io/gunn-elimination/elimination-2023/frontend:${{ github.sha }} ghcr.io/gunn-elimination/elimination-2023/frontend:latest
                     docker push ghcr.io/gunn-elimination/elimination-2023/frontend:${{ github.sha }}
+                    docker push ghcr.io/gunn-elimination/elimination-2023/frontend:latest
 
             -   name: Update the frontend image
                 uses: actions-hub/kubectl@master

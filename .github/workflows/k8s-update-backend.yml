@@ -24,7 +24,9 @@ jobs:
                 run: |
                     cd backend
                     docker build -t ghcr.io/gunn-elimination/elimination-2023/backend:${{ github.sha }} .
+                    docker tag ghcr.io/gunn-elimination/elimination-2023/backend:${{ github.sha }} ghcr.io/gunn-elimination/elimination-2023/backend:latest
                     docker push ghcr.io/gunn-elimination/elimination-2023/backend:${{ github.sha }}
+                    docker push ghcr.io/gunn-elimination/elimination-2023/backend:latest
 
             -   name: Update the backend image
                 uses: actions-hub/kubectl@master
