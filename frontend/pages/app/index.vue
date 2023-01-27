@@ -33,7 +33,7 @@
             <h3 class="font-semibold text-secondary mb-4">
                 Restrictions for {{ currentTimeStore.time.toLocaleString({ weekday: 'long', month: 'long', day: '2-digit' }) }}:
             </h3>
-            <div class="flex flex-col gap-2 px-4">
+            <div v-if="info" class="flex flex-col gap-2 px-4">
                 <div v-if="info.announcement" class="flex gap-4">
                     <MegaphoneIcon class="h-6 w-6 text-primary flex-none" />
                     <strong>{{ info.announcement }}</strong>
@@ -43,6 +43,9 @@
                     {{ info.restriction }}
                 </div>
             </div>
+            <p v-else class="text-secondary text-center italic">
+                There are no restrictions to display.
+            </p>
         </section>
 
         <!--
