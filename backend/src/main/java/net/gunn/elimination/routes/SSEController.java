@@ -2,10 +2,12 @@ package net.gunn.elimination.routes;
 
 import io.sentry.Sentry;
 import io.sentry.spring.tracing.SentrySpan;
-import net.gunn.elimination.RabbitConfig;
 import net.gunn.elimination.model.Announcement;
 import net.gunn.elimination.routes.game.Kill;
 import net.gunn.elimination.routes.game.ScoreboardController;
+import org.springframework.amqp.rabbit.annotation.Exchange;
+import org.springframework.amqp.rabbit.annotation.Queue;
+import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -25,7 +27,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @ConditionalOnProperty(name = "elimination.sse.enabled", havingValue = "true")
 public class SSEController {
 	private final RabbitTemplate rabbitTemplate; // so we can broadcast between replicas
-	private final RabbitConfig rabbitConfig;
 
 	private final AnnouncementController announcementController;
 	private final ScoreboardController scoreboardController;
@@ -36,9 +37,8 @@ public class SSEController {
 
 	private final EntityManagerFactory emf;
 
-	public SSEController(RabbitTemplate rabbitTemplate, RabbitConfig rabbitConfig, AnnouncementController announcementController, ScoreboardController scoreboardController, EntityManagerFactory emf) {
+	public SSEController(RabbitTemplate rabbitTemplate, AnnouncementController announcementController, ScoreboardController scoreboardController, EntityManagerFactory emf) {
 		this.rabbitTemplate = rabbitTemplate;
-		this.rabbitConfig = rabbitConfig;
 		this.announcementController = announcementController;
 		this.scoreboardController = scoreboardController;
 		this.emf = emf;
@@ -97,7 +97,12 @@ public class SSEController {
 		return emitter;
 	}
 
-	@RabbitListener(queues = "#{rabbitConfig.getAnnouncementQueueName()}")
+	@RabbitListener(bindings =
+	@QueueBinding(
+		value = @Queue(""),
+		exchange = @Exchange(name = "announcements", type = "fanout")
+	)
+	)
 	public void sendAnnouncementsToConnectedClients() {
 		List<Announcement> announcements;
 
@@ -124,7 +129,12 @@ public class SSEController {
 	}
 
 	@SentrySpan(description = "send scoreboard after update via sse")
-	@RabbitListener(queues = "#{rabbitConfig.getScoreboardQueueName()}")
+	@RabbitListener(bindings =
+	@QueueBinding(
+		value = @Queue(""),
+		exchange = @Exchange(name = "scoreboard", type = "fanout")
+	)
+	)
 	public void sendScoreboardToConnectedClients() {
 		var em = emf.createEntityManager();
 		em.getTransaction().begin();
@@ -153,7 +163,12 @@ public class SSEController {
 	}
 
 	@SentrySpan(description = "sends kill events to clients via see")
-	@RabbitListener(queues = "#{rabbitConfig.getKillQueueName()}")
+	@RabbitListener(bindings =
+	@QueueBinding(
+		value = @Queue(""),
+		exchange = @Exchange(name = "kills", type = "fanout")
+	)
+	)
 	void sendKillToConnectedClients(Kill kill) {
 		for (var emitter : new HashSet<>(killEmitters)) {
 			try {
@@ -165,14 +180,14 @@ public class SSEController {
 	}
 
 	public void signalAnnouncementChange() {
-		rabbitTemplate.convertAndSend(rabbitConfig.getAnnouncementQueueName(), "");
+		rabbitTemplate.convertAndSend("announcements", "announcements", "update");
 	}
 
 	public void signalScoreboardChange() {
-		rabbitTemplate.convertAndSend(rabbitConfig.getScoreboardQueueName(), "");
+		rabbitTemplate.convertAndSend("scoreboard", "scoreboard", "update");
 	}
 
 	public void signalKill(Kill kill) {
-		rabbitTemplate.convertAndSend(rabbitConfig.getKillQueueName(), kill);
+		rabbitTemplate.convertAndSend("kills", "kills", kill);
 	}
 }
