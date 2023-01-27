@@ -1,5 +1,6 @@
 package net.gunn.elimination.routes.game;
 
+import io.micrometer.core.annotation.Timed;
 import io.sentry.spring.tracing.SentrySpan;
 import net.gunn.elimination.EliminationManager;
 import net.gunn.elimination.EmptyGameException;
@@ -29,6 +30,7 @@ import java.util.Optional;
 	allowCredentials = "true",
 	exposedHeaders = "SESSION"
 )
+@Timed
 public class GameController {
 	public final EliminationManager eliminationManager;
 	private final Optional<SSEController> sseController;

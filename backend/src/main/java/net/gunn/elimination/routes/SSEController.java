@@ -1,5 +1,6 @@
 package net.gunn.elimination.routes;
 
+import io.micrometer.core.annotation.Timed;
 import io.sentry.Sentry;
 import io.sentry.spring.tracing.SentrySpan;
 import net.gunn.elimination.auth.Roles;
@@ -27,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @RestController
 @CrossOrigin(originPatterns = "*")
 @ConditionalOnProperty(name = "elimination.sse.enabled", havingValue = "true")
+@Timed
 public class SSEController {
 	private final RabbitTemplate rabbitTemplate; // so we can broadcast between replicas
 

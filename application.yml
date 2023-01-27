@@ -58,8 +58,13 @@ management:
         livenessstate.enabled: true
         readinessstate.enabled: true
 
-    endpoints.web.exposure.include: "*"
-    endpoint.health.probes.enabled: true
+    endpoints:
+        web.exposure.include: "*"
+        health.probes.enabled: true
+        metrics.enabled: true
+        prometheus.enabled: true
+
+    metrics.export.prometheus.enabled: true
 
 #logging:
 #    level:

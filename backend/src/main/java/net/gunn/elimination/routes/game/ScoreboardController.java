@@ -1,26 +1,22 @@
 package net.gunn.elimination.routes.game;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.micrometer.core.annotation.Timed;
 import io.sentry.spring.tracing.SentrySpan;
 import net.gunn.elimination.auth.Roles;
-import net.gunn.elimination.auth.Roles;
 import net.gunn.elimination.model.EliminationUser;
-import net.gunn.elimination.model.Role;
 import net.gunn.elimination.repository.UserRepository;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import javax.persistence.EntityManagerFactory;
-import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/game")
 @CrossOrigin(originPatterns = "*")
+@Timed
 public class ScoreboardController {
 	private final UserRepository userRepository;
 
