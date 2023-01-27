@@ -4,6 +4,7 @@ on:
     push:
         branches:
             - k8s
+            - main
         paths:
             - 'backend/**'
             - '.github/workflows/k8s-update-backend.yml'
