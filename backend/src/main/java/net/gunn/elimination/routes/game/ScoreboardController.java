@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.sentry.spring.tracing.SentrySpan;
 import net.gunn.elimination.model.EliminationUser;
 import net.gunn.elimination.repository.UserRepository;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,9 @@ public class ScoreboardController {
 	}
 
 	private Scoreboard scoreboard0(@RequestParam(defaultValue = "20") int limit) {
-		return new Scoreboard(new ArrayList<>(userRepository.findTopByNumberOfEliminations(Pageable.ofSize(limit))));
+		var users = userRepository.findTopByNumberOfEliminations(Pageable.ofSize(limit));
+		Hibernate.initialize(users);
+		return new Scoreboard(users);
 	}
 
 	public record Scoreboard(@JsonProperty List<EliminationUser> users) {
