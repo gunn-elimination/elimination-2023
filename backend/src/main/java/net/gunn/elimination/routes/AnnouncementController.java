@@ -43,6 +43,6 @@ public class AnnouncementController {
             result = announcementRepository.findAnnouncementsForCurrentTime();
 
         result.sort(Comparator.comparing(Announcement::getStartDate).reversed());
-        return result;
+        return new ArrayList<>(result);
     }
 }

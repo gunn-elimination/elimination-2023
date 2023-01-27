@@ -32,7 +32,7 @@ public class ScoreboardController {
 	}
 
 	private Scoreboard scoreboard0(@RequestParam(defaultValue = "20") int limit) {
-		return new Scoreboard(userRepository.findTopByNumberOfEliminations(Pageable.ofSize(limit)));
+		return new Scoreboard(new ArrayList<>(userRepository.findTopByNumberOfEliminations(Pageable.ofSize(limit))));
 	}
 
 	public record Scoreboard(@JsonProperty List<EliminationUser> users) {
