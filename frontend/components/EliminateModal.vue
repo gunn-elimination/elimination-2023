@@ -37,9 +37,8 @@ const code = ref('');
 
 function onSubmit() {
     fetch(`${config.public.apiUrl}/game/eliminate?code=${code.value}`)
-        .then(res => res.json())
         .then(res => {
-            if (res.error) return;
+            if (!res.ok) return;
             store.refreshTarget();
             store.refreshMe();
         });
