@@ -32,5 +32,7 @@ public interface UserRepository extends JpaRepository<EliminationUser, Long> {
 	@Query("select u from EliminationUser u order by u.eliminated.size desc")
 	List<EliminationUser> findTopByNumberOfEliminations(Pageable pageable);
 
+	int countEliminationUsersByRolesContaining(Role role);
+
 	Optional<EliminationUser> findByWinnerTrue();
 }
