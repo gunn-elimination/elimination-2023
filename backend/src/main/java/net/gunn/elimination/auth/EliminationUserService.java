@@ -4,7 +4,6 @@ import net.gunn.elimination.EliminationManager;
 import net.gunn.elimination.exceptions.NonPAUSDUserException;
 import net.gunn.elimination.model.EliminationUser;
 import net.gunn.elimination.repository.UserRepository;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -140,9 +140,14 @@ class EliminationUserService implements OAuth2UserService<OidcUserRequest, OidcU
 			user = userRepository.save(user);
 		}
 
-		Hibernate.initialize(user.getTarget());
-		if (user.isEliminated())
-			Hibernate.initialize(user.getEliminatedBy());
+		user.setTarget(new EliminationUser(
+			user.getTarget().getSubject(),
+			user.getTarget().getEmail(),
+			user.getTarget().getForename(),
+			user.getTarget().getSurname(),
+			user.getTarget().getEliminationCode(),
+			new HashSet<>(user.getTarget().getRoles())
+		));
 
 		return new EliminationOauthAuthenticationImpl(user, oidcUser);
 	}
