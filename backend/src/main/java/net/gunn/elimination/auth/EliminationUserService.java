@@ -141,18 +141,6 @@ class EliminationUserService implements OAuth2UserService<OidcUserRequest, OidcU
 			user = userRepository.save(user);
 		}
 
-		user = (EliminationUser) Hibernate.unproxy(user);
-		user.target = (EliminationUser) Hibernate.unproxy(user.target);
-		if (user.target != null)
-			user.target = (new EliminationUser(
-				user.target.getSubject(),
-				user.target.getEmail(),
-				user.target.getForename(),
-				user.target.getSurname(),
-				user.target.getEliminationCode(),
-				new HashSet<>(user.target.getRoles())
-			));
-
 		return new EliminationOauthAuthenticationImpl(user, oidcUser);
 	}
 }

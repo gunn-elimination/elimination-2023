@@ -5,9 +5,8 @@ import net.gunn.elimination.EliminationManager;
 import net.gunn.elimination.EmptyGameException;
 import net.gunn.elimination.IncorrectEliminationCodeException;
 import net.gunn.elimination.auth.EliminationAuthentication;
-import net.gunn.elimination.model.EliminationUser;
+import net.gunn.elimination.repository.UserRepository;
 import net.gunn.elimination.routes.SSEController;
-import org.hibernate.Hibernate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,13 +30,15 @@ import java.util.Set;
 public class GameController {
 	public final EliminationManager eliminationManager;
 	private final Optional<SSEController> sseController;
+	private final UserRepository userRepository;
 
 	private final EntityManagerFactory emf;
 
 
-	public GameController(EliminationManager eliminationManager, Optional<SSEController> sseController, EntityManagerFactory emf) {
+	public GameController(EliminationManager eliminationManager, Optional<SSEController> sseController, UserRepository userRepository, EntityManagerFactory emf) {
 		this.eliminationManager = eliminationManager;
 		this.sseController = sseController;
+		this.userRepository = userRepository;
 		this.emf = emf;
 	}
 
@@ -47,19 +48,22 @@ public class GameController {
 	@GetMapping(value = "/code", produces = "application/json")
 	@SentrySpan
 	@ResponseBody
-	public String code(@AuthenticationPrincipal EliminationAuthentication user) {
-		return user.user().getEliminationCode();
+	@Transactional
+	public String code(@AuthenticationPrincipal EliminationAuthentication user_) {
+		var user = userRepository.findBySubject(user_.subject()).orElseThrow();
+		return user.getEliminationCode();
 	}
 
 	@GetMapping("/eliminate")
 	@PostMapping("/eliminate")
 	@SentrySpan
 	@Transactional
-	public void eliminate(HttpServletResponse response, @AuthenticationPrincipal EliminationAuthentication me, @RequestParam("code") String code) throws IncorrectEliminationCodeException, EmptyGameException, IOException {
-		var eliminated = eliminationManager.attemptElimination(me.user(), code);
+	public void eliminate(HttpServletResponse response, @AuthenticationPrincipal EliminationAuthentication me_, @RequestParam("code") String code) throws IncorrectEliminationCodeException, EmptyGameException, IOException {
+		var me = userRepository.findBySubject(me_.subject()).orElseThrow();
+		var eliminated = eliminationManager.attemptElimination(me, code);
 
 		sseController.ifPresent(sseController -> {
-			sseController.signalKill(new Kill(me.user(), eliminated));
+			sseController.signalKill(new Kill(me, eliminated));
 			sseController.signalScoreboardChange();
 		});
 
@@ -70,8 +74,9 @@ public class GameController {
 	@SentrySpan
 	@ResponseBody
 	@Transactional
-	public Set target(@AuthenticationPrincipal EliminationAuthentication me) {
-		var target = me.user().target;
+	public Set target(@AuthenticationPrincipal EliminationAuthentication me_) {
+		var me = userRepository.findBySubject(me_.subject()).orElseThrow();
+		var target = me.getTarget();
 		return Set.of(
 			"email", target.getEmail(),
 			"forename", target.getForename(),
@@ -83,13 +88,13 @@ public class GameController {
 	@SentrySpan
 	@ResponseBody
 	@Transactional
-	public Set eliminatedBy(@AuthenticationPrincipal EliminationAuthentication me, HttpServletResponse r) {
-		var eliminatedBy = me.user().getEliminatedBy();
+	public Set eliminatedBy(@AuthenticationPrincipal EliminationAuthentication me) {
+		var me_ = userRepository.findBySubject(me.subject()).orElseThrow();
+		var eliminatedBy = me_.getEliminatedBy();
+
 		if (eliminatedBy == null) {
-			r.setStatus(404);
 			return Set.of();
 		}
-
 		return Set.of(
 			"email", eliminatedBy.getEmail(),
 			"forename", eliminatedBy.getForename(),

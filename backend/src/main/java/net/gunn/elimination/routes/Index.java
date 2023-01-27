@@ -2,6 +2,7 @@ package net.gunn.elimination.routes;
 
 import net.gunn.elimination.EliminationManager;
 import net.gunn.elimination.auth.EliminationAuthentication;
+import net.gunn.elimination.repository.UserRepository;
 import net.gunn.elimination.routes.game.ScoreboardController;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,20 +20,25 @@ public class Index {
     private final EliminationManager eliminationManager;
     private final ScoreboardController scoreboardController;
     private final AnnouncementController announcementController;
+	private final UserRepository userRepository;
 
-    public Index(EliminationManager eliminationManager, ScoreboardController scoreboardController, AnnouncementController announcementController) {
+    public Index(EliminationManager eliminationManager, ScoreboardController scoreboardController, AnnouncementController announcementController, UserRepository userRepository) {
         this.eliminationManager = eliminationManager;
         this.scoreboardController = scoreboardController;
         this.announcementController = announcementController;
-    }
+		this.userRepository = userRepository;
+	}
 
     @RequestMapping("/")
+	@Transactional
     public String index(@AuthenticationPrincipal EliminationAuthentication user, Model model) {
         if (user == null)
             return "redirect:/login";
 
-        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof EliminationAuthentication auth)
-            model.addAttribute("currentUser", auth.user());
+        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof EliminationAuthentication auth) {
+			var user_ = userRepository.findBySubject(auth.subject());
+			model.addAttribute("currentUser", user_);
+		}
 
         model.addAttribute("eliminationManager", eliminationManager);
         if (eliminationManager.gameHasStarted())

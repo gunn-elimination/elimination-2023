@@ -43,7 +43,7 @@ public class EliminationUser implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @LazyToOne(value = LazyToOneOption.NO_PROXY)
-    public EliminationUser target;
+    private EliminationUser target;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
@@ -149,7 +149,11 @@ public class EliminationUser implements Serializable {
         return eliminatedBy != null;
     }
 
-    public void setEliminatedBy(EliminationUser eliminatedBy) {
+	public Set<EliminationUser> eliminated() {
+		return eliminated;
+	}
+
+	public void setEliminatedBy(EliminationUser eliminatedBy) {
         this.eliminatedBy = eliminatedBy;
     }
 

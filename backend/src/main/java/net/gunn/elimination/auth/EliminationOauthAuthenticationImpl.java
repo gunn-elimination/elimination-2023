@@ -6,18 +6,17 @@ import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 class EliminationOauthAuthenticationImpl extends DefaultOidcUser implements EliminationAuthentication {
-    private final EliminationUser user;
     private final OidcUser original;
 
     public EliminationOauthAuthenticationImpl(EliminationUser user, OidcUser original) {
         super(user.getRoles().stream().map(Object::toString).map(SimpleGrantedAuthority::new).toList(), original.getIdToken(), original.getUserInfo());
-        this.user = user;
         this.original = original;
     }
 
-    public EliminationUser user() {
-        return user;
-    }
+    @Override
+	public String subject() {
+		return original.getSubject();
+	}
 
     public OidcUser original() {
         return original;
@@ -25,7 +24,7 @@ class EliminationOauthAuthenticationImpl extends DefaultOidcUser implements Elim
 
     @Override
     public String getName() {
-        return user.getForename() + " " + user.getSurname();
+        return subject();
     }
 
 }
