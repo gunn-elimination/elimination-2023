@@ -2,10 +2,12 @@ package net.gunn.elimination.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
@@ -36,11 +38,13 @@ public class EliminationUser implements Serializable {
     @OneToOne(mappedBy = "target", fetch = FetchType.LAZY)
     @JsonIgnore
     @LazyToOne(value = LazyToOneOption.NO_PROXY)
+	@Cascade(org.hibernate.annotations.CascadeType.ALL)
     private EliminationUser targettedBy;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @LazyToOne(value = LazyToOneOption.NO_PROXY)
+	@Null
     private EliminationUser target;
 
     @ManyToOne(fetch = FetchType.LAZY)

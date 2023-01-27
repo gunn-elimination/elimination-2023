@@ -1,4 +1,5 @@
-SET REFERENTIAL_INTEGRITY FALSE;
-delete from elimination_user where subject = 'subject0';
-delete from elimination_user where subject = 'subject1';
-SET REFERENTIAL_INTEGRITY TRUE;
+-- SET REFERENTIAL_INTEGRITY FALSE;
+UPDATE elimination_user SET target_subject = NULL;
+UPDATE elimination_user SET eliminated_by_subject = NULL;
+delete from elimination_user;
+-- SET REFERENTIAL_INTEGRITY TRUE;
