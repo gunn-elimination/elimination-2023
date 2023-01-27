@@ -28,11 +28,21 @@ export default {
 </script>
 
 <script setup lang="ts">
+import {useUserStore} from '@/store/user';
+
 const config = useRuntimeConfig();
+const store = useUserStore();
+
 const code = ref('');
 
 function onSubmit() {
-    fetch(`${config.public.apiUrl}/game/eliminate?code=${code.value}`);
+    fetch(`${config.public.apiUrl}/game/eliminate?code=${code.value}`)
+        .then(res => res.json())
+        .then(res => {
+            if (res.error) return;
+            store.refreshTarget();
+            store.refreshMe();
+        });
     code.value = '';
 }
 </script>

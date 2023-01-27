@@ -12,13 +12,13 @@ export const useUserStore = defineStore('user', () => {
     }
 
     // TODO: middleware?
-    const {data: currentUser, pending} = useFetch(`${config.public.apiUrl}/me`, {
+    const {data: currentUser, pending, refresh: refreshMe} = useFetch(`${config.public.apiUrl}/me`, {
         credentials: 'include',
         server: false,
         onResponse: responseHandler
     });
 
-    const {data: targetRaw} = useFetch(`${config.public.apiUrl}/game/target`, {
+    const {data: targetRaw, refresh: refreshTarget} = useFetch(`${config.public.apiUrl}/game/target`, {
         credentials: 'include',
         server: false,
         onResponse: responseHandler
@@ -38,5 +38,5 @@ export const useUserStore = defineStore('user', () => {
     });
     const eliminatedBy = computed(() => eliminatedByRaw.value && (eliminatedByRaw.value as {user: EliminationUser | null}).user);
 
-    return {currentUser, target, code, eliminatedBy, pending};
+    return {currentUser, target, code, eliminatedBy, pending, refreshMe, refreshTarget};
 });
