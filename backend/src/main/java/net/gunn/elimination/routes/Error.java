@@ -1,6 +1,7 @@
 package net.gunn.elimination.routes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.gunn.elimination.auth.RegistrationClosedException;
 import net.gunn.elimination.exceptions.NonPAUSDUserException;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
@@ -48,4 +49,10 @@ public class Error implements ErrorController, AccessDeniedHandler {
             mapper.writeValueAsString(Map.of("error", Map.of("code", request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE), "message", accessDeniedException.getMessage())))
         );
     }
+
+	@ExceptionHandler(RegistrationClosedException.class)
+	public void handleRegistrationClosed(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+		response.sendRedirect("/error/signups-closed");
+	}
 }
