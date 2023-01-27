@@ -28,7 +28,7 @@ server.servlet.session.timeout: 4320m
 server.servlet.context-path: /api
 
 spring:
-    datasource.hikari.maximum-pool-size: 100
+    datasource.hikari.maximum-pool-size: 20
     jpa.hibernate.ddl-auto: update
     thymeleaf:
         cache: false
