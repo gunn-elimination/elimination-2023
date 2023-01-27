@@ -20,6 +20,7 @@ spec:
     type: NodePort
     ports:
         - targetPort: web
+          nodePort: 30080
           port: 80
     selector:
         app: traefik
