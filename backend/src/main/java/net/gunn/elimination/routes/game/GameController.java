@@ -17,6 +17,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.Set;
 
 
 @RestController
@@ -69,17 +70,26 @@ public class GameController {
 	@SentrySpan
 	@ResponseBody
 	@Transactional
-	public EliminationUser target(@AuthenticationPrincipal EliminationAuthentication me) {
+	public Set target(@AuthenticationPrincipal EliminationAuthentication me) {
 		var target = me.user().getTarget();
-		return (EliminationUser) Hibernate.unproxy(target);
+		return Set.of(
+			"email", target.getEmail(),
+			"forename", target.getForename(),
+			"surname", target.getSurname()
+			);
 	}
 
 	@GetMapping("/eliminatedBy")
 	@SentrySpan
 	@ResponseBody
 	@Transactional
-	public EliminationUser eliminatedBy(@AuthenticationPrincipal EliminationAuthentication me) {
+	public Set eliminatedBy(@AuthenticationPrincipal EliminationAuthentication me) {
 		var eliminatedBy = me.user().getEliminatedBy();
-		return (EliminationUser) Hibernate.unproxy(eliminatedBy);
+
+		return Set.of(
+			"email", eliminatedBy.getEmail(),
+			"forename", eliminatedBy.getForename(),
+			"surname", eliminatedBy.getSurname()
+		);
 	}
 }
