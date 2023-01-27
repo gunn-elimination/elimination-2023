@@ -43,7 +43,6 @@ public class EliminationUser implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @LazyToOne(value = LazyToOneOption.NO_PROXY)
-	@Null
     private EliminationUser target;
 
     @ManyToOne(fetch = FetchType.LAZY)
