@@ -40,7 +40,7 @@ public class ScoreboardController {
 		Hibernate.initialize(users);
 		return new Scoreboard(
 			users
-			, userRepository.countEliminationUsersByRolesContaining(Roles.PLAYER)
+			, userRepository.countEliminationUsersByRolesContainingAndEliminatedByNull(Roles.PLAYER)
 		);
 	}
 

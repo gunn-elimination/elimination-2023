@@ -149,7 +149,7 @@ public class SSEController {
 		try {
 			var maxLimit = new HashSet<>(scoreboardEmitters).stream().max(Comparator.comparingInt(ScoreboardController.ScoreboardSubscription::limit)).get().limit();
 			scoreboard = scoreboardController.scoreboard(maxLimit);
-			countUsers = userRepository.countEliminationUsersByRolesContaining(Roles.PLAYER);
+			countUsers = userRepository.countEliminationUsersByRolesContainingAndEliminatedByNull(Roles.PLAYER);
 		} catch (Exception e) {
 			Sentry.captureException(e);
 			return;

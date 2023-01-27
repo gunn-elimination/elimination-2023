@@ -2,8 +2,6 @@ package net.gunn.elimination.repository;
 
 import net.gunn.elimination.model.EliminationUser;
 import net.gunn.elimination.model.Role;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Component
 @Repository
@@ -32,7 +29,7 @@ public interface UserRepository extends JpaRepository<EliminationUser, Long> {
 	@Query("select u from EliminationUser u order by u.eliminated.size desc")
 	List<EliminationUser> findTopByNumberOfEliminations(Pageable pageable);
 
-	int countEliminationUsersByRolesContaining(Role role);
+	int countEliminationUsersByRolesContainingAndEliminatedByNull(Role role);
 
 	Optional<EliminationUser> findByWinnerTrue();
 }
