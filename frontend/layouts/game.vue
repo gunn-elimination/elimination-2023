@@ -12,4 +12,12 @@
     <client-only>
         <InstallModal />
     </client-only>
+    <KillCodeModal :code="store.code" />
+    <EliminateModal />
 </template>
+
+<script setup lang="ts">
+import {useUserStore} from '@/store/user';
+
+const store = useUserStore();
+</script>

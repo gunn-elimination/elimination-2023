@@ -53,10 +53,10 @@
                     <NuxtLink
                         exact-active-class="active"
                         active-class="active"
-                        href="/app/settings"
+                        href="/app/profile"
                     >
-                        <Cog6ToothIcon class="w-5 h-5 stroke-2"/>
-                        Settings
+                        <UserIcon class="w-5 h-5 stroke-2"/>
+                        Profile
                     </NuxtLink>
                 </li>
             </ul>
@@ -65,12 +65,12 @@
 </template>
 
 <script lang="ts">
-import {HomeIcon, Cog6ToothIcon, MegaphoneIcon, CalendarIcon, TrophyIcon} from "@heroicons/vue/24/outline/index.js";
+import {HomeIcon, UserIcon, MegaphoneIcon, CalendarIcon, TrophyIcon} from "@heroicons/vue/24/outline/index.js";
 
 export default {
     components: {
         HomeIcon,
-        Cog6ToothIcon,
+        UserIcon,
         MegaphoneIcon,
         CalendarIcon,
         TrophyIcon,

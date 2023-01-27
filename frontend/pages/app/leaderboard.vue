@@ -8,12 +8,12 @@
             <div class="text-center flex flex-col">
                 <Avatar
                     class="mb-2 mx-auto"
-                    :user="currentUser"
+                    :user="store.currentUser"
                     large
                 />
 
-                <span class="font-bold text-lg">{{ currentUser.forename }} {{ currentUser.surname }}</span>
-                <span class="text-sm"><!-- #4 • -->{{ currentUser.eliminated.length }} eliminations</span>
+                <span class="font-bold text-lg">{{ store.currentUser.forename }} {{ store.currentUser.surname }}</span>
+                <span class="text-sm"><!-- #4 • -->{{ store.currentUser.eliminated.length }} eliminations</span>
             </div>
         </div>
         <div class="px-6 sm:px-12 mt-6 pb-12">
@@ -24,13 +24,8 @@
     </div>
 </template>
 
-<script lang="ts">
-import type {PropType} from 'vue';
-import type {EliminationUser} from '~/utils/types';
+<script setup lang="ts">
+import {useUserStore} from '@/store/user';
 
-export default {
-    props: {
-        currentUser: Object as PropType<EliminationUser>
-    }
-}
+const store = useUserStore();
 </script>

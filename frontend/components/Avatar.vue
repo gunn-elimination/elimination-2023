@@ -1,6 +1,6 @@
 <template>
     <!-- TODO: backend pfps -->
-    <div v-if="false" class="avatar my-auto" :class="large ? 'w-24' : 'w-10'">
+    <div v-if="false" class="avatar my-auto" :class="large ? 'w-24 h-24' : 'w-10 h-10'">
         <div
             class="w-full rounded-full ring-primary ring-offset-base-100 ring-offset-2"
             :class={ring:ring}
@@ -8,7 +8,7 @@
             <img :src="src" />
         </div>
     </div>
-    <div v-else class="avatar placeholder" :class="large ? 'w-24' : 'w-10'">
+    <div v-else class="avatar placeholder" :class="large ? 'w-24 h-24' : 'w-10 h-10'">
         <div class="bg-base-200 text-neutral-content rounded-full w-full">
             <span class="text-secondary" :class="large ? 'text-3xl' : 'text-lg'">
                 {{ user.forename.charAt(0) + user.surname.charAt(0) }}
