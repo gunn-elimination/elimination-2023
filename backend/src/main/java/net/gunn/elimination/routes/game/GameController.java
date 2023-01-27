@@ -16,9 +16,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 
 @RestController
@@ -83,11 +83,23 @@ public class GameController {
 			response.setStatus(404);
 			return null;
 		}
+		var targetEliminations = new HashSet<>();
+		for (var eliminatee : target.eliminated()) {
+			targetEliminations.add(
+				Map.of(
+					"forename", eliminatee.getForename(),
+					"surname", eliminatee.getSurname(),
+					"email", eliminatee.getEmail()
+				)
+			);
+		}
+
 		return Map.of(
 			"email", target.getEmail(),
 			"forename", target.getForename(),
-			"surname", target.getSurname()
-			);
+			"surname", target.getSurname(),
+			"eliminated", targetEliminations
+		);
 	}
 
 	@GetMapping("/eliminatedBy")
