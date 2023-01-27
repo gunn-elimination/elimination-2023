@@ -31,6 +31,8 @@ server.servlet.context-path: /api
 
 spring:
     datasource.hikari.maximum-pool-size: 20
+    datasource.hikari.leak-detection-threshold: 30000
+
     jpa.hibernate.ddl-auto: update
     thymeleaf:
         cache: false
@@ -56,3 +58,7 @@ management:
 
     endpoints.web.exposure.include: "*"
     endpoint.health.probes.enabled: true
+
+logging:
+    level:
+        com.zaxxer.hikari: TRACE

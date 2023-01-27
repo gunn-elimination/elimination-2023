@@ -25,7 +25,6 @@ public class ScoreboardController {
 	}
 
 	@GetMapping(value = "/scoreboard", produces = "application/json")
-	@Transactional(readOnly = true)
 	@ResponseBody
 	@SentrySpan
 	public Scoreboard scoreboard(@RequestParam(defaultValue = "20") int limit) {
