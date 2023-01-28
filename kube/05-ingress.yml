@@ -12,7 +12,7 @@ spec:
         - http:
             paths:
                 # route /api to backend, but exclude /api/actuator
-                - path: /api(/|$)(?!actuator)
+                - path: /api(?!/actuator)
                   pathType: Prefix
                   backend:
                       service:
