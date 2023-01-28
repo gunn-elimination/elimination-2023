@@ -11,13 +11,15 @@ spec:
     rules:
         - http:
             paths:
-                - path: /api
+                # route /api to backend, but exclude /api/actuator
+                - path: /api(/|$)(?!actuator)
                   pathType: Prefix
                   backend:
                       service:
                           name: backend-service
                           port:
                               number: 80
+
 
                 - path: /
                   pathType: Prefix
