@@ -26,6 +26,8 @@ grafana:
 
 prometheus:
     prometheusSpec:
+        podMonitorSelectorNilUsesHelmValues: false
+        serviceMonitorSelectorNilUsesHelmValues: false
         containers:
             -   name: ts-sidecar
                 imagePullPolicy: Always
