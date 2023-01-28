@@ -11,8 +11,7 @@ spec:
     rules:
         - http:
             paths:
-                # route /api to backend, but exclude /api/actuator using a regex
-                - path: /api(?!(/actuator))
+                - path: /api
                   pathType: Prefix
                   backend:
                       service:
