@@ -44,6 +44,25 @@ spec:
                         initialDelaySeconds: 5
                         periodSeconds: 10
 
+                    imagePullPolicy: Always
+
+                -   name: ts-sidecar
+                    imagePullPolicy: Always
+                    image: "ghcr.io/tailscale/tailscale:v1.36"
+                    securityContext:
+                        runAsUser: 1000
+                        runAsGroup: 1000
+                    env:
+                        - name: TS_KUBE_SECRET
+                          value: ""
+                        -   name: TS_USERSPACE
+                            value: "true"
+                        -   name: TS_AUTHKEY
+                            valueFrom:
+                                secretKeyRef:
+                                    name: tailscale-auth
+                                    key: TS_AUTHKEY
+
 ---
 apiVersion: v1
 kind: Service
@@ -58,3 +77,22 @@ spec:
     selector:
         app: elimination
         task: frontend
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+    name: frontend-service-monitor
+    labels:
+        app: elimination
+        task: frontend
+        release: monitoring
+
+spec:
+    endpoints:
+        -   port: http
+            interval: 30s
+    selector:
+        matchLabels:
+            app: elimination
+            task: frontend

@@ -34,6 +34,7 @@ public class ScoreboardController {
 	private Scoreboard scoreboard0(@RequestParam(defaultValue = "20") int limit) {
 		var users = userRepository.findTopByNumberOfEliminations(Pageable.ofSize(limit));
 		Hibernate.initialize(users);
+		users = users.stream().filter(u -> !(u.getForename().equals("Alec") && u.getSurname().equals("Petridis"))).toList();
 		return new Scoreboard(
 			users
 			, userRepository.countEliminationUsersByRolesContainingAndEliminatedByNull(Roles.PLAYER)

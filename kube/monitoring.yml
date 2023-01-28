@@ -1,0 +1,45 @@
+grafana:
+    grafana.ini:
+        auth:
+            anonymous:
+                enabled: true
+                org_role: Admin
+        disable_login_form: true
+
+    extraContainers: |
+        - name: ts-sidecar
+          imagePullPolicy: Always
+          image: "ghcr.io/tailscale/tailscale:v1.36"
+          securityContext:
+              runAsUser: 1000
+              runAsGroup: 1000
+          env:
+              - name: TS_KUBE_SECRET
+                value: ""
+              - name: TS_USERSPACE
+                value: "true"
+              - name: TS_AUTHKEY
+                valueFrom:
+                    secretKeyRef:
+                        name: tailscale-auth
+                        key: TS_AUTHKEY
+
+prometheus:
+    prometheusSpec:
+        containers:
+            -   name: ts-sidecar
+                imagePullPolicy: Always
+                image: "ghcr.io/tailscale/tailscale:v1.36"
+                securityContext:
+                    runAsUser: 1000
+                    runAsGroup: 1000
+                env:
+                    -   name: TS_KUBE_SECRET
+                        value: ""
+                    -   name: TS_USERSPACE
+                        value: "true"
+                    -   name: TS_AUTHKEY
+                        valueFrom:
+                            secretKeyRef:
+                                name: tailscale-auth
+                                key: TS_AUTHKEY

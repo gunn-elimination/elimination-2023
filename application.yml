@@ -32,7 +32,7 @@ server.servlet.context-path: /api
 spring:
     jpa:
         open-in-view: false
-    datasource.hikari.maximum-pool-size: 20
+    datasource.hikari.maximum-pool-size: 5
     datasource.hikari.leak-detection-threshold: 30000
 
     jpa.hibernate.ddl-auto: update

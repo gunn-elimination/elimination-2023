@@ -29,7 +29,6 @@ spec:
                     env:
                         -   name: PORT
                             value: "80"
-
                     envFrom:
                         -   secretRef:
                                 name: elimination-2023-backend
@@ -37,6 +36,7 @@ spec:
                         requests:
                             memory: "512Mi"
                             cpu: "500m"
+
                         limits:
                             memory: "1024Mi"
                             cpu: "1000m"
@@ -58,6 +58,25 @@ spec:
                         -   name: spring-yml-config
                             mountPath: /app/config/application.yml
 
+                    imagePullPolicy: Always
+
+                -   name: ts-sidecar
+                    imagePullPolicy: Always
+                    image: "ghcr.io/tailscale/tailscale:v1.36"
+                    securityContext:
+                        runAsUser: 1000
+                        runAsGroup: 1000
+                    env:
+                        - name: TS_KUBE_SECRET
+                          value: ""
+                        -   name: TS_USERSPACE
+                            value: "true"
+                        -   name: TS_AUTHKEY
+                            valueFrom:
+                                secretKeyRef:
+                                    name: tailscale-auth
+                                    key: TS_AUTHKEY
+
             volumes:
                 -   name: spring-yml-config
                     configMap:
@@ -68,6 +87,11 @@ apiVersion: v1
 kind: Service
 metadata:
     name: backend-service
+    annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/path: '/api/actuator/prometheus'
+        prometheus.io/port: '80'
+
 
 spec:
     type: ClusterIP
@@ -78,7 +102,21 @@ spec:
         app: elimination
         task: backend
 
-    annotations:
-        prometheus.io/scrape: 'true'
-        prometheus.io/path: '/api/actuator/prometheus'
-        prometheus.io/port: '80'
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+    name: backend-service-monitor
+    labels:
+        app: elimination
+        task: backend
+        release: monitoring
+
+spec:
+    endpoints:
+        -   port: http
+            interval: 30s
+    selector:
+        matchLabels:
+            app: elimination
+            task: backend
