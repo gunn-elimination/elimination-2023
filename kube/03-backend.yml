@@ -116,6 +116,7 @@ spec:
     endpoints:
         -   port: http
             interval: 30s
+            path: /api/actuator/prometheus
     selector:
         matchLabels:
             app: elimination
