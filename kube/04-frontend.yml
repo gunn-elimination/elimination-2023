@@ -89,7 +89,6 @@ metadata:
     labels:
         app: elimination
         task: frontend
-        release: monitoring
 
 spec:
     endpoints:
@@ -99,4 +98,3 @@ spec:
         matchLabels:
             app: elimination
             task: frontend
-            release: monitoring

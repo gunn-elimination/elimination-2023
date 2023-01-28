@@ -113,7 +113,6 @@ metadata:
     labels:
         app: elimination
         task: backend
-        release: monitoring
 
 spec:
     endpoints:
