@@ -4,8 +4,12 @@
         <div class="flex flex-col">
             <p class="font-semibold">{{ user.forename }} {{ user.surname }}</p>
             <p class="text-sm text-secondary italic">
+                {{ user.email }}
+                <!-- TODO: get backend to send elimination count -->
+                <!--
                 {{ user.eliminated.length }}
                 elimination<template v-if="user.eliminated.length !== 1">s</template>
+                -->
             </p>
         </div>
     </div>
