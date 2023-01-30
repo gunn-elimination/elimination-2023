@@ -36,7 +36,7 @@
             <div class="text-center flex flex-col items-center">
                 <Avatar :user="userStore.eliminatedBy" large />
                 <span class="font-bold text-lg">{{ userStore.eliminatedBy.forename }} {{ userStore.eliminatedBy.surname }}</span>
-                <span class="text-sm"><!-- #4 • -->{{ userStore.eliminatedBy.eliminations }} kills</span>
+                <span class="text-sm"><!-- #4 • -->{{ userStore.eliminatedBy.eliminations }} eliminations</span>
             </div>
         </section>
 
