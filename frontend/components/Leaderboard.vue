@@ -9,6 +9,9 @@
         <Spinner /> Loading leaderboard...
     </div>
     <ol v-else class="flex flex-col gap-2 list-decimal list-inside">
+        <p v-if="leaderboardStore.participants" class="text-secondary italic mb-4">
+            There are {{ leaderboardStore.participants }} users remaining.
+        </p>
         <LeaderboardUser
             v-for="user in leaderboardStore.leaderboard"
             :user="user"
