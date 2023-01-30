@@ -145,4 +145,28 @@ public class AdminController {
 		response.setStatus(HttpServletResponse.SC_OK);
 		return "OK";
 	}
+
+	@GetMapping("/awardEliminationOf")
+	public String awardElim(@RequestParam("toEliminateEmail") String toEliminateEmail, HttpServletResponse response) {
+		var toEliminate = userRepository.findByEmail(toEliminateEmail);
+
+		if (toEliminate.isPresent()) {
+			EliminationUser eliminated = toEliminate.get();
+			EliminationUser eliminator = eliminated.getTargettedBy();
+			String elimCode = eliminated.getEliminationCode();
+
+			try {
+				eliminationManager.attemptElimination(eliminator, elimCode);
+
+				response.setStatus(HttpServletResponse.SC_OK);
+				return "OK, eliminated " + eliminated.getEmail();
+			} catch (Exception e) {
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				return "failed to eliminate";
+			}
+		} else {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return "victim not found";
+		}
+	}
 }
