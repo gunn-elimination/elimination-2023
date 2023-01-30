@@ -26,7 +26,11 @@ public class KillEventSerializer extends JsonSerializer<KillEvent> {
 			gen.writeFieldName("value");
 			gen.writeStartArray();
 			for (Kill kill : bk.kills()) {
-				gen.writeObject(kill);
+				gen.writeStartObject();
+				gen.writeObjectField("eliminator", kill.eliminator().decompose());
+				gen.writeObjectField("eliminated", kill.eliminated().decompose());
+				gen.writeStringField("timeStamp", kill.timeStamp().toString());
+				gen.writeEndObject();
 			}
 			gen.writeEndArray();
 		}
