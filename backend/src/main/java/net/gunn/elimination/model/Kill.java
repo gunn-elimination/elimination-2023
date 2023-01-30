@@ -2,48 +2,55 @@ package net.gunn.elimination.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Date;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @Entity
-public class Kill implements Serializable {
+@JsonSerialize(using = KillSerializer.class)
+public non-sealed class Kill implements Serializable, KillEvent {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@JsonIgnore
 	private String id;
 
 	@JsonProperty
-	private String eliminator;
+	@ManyToOne
+	private EliminationUser eliminator;
 
 	@JsonProperty
-	private String eliminated;
+	@OneToOne
+	private EliminationUser eliminated;
 
 	@JsonProperty
-	private String timeStamp;
+	private Instant timeStamp;
 
 	public Kill() {}
 
 	public Kill(EliminationUser eliminator, EliminationUser eliminated) {
-		this.eliminator = eliminator.getSubject();
-		this.eliminated = eliminated.getSubject();
+		this.eliminator = eliminator;
+		this.eliminated = eliminated;
 
-		this.timeStamp = ZonedDateTime.now(ZoneId.of("America/Los_Angeles")).format(DateTimeFormatter.ISO_DATE_TIME);
+		this.timeStamp = Instant.now();
 	}
 
-	public String getEliminator() {
-		return eliminator;
-	}
-
-	public String getEliminated() {
+	public EliminationUser eliminated() {
 		return eliminated;
 	}
 
-	public String getTimeStamp() {
+	public EliminationUser eliminator() {
+		return eliminator;
+	}
+
+	public Instant timeStamp() {
 		return timeStamp;
 	}
 }
