@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
+import java.time.Instant;
 import java.util.Optional;
 
 import static net.gunn.elimination.auth.Roles.BANNED;
@@ -133,7 +134,7 @@ public class AdminController {
 	@GetMapping("/test/elimination")
 	@ConditionalOnProperty(name = "elimination.sse.enabled", havingValue = "true")
 	public String testElimination(HttpServletRequest req, HttpServletResponse response) throws IOException {
-		sseController.get().signalKill(new Kill(new EliminationUser(), new EliminationUser()));
+		sseController.get().signalKill(new Kill(new EliminationUser(), new EliminationUser(), Instant.now()));
 		response.setStatus(HttpServletResponse.SC_OK);
 		return "OK";
 	}
