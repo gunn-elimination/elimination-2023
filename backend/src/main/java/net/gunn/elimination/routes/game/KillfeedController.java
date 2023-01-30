@@ -34,7 +34,7 @@ public class KillfeedController {
 	@ResponseBody
 	@Transactional
 	public BulkKillfeed killfeed() {
-		return new BulkKillfeed(killfeedRepository.findAll(Sort.by(Sort.Direction.DESC, "timestamp")));
+		return new BulkKillfeed(killfeedRepository.findAll(Sort.by(Sort.Direction.DESC, "timeStamp")));
 	}
 
 }
