@@ -2,6 +2,8 @@ package net.gunn.elimination.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
@@ -16,6 +18,7 @@ import java.util.Map;
 
 @Entity
 @JsonSerialize(using = KillSerializer.class)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 public non-sealed class Kill implements Serializable, KillEvent {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
