@@ -17,15 +17,26 @@
             </div>
         </header>
 
-        <section class="p-8 bg-secondary text-secondary-content">
-            <h2 class="font-bold text-xl flex flex-row gap-2 mb-2">
+        <section class="p-8 bg-secondary text-secondary-content" v-if="userStore.target">
+            <h2 class="font-bold text-xl flex flex-row gap-2 mb-3">
                 <ViewfinderCircleIcon class="w-5 h-5 stroke-2 my-auto" />
                 Your Target
             </h2>
-            <div class="text-center flex flex-col items-center" v-if="userStore.target">
+            <div class="text-center flex flex-col items-center">
                 <Avatar :user="userStore.target" large />
                 <span class="font-bold text-lg">{{ userStore.target.forename }} {{ userStore.target.surname }}</span>
-                <span class="text-sm"><!-- #4 • -->{{ userStore.target.eliminated.length }} kills</span>
+                <span class="text-sm"><!-- #4 • -->{{ userStore.target.eliminated.length }} eliminations</span>
+            </div>
+        </section>
+        <section class="p-8 bg-secondary text-secondary-content" v-else-if="userStore.eliminatedBy">
+            <h2 class="font-bold text-xl flex flex-row gap-2 mb-3">
+                <SkullIcon class="w-5 h-5 stroke-2 my-auto" />
+                You were eliminated by
+            </h2>
+            <div class="text-center flex flex-col items-center">
+                <Avatar :user="userStore.eliminatedBy" large />
+                <span class="font-bold text-lg">{{ userStore.eliminatedBy.forename }} {{ userStore.eliminatedBy.surname }}</span>
+                <span class="text-sm"><!-- #4 • -->{{ userStore.eliminatedBy.eliminated.length }} eliminations</span>
             </div>
         </section>
 
