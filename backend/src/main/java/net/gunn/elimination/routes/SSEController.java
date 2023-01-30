@@ -58,6 +58,7 @@ public class SSEController {
 	public SseEmitter announcementsStream() throws IOException {
 		var emitter = new SseEmitter(-1L);
 
+		emitter.onCompletion(() -> announcementEmitters.remove(emitter));
 		announcementEmitters.add(emitter);
 
 		var em = emf.createEntityManager();
@@ -70,7 +71,6 @@ public class SSEController {
 			em.close();
 		}
 
-		emitter.onCompletion(() -> announcementEmitters.remove(emitter));
 		return emitter;
 	}
 
@@ -81,8 +81,9 @@ public class SSEController {
 		var emitter = new SseEmitter(-1L);
 
 		var sub = new ScoreboardController.ScoreboardSubscription(emitter, limit);
-		scoreboardEmitters.add(sub);
+
 		emitter.onCompletion(() -> scoreboardEmitters.remove(sub));
+		scoreboardEmitters.add(sub);
 
 		em.getTransaction().begin();
 		em.getTransaction().setRollbackOnly();
@@ -101,9 +102,8 @@ public class SSEController {
 		var em = emf.createEntityManager();
 		var emitter = new SseEmitter(-1L);
 
-		killEmitters.add(emitter);
-
 		emitter.onCompletion(() -> killEmitters.remove(emitter));
+		killEmitters.add(emitter);
 
 		em.getTransaction().begin();
 		em.getTransaction().setRollbackOnly();
