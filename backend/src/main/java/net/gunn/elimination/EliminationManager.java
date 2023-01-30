@@ -65,7 +65,7 @@ public class EliminationManager {
         var victim = eliminator.getTarget();
         eliminate0(eliminator.getSubject(), victim.getSubject());
 
-		Kill kill = new Kill(eliminator, victim);
+		Kill kill = new Kill(eliminator, victim, Instant.now());
 		killfeedRepository.save(kill);
 
 		sseController.ifPresent(sseController -> {

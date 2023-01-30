@@ -35,11 +35,11 @@ public non-sealed class Kill implements Serializable, KillEvent {
 
 	public Kill() {}
 
-	public Kill(EliminationUser eliminator, EliminationUser eliminated) {
+	public Kill(EliminationUser eliminator, EliminationUser eliminated, Instant timeStamp) {
 		this.eliminator = eliminator;
 		this.eliminated = eliminated;
 
-		this.timeStamp = Instant.now();
+		this.timeStamp = timeStamp;
 	}
 
 	public EliminationUser eliminated() {
