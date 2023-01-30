@@ -12,8 +12,8 @@
             </h2>
             <p class="text-secondary text-sm">
                 <!-- TODO: make this the same datetime object -->
-                {{ DateTime.fromISO(item.timestamp).toLocaleString({ weekday: 'long', month: 'long', day: '2-digit' }) }},
-                {{ DateTime.fromISO(item.timestamp).toRelative() }}
+                {{ DateTime.fromISO(item.timeStamp).toLocaleString({ weekday: 'long', month: 'long', day: '2-digit' }) }},
+                {{ DateTime.fromISO(item.timeStamp).toRelative() }}
             </p>
         </div>
     </div>

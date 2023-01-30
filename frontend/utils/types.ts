@@ -2,6 +2,10 @@ export type EliminationUser = {
     email: string,
     forename: string,
     surname: string,
+    eliminations: number,
+}
+
+export type MeEliminationUser = EliminationUser & {
     eliminated: EliminationUser[]
 }
 
@@ -17,5 +21,5 @@ export type Announcement = {
 export type EliminationFeedItem = {
     eliminated: EliminationUser,
     eliminator: EliminationUser,
-    timestamp: string
+    timeStamp: string
 }
