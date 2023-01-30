@@ -1,6 +1,7 @@
 package net.gunn.elimination.routes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.gunn.elimination.auth.BannedUserException;
 import net.gunn.elimination.auth.RegistrationClosedException;
 import net.gunn.elimination.exceptions.NonPAUSDUserException;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -72,5 +73,11 @@ public class Error implements ErrorController, AccessDeniedHandler {
 	public void handleRegistrationClosed(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 		response.sendRedirect("/error/signups-closed");
+	}
+
+	@ExceptionHandler(BannedUserException.class)
+	public void handleBannedUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+		response.sendRedirect("/error/banned");
 	}
 }

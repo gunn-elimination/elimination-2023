@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class Roles {
     public static final Role USER = new Role("ROLE_USER");
-    public static final Role PLAYER = new Role("ROLE_PLAYER");
+	public static final Role PLAYER = new Role("ROLE_PLAYER");
+	public static final Role BANNED = new Role("ROLE_BANNED");
     public static final Role ADMIN = new Role("ROLE_ADMIN");
 
     private Roles() {
@@ -22,5 +23,7 @@ public class Roles {
             roleRepository.save(Roles.PLAYER);
         if (!roleRepository.existsByName(Roles.ADMIN.name()))
             roleRepository.save(Roles.ADMIN);
+		if (!roleRepository.existsByName(Roles.BANNED.name()))
+			roleRepository.save(Roles.BANNED);
     }
 }

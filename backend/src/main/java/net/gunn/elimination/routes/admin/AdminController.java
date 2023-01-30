@@ -19,6 +19,9 @@ import java.io.IOException;
 import java.sql.Date;
 import java.util.Optional;
 
+import static net.gunn.elimination.auth.Roles.BANNED;
+import static net.gunn.elimination.auth.Roles.PLAYER;
+
 @RestController
 @RequestMapping("/admin")
 @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -100,7 +103,9 @@ public class AdminController {
     ) throws IOException {
         var subject = userRepository.findByEmail(email).orElseThrow().getSubject();
         eliminationManager.unlink(subject);
-        userRepository.deleteBySubject(subject);
+		var user = userRepository.findByEmail(email).orElseThrow();
+		user.removeRole(PLAYER);
+		user.addRole(BANNED);
         response.setStatus(HttpServletResponse.SC_OK);
         response.sendRedirect(req.getHeader("Referer"));
     }
