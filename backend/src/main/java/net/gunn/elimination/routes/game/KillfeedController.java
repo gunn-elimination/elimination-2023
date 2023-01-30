@@ -22,12 +22,10 @@ import java.util.Map;
 @PreAuthorize("@eliminationManager.gameIsOngoing()")
 @CrossOrigin(originPatterns = "*")
 public class KillfeedController {
-	public final EliminationManager eliminationManager;
 	private final KillfeedRepository killfeedRepository;
 
 
-	public KillfeedController(EliminationManager eliminationManager, KillfeedRepository killfeedRepository) {
-		this.eliminationManager = eliminationManager;
+	public KillfeedController(KillfeedRepository killfeedRepository) {
 		this.killfeedRepository = killfeedRepository;
 	}
 
