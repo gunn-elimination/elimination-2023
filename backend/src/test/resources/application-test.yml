@@ -7,10 +7,8 @@ elimination:
     game-end-time: 2023-06-01T00:00
     client-id: ${CLIENT_ID:null}
     client-secret: ${CLIENT_SECRET:null}
-    admins:
-        - ap40132@pausd.us
-        - ky28059@pausd.us
-        - el31132@pausd.us
+    admins: A b
+    sse.enabled: true
 
 # database configuration
 spring.datasource.url: ${JDBC_DATABASE_URL}
@@ -30,7 +28,7 @@ server.servlet.context-path: /api
 
 spring:
     datasource.hikari.maximum-pool-size: 20
-    jpa.hibernate.ddl-auto: update
+    jpa.hibernate.ddl-auto: create
     thymeleaf:
         cache: false
         mode: HTML

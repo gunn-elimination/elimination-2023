@@ -9,9 +9,8 @@ buildscript {
 	}
 }
 plugins {
-	id 'org.springframework.boot' version '2.7.3'
-	id 'io.spring.dependency-management' version '1.0.13.RELEASE'
-	id "org.springdoc.openapi-gradle-plugin" version "1.4.0"
+	id 'org.springframework.boot' version '3.0.2'
+	id 'io.spring.dependency-management' version '1.1.0'
 
 	id 'java'
 }
@@ -39,10 +38,6 @@ dependencies {
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-// https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
-//    implementation 'org.hibernate.orm:hibernate-core:6.1.6.Final'
-
-	// spring-orm-jpa
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
@@ -60,23 +55,23 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
 
-	implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
 	implementation 'org.postgresql:postgresql'
-	implementation 'org.xerial:sqlite-jdbc:3.39.2.1'
 
-	implementation 'org.thymeleaf:thymeleaf'
-	implementation 'org.thymeleaf:thymeleaf-spring5'
+	implementation 'org.thymeleaf:thymeleaf-spring6'
 
 
-	implementation 'com.h2database:h2:2.1.214'
-	testImplementation 'org.mockito:mockito-core:4.7.0'
+	implementation 'com.h2database:h2'
+	implementation 'org.springframework:spring-webflux:6.0.3'
+	implementation 'io.sentry:sentry-spring-boot-starter-jakarta:6.13.0'
+
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
+
+	testImplementation 'com.github.fridujo:rabbitmq-mock:1.2.0'
+	testImplementation 'io.rest-assured:spring-mock-mvc:5.3.0'
+	testImplementation 'org.mockito:mockito-core:5.1.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-
-	implementation 'org.springframework:spring-webflux:6.0.4'
-	implementation 'io.sentry:sentry-spring-boot-starter:6.12.1'
-
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7.1'
+	testImplementation 'io.projectreactor:reactor-test:3.5.2'
 }
 
 jar {
@@ -89,19 +84,8 @@ jar {
 	}
 
 }
-dependencyManagement {
-	imports {
-		mavenBom 'org.springframework.session:spring-session-bom:2020.0.3'
-	}
-}
+
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
-
-openApi {
-	outputDir.set(file("docs"))
-	outputFileName.set("elimination-api.json")
-}
-
-

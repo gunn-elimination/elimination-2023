@@ -1,6 +1,6 @@
 package net.gunn.elimination.routes.kills;
 
-import io.sentry.spring.tracing.SentrySpan;
+import io.sentry.spring.jakarta.tracing.SentrySpan;
 import net.gunn.elimination.EmptyGameException;
 import net.gunn.elimination.IncorrectEliminationCodeException;
 import net.gunn.elimination.model.EliminationUser;
@@ -14,8 +14,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;

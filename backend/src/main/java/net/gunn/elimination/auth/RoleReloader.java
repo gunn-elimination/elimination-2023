@@ -4,7 +4,7 @@ import net.gunn.elimination.routes.user.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 
-import javax.servlet.*;
+import jakarta.servlet.*;
 import java.io.IOException;
 
 //@Service

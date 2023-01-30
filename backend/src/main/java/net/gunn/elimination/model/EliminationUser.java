@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;

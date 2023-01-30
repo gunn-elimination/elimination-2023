@@ -1,6 +1,6 @@
 package net.gunn.elimination.routes.announcements;
 
-import io.sentry.spring.tracing.SentrySpan;
+import io.sentry.spring.jakarta.tracing.SentrySpan;
 import net.gunn.elimination.auth.EliminationAuthentication;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Scope;
@@ -89,6 +89,6 @@ public class AnnouncementService {
 	}
 
 	private void signalAnnouncementChange() {
-		rabbitTemplate.convertAndSend("announcements", "");
+		rabbitTemplate.convertAndSend("announcements", "", "");
 	}
 }

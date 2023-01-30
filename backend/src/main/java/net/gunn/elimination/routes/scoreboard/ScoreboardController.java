@@ -1,7 +1,7 @@
 package net.gunn.elimination.routes.scoreboard;
 
 import io.micrometer.core.annotation.Timed;
-import io.sentry.spring.tracing.SentrySpan;
+import io.sentry.spring.jakarta.tracing.SentrySpan;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
@@ -10,9 +10,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import javax.annotation.PreDestroy;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.annotation.PreDestroy;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.HashSet;

@@ -1,7 +1,7 @@
 //package net.gunn.elimination.routes.game;
 //
 //import io.micrometer.core.annotation.Timed;
-//import io.sentry.spring.tracing.SentrySpan;
+//import io.sentry.spring.jakarta.tracing.SentrySpan;
 //import net.gunn.elimination.EliminationManager;
 //import net.gunn.elimination.EmptyGameException;
 //import net.gunn.elimination.IncorrectEliminationCodeException;
@@ -14,8 +14,8 @@
 //import org.springframework.transaction.annotation.Transactional;
 //import org.springframework.web.bind.annotation.*;
 //
-//import javax.persistence.EntityManagerFactory;
-//import javax.servlet.http.HttpServletResponse;
+//import jakarta.persistence.EntityManagerFactory;
+//import jakarta.servlet.http.HttpServletResponse;
 //import java.io.IOException;
 //import java.util.HashMap;
 //import java.util.HashSet;

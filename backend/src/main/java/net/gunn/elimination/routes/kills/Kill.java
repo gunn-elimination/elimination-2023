@@ -3,7 +3,7 @@ package net.gunn.elimination.routes.kills;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import net.gunn.elimination.model.EliminationUser;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;

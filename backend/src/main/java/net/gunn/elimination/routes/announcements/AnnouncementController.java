@@ -1,6 +1,9 @@
 package net.gunn.elimination.routes.announcements;
 
-import io.sentry.spring.tracing.SentrySpan;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.sentry.spring.jakarta.tracing.SentrySpan;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
@@ -10,14 +13,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import javax.annotation.PreDestroy;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static org.springframework.web.servlet.mvc.method.annotation.SseEmitter.event;
 
 @RestController
 @CrossOrigin(originPatterns = "*")
@@ -31,19 +33,21 @@ class AnnouncementController {
 
 	@GetMapping(value = "/announcements", produces = "application/json")
 	@SentrySpan
-	public List<Announcement> getAnnouncements() {
+	@ResponseBody
+	public List<Announcement> getAnnouncements(ObjectMapper objectMapper) {
 		return announcementService.announcementsVisibleByCurrentlyAuthenticatedUser();
 	}
 
 	@ConditionalOnProperty(name = "elimination.sse.enabled", havingValue = "true")
 	@GetMapping(value = "/announcements", produces = "text/event-stream")
+	@ResponseBody
 	public SseEmitter getAnnouncementsStream() throws IOException {
 		var emitter = new SseEmitter(-1L);
 		emitter.onCompletion(() -> announcementEmitters.remove(emitter));
 		emitter.onTimeout(() -> announcementEmitters.remove(emitter));
 
 		announcementEmitters.add(emitter);
-		emitter.send(announcementService.announcementsVisibleByCurrentlyAuthenticatedUser());
+		emitter.send(event().data(announcementService.announcementsVisibleByAllUsers()));
 		return emitter;
 	}
 
@@ -104,12 +108,12 @@ class AnnouncementController {
 	)
 	)
 	@ConditionalOnProperty(name = "elimination.sse.enabled", havingValue = "true")
-	private void sendAnnouncementsToConnectedClients() {
+	void sendAnnouncementsToConnectedClients() {
 		var announcements = announcementService.announcementsVisibleByAllUsers();
 
 		for (var emitter : new HashSet<>(announcementEmitters)) {
 			try {
-				emitter.send(announcements);
+				emitter.send(event().data(announcements));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
