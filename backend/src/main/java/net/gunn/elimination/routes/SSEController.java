@@ -108,7 +108,7 @@ public class SSEController {
 		em.getTransaction().begin();
 		em.getTransaction().setRollbackOnly();
 		try {
-			emitter.send(killfeedController.killfeed0());
+			emitter.send(killfeedController.killfeed());
 		} finally {
 			em.getTransaction().rollback();
 			em.close();
@@ -194,7 +194,7 @@ public class SSEController {
 	void sendKillToConnectedClients(Kill kill) {
 		for (var emitter : new HashSet<>(killEmitters)) {
 			try {
-				emitter.send(killfeedController.killfeed0());
+				emitter.send(kill);
 			} catch (IOException e) {
 				// ignore
 			}
