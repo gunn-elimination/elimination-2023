@@ -6,23 +6,17 @@ import net.gunn.elimination.EliminationManager;
 import net.gunn.elimination.EmptyGameException;
 import net.gunn.elimination.IncorrectEliminationCodeException;
 import net.gunn.elimination.auth.EliminationAuthentication;
-import net.gunn.elimination.model.EliminationUser;
-import net.gunn.elimination.model.Kill;
-import net.gunn.elimination.repository.KillfeedRepository;
 import net.gunn.elimination.repository.UserRepository;
-import net.gunn.elimination.routes.SSEController;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityManagerFactory;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 
 
 @RestController
@@ -36,19 +30,11 @@ import java.util.Optional;
 @Timed
 public class GameController {
 	public final EliminationManager eliminationManager;
-	private final Optional<SSEController> sseController;
 	private final UserRepository userRepository;
-	private final KillfeedRepository killfeedRepository;
 
-	private final EntityManagerFactory emf;
-
-
-	public GameController(EliminationManager eliminationManager, Optional<SSEController> sseController, UserRepository userRepository, KillfeedRepository killfeedRepository, EntityManagerFactory emf) {
+	public GameController(EliminationManager eliminationManager, UserRepository userRepository) {
 		this.eliminationManager = eliminationManager;
-		this.sseController = sseController;
 		this.userRepository = userRepository;
-		this.killfeedRepository = killfeedRepository;
-		this.emf = emf;
 	}
 
 	/**
@@ -70,14 +56,6 @@ public class GameController {
 	public void eliminate(HttpServletResponse response, @AuthenticationPrincipal EliminationAuthentication me_, @RequestParam("code") String code) throws IncorrectEliminationCodeException, EmptyGameException, IOException {
 		var me = userRepository.findBySubject(me_.subject()).orElseThrow();
 		var eliminated = eliminationManager.attemptElimination(me, code);
-
-		Kill kill = new Kill(me, eliminated);
-		killfeedRepository.save(kill);
-
-		sseController.ifPresent(sseController -> {
-			sseController.signalKill(new Kill(me, eliminated));
-			sseController.signalScoreboardChange();
-		});
 
 		response.sendRedirect("/");
 	}

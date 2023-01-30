@@ -2,7 +2,10 @@ package net.gunn.elimination;
 
 import net.gunn.elimination.auth.EliminationCodeGenerator;
 import net.gunn.elimination.model.EliminationUser;
+import net.gunn.elimination.model.Kill;
+import net.gunn.elimination.repository.KillfeedRepository;
 import net.gunn.elimination.repository.UserRepository;
+import net.gunn.elimination.routes.SSEController;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,6 +17,7 @@ import javax.persistence.PersistenceContext;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.Optional;
 
 import static net.gunn.elimination.auth.Roles.PLAYER;
 
@@ -27,19 +31,25 @@ public class EliminationManager {
 
     private final Instant gameStartTime, gameEndTime;
 	private final EliminationCodeGenerator eliminationCodeGenerator;
+	private final Optional<SSEController> sseController;
+	private final KillfeedRepository killfeedRepository;
 
     public EliminationManager(
-        UserRepository userRepository,
-        EntityManager entityManager,
-        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") @Value("${elimination.game-start-time}") LocalDateTime gameStartTime,
-        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") @Value("${elimination.game-end-time}") LocalDateTime gameEndTime,
-		EliminationCodeGenerator eliminationCodeGenerator) {
+		UserRepository userRepository,
+		EntityManager entityManager,
+		@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") @Value("${elimination.game-start-time}") LocalDateTime gameStartTime,
+		@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") @Value("${elimination.game-end-time}") LocalDateTime gameEndTime,
+		EliminationCodeGenerator eliminationCodeGenerator,
+		Optional<SSEController> sseController, KillfeedRepository killfeedRepository) {
         this.userRepository = userRepository;
         this.entityManager = entityManager;
 
         this.gameStartTime = gameStartTime.toInstant(ZonedDateTime.now().getOffset());
         this.gameEndTime = gameEndTime.toInstant(ZonedDateTime.now().getOffset());
 		this.eliminationCodeGenerator = eliminationCodeGenerator;
+
+		this.sseController = sseController;
+		this.killfeedRepository = killfeedRepository;
 	}
 
     public EliminationUser attemptElimination(EliminationUser eliminator, String code) throws IncorrectEliminationCodeException, EmptyGameException {
@@ -54,6 +64,15 @@ public class EliminationManager {
 
         var victim = eliminator.getTarget();
         eliminate0(eliminator.getSubject(), victim.getSubject());
+
+		Kill kill = new Kill(eliminator, victim);
+		killfeedRepository.save(kill);
+
+		sseController.ifPresent(sseController -> {
+			sseController.signalKill(kill);
+			sseController.signalScoreboardChange();
+		});
+
         return victim;
     }
 
