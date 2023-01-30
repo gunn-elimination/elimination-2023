@@ -2,14 +2,9 @@ package net.gunn.elimination.model;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-@JsonSubTypes(
-	{
-		@JsonSubTypes.Type(value = Kill.class, name = "Kill"),
-		@JsonSubTypes.Type(value = BulkKillfeed.class, name = "BulkKillfeed")
-	}
-)
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+@JsonSerialize(using = KillEventSerializer.class)
 public sealed interface KillEvent permits Kill, BulkKillfeed {
 
 }
