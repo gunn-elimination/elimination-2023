@@ -17,8 +17,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @Entity
-@JsonSerialize(using = KillSerializer.class)
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 public non-sealed class Kill implements Serializable, KillEvent {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
