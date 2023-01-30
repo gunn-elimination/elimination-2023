@@ -18,9 +18,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/game")
 @PreAuthorize("@eliminationManager.gameIsOngoing()")
-@CrossOrigin(
-	origins = {"https://elimination-2023.vercel.app", "https://elimination.gunn.one", "http://localhost:3000"}
-)
+@CrossOrigin(originPatterns = "*")
 public class KillfeedController {
 	public final EliminationManager eliminationManager;
 	private final UserRepository userRepository;
