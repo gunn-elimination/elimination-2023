@@ -64,7 +64,7 @@ class EliminationUserService implements OAuth2UserService<OidcUserRequest, OidcU
 
 		try {
 			return processOidcUser(oidcUser);
-		} catch (RegistrationClosedException e) {
+		} catch (BannedUserException | RegistrationClosedException e) {
 			sneakyThrow(e);
 			return null;
 		}
@@ -127,7 +127,7 @@ class EliminationUserService implements OAuth2UserService<OidcUserRequest, OidcU
 			insertUserRandomly(user);
 	}
 
-	private EliminationOauthAuthenticationImpl processOidcUser(OidcUser oidcUser) throws RegistrationClosedException {
+	private EliminationOauthAuthenticationImpl processOidcUser(OidcUser oidcUser) throws RegistrationClosedException, BannedUserException {
 		if (!userRepository.existsBySubject(oidcUser.getSubject())) {
 			if (LocalDateTime.now().isAfter(registrationDeadline))
 				throw new RegistrationClosedException();
@@ -140,6 +140,9 @@ class EliminationUserService implements OAuth2UserService<OidcUserRequest, OidcU
 			user.addRole(ADMIN);
 			user = userRepository.save(user);
 		}
+
+		if (user.getRoles().contains(BANNED))
+			throw new BannedUserException(user.getEmail());
 
 		return new EliminationOauthAuthenticationImpl(user, oidcUser);
 	}

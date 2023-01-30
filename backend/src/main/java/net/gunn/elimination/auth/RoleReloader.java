@@ -5,12 +5,13 @@ import net.gunn.elimination.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.*;
 import java.io.IOException;
 
-@Service
+@Component
 class RoleReloader implements Filter {
     private final UserRepository userRepository;
 
