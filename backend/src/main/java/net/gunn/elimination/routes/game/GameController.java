@@ -70,23 +70,8 @@ public class GameController {
 
 		Map userObj = null;
 		if (target != null) {
-			var targetEliminations = new HashSet<>();
-			for (var eliminatee : target.eliminated()) {
-				targetEliminations.add(
-					Map.of(
-						"forename", eliminatee.getForename(),
-						"surname", eliminatee.getSurname(),
-						"email", eliminatee.getEmail()
-					)
-				);
-			}
 
-			userObj = Map.of(
-				"email", target.getEmail(),
-				"forename", target.getForename(),
-				"surname", target.getSurname(),
-				"eliminated", targetEliminations
-			);
+			userObj = target.decompose();
 		}
 
 		var result = new HashMap<>();

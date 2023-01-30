@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class KillEventSerializer extends JsonSerializer<KillEvent> {
 	@Override
@@ -15,8 +16,8 @@ public class KillEventSerializer extends JsonSerializer<KillEvent> {
 
 			gen.writeFieldName("value");
 			gen.writeStartObject();
-			gen.writeStringField("eliminator", kill.eliminator().getSubject());
-			gen.writeStringField("eliminated", kill.eliminated().getSubject());
+			gen.writeObjectField("eliminator", kill.eliminator().decompose());
+			gen.writeObjectField("eliminated", kill.eliminated().decompose());
 			gen.writeStringField("timeStamp", kill.timeStamp().toString());
 			gen.writeEndObject();
 		} else if (value instanceof BulkKillfeed bk) {

@@ -187,7 +187,8 @@ public class EliminationUser implements Serializable {
 				Map.of(
 					"forename", eliminatee.getForename(),
 					"surname", eliminatee.getSurname(),
-					"email", eliminatee.getEmail()
+					"email", eliminatee.getEmail(),
+					"eliminations", eliminatee.eliminated().size()
 				)
 			);
 		}

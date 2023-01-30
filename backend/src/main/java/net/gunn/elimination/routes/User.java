@@ -32,25 +32,7 @@ public class User {
 	@Transactional
 	public Object me(@AuthenticationPrincipal EliminationAuthentication user) {
 		var result = userRepository.findBySubject(user.subject()).orElseThrow();
-		var eliminated = result.eliminated();
-
-		var eliminatedMaps = new HashSet<Map>();
-		for (var e : eliminated) {
-			eliminatedMaps.add(
-				Map.of(
-					"forename", e.getForename(),
-					"surname", e.getSurname(),
-					"email", e.getEmail()
-				)
-			);
-		}
-
-		return Map.of(
-			"forename", result.getForename(),
-			"surname", result.getSurname(),
-			"email", result.getEmail(),
-			"eliminated", eliminatedMaps
-		);
+		return result.decompose();
 	}
 
 	@PostMapping("/logout")
