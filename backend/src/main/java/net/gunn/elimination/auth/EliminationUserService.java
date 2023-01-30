@@ -3,8 +3,7 @@ package net.gunn.elimination.auth;
 import net.gunn.elimination.EliminationManager;
 import net.gunn.elimination.exceptions.NonPAUSDUserException;
 import net.gunn.elimination.model.EliminationUser;
-import net.gunn.elimination.repository.UserRepository;
-import org.hibernate.Hibernate;
+import net.gunn.elimination.routes.user.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -30,7 +28,9 @@ class EliminationUserService implements OAuth2UserService<OidcUserRequest, OidcU
 	private static final Pattern PAUSD_DOMAIN_PATTERN = Pattern.compile("[a-z]{2}[0-9]{5}@pausd\\.us");
 	private final Random random = new Random();
 	private final OidcUserService delegate;
+
 	private final AdminList admins;
+
 	private final EliminationCodeGenerator eliminationCodeGenerator;
 	private final UserRepository userRepository;
 	private final LocalDateTime registrationDeadline;
@@ -41,12 +41,14 @@ class EliminationUserService implements OAuth2UserService<OidcUserRequest, OidcU
 		EliminationCodeGenerator eliminationCodeGenerator,
 
 		AdminList admins,
+
 		@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") @Value("${elimination.registration-deadline}") LocalDateTime registrationDeadline,
 		EliminationManager eliminationManager) {
 		this.userRepository = userRepository;
 		this.eliminationCodeGenerator = eliminationCodeGenerator;
 
 		this.admins = admins;
+
 		this.registrationDeadline = registrationDeadline;
 		this.eliminationManager = eliminationManager;
 		this.delegate = new OidcUserService();
@@ -136,8 +138,9 @@ class EliminationUserService implements OAuth2UserService<OidcUserRequest, OidcU
 		}
 
 		var user = userRepository.findBySubject(oidcUser.getSubject()).orElseThrow();
-		if (admins.isAdmin(user.getEmail()) && !user.getRoles().contains(ADMIN)) {
+		if (admins.isAdmin(user.getEmail()) && !(user.getRoles().contains(ADMIN) && user.getRoles().contains(EXCLUDED))) {
 			user.addRole(ADMIN);
+			user.addRole(EXCLUDED);
 			user = userRepository.save(user);
 		}
 

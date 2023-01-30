@@ -1,15 +1,15 @@
 package net.gunn.elimination.routes;
 
 import net.gunn.elimination.auth.EliminationAuthentication;
-import net.gunn.elimination.model.EliminationUser;
-import net.gunn.elimination.repository.UserRepository;
+import net.gunn.elimination.routes.user.UserRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.AuthenticatedPrincipal;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 

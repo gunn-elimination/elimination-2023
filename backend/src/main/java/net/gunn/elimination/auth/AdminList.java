@@ -5,7 +5,6 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 
 import java.util.Set;
 
-@ConfigurationProperties(prefix = "elimination")
 @ConstructorBinding
 record AdminList(Set<String> admins) {
     boolean isAdmin(String email) {

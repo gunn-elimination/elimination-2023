@@ -9,7 +9,7 @@ class EliminationOauthAuthenticationImpl extends DefaultOidcUser implements Elim
     private final OidcUser original;
 
     public EliminationOauthAuthenticationImpl(EliminationUser user, OidcUser original) {
-        super(user.getRoles().stream().map(Object::toString).map(SimpleGrantedAuthority::new).toList(), original.getIdToken(), original.getUserInfo());
+        super(user.getRoles(), original.getIdToken(), original.getUserInfo());
         this.original = original;
     }
 

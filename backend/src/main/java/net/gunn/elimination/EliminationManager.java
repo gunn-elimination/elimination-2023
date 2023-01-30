@@ -2,7 +2,7 @@ package net.gunn.elimination;
 
 import net.gunn.elimination.auth.EliminationCodeGenerator;
 import net.gunn.elimination.model.EliminationUser;
-import net.gunn.elimination.repository.UserRepository;
+import net.gunn.elimination.routes.user.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -42,57 +42,6 @@ public class EliminationManager {
 		this.eliminationCodeGenerator = eliminationCodeGenerator;
 	}
 
-    public EliminationUser attemptElimination(EliminationUser eliminator, String code) throws IncorrectEliminationCodeException, EmptyGameException {
-        var expectedCode = entityManager.createQuery("SELECT u.target.eliminationCode from EliminationUser u WHERE u.subject = :subject", String.class)
-            .setParameter("subject", eliminator.getSubject())
-            .getResultList();
-        if (expectedCode.isEmpty())
-            throw new EmptyGameException("Game is not ongoing");
-
-        if (!expectedCode.get(0).equals(code))
-            throw new IncorrectEliminationCodeException("Incorrect code");
-
-        var victim = eliminator.getTarget();
-        eliminate0(eliminator.getSubject(), victim.getSubject());
-        return victim;
-    }
-
-    void eliminate0(String eliminatorSubject, String toEliminateSubject) {
-        var toEliminate = entityManager.find(EliminationUser.class, toEliminateSubject);
-        assert !toEliminate.isEliminated();
-
-        var eliminator = entityManager.find(EliminationUser.class, eliminatorSubject);
-        eliminator.setTarget(toEliminate.getTarget());
-        eliminator.getTarget().setTargettedBy(eliminator);
-        eliminator = userRepository.save(eliminator);
-
-        if (eliminator.getTarget().getSubject().equals(eliminator.getSubject())) {
-            eliminator.setTarget(null);
-            eliminator.setTargettedBy(null);
-            eliminator.setEliminationCode(null);
-            eliminator.setWinner(true);
-            eliminator = userRepository.save(eliminator);
-        }
-
-        toEliminate.setTarget(null);
-        toEliminate.setTargettedBy(null);
-        toEliminate.setEliminatedBy(eliminator);
-        toEliminate.setEliminationCode(null);
-        toEliminate.removeRole(PLAYER);
-        userRepository.save(toEliminate);
-    }
-
-    public void unlink(String subject) {
-        var user = entityManager.find(EliminationUser.class, subject);
-        user.getTargettedBy().setTarget(user.getTarget());
-        user.getTarget().setTargettedBy(user.getTargettedBy());
-
-        user.setTarget(null);
-        user.setTargettedBy(null);
-        user.setEliminatedBy(null);
-        user.setEliminationCode(null);
-        userRepository.save(user);
-    }
 
     public boolean gameHasEnded() {
         return Instant.now().isAfter(gameEndTime) || userRepository.findByWinnerTrue().isPresent();

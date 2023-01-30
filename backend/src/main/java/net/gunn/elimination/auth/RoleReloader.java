@@ -1,16 +1,13 @@
 package net.gunn.elimination.auth;
 
-import net.gunn.elimination.repository.RoleRepository;
-import net.gunn.elimination.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import net.gunn.elimination.routes.user.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.stereotype.Service;
 
 import javax.servlet.*;
 import java.io.IOException;
 
-@Service
+//@Service
 class RoleReloader implements Filter {
     private final UserRepository userRepository;
 

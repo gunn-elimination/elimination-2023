@@ -1,13 +1,10 @@
 package net.gunn.elimination.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.Cascade;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
 
 import javax.persistence.*;
-import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
@@ -15,6 +12,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Entity
+@JsonSerialize(using = PublicUserSerialiser.class)
 /**
  * this is a fat and ugly class that is used to represent a user in the database.
  * it is a combination of the OidcUser and the UserDetails interface, and does way too much.
@@ -24,34 +22,27 @@ import java.util.concurrent.ConcurrentHashMap;
 public class EliminationUser implements Serializable {
     @Id
     @Column(columnDefinition = "TEXT")
-    @JsonIgnore
     private String subject;
 
     @Column
-    @JsonProperty
     private String email;
 
     @Column
-    @JsonProperty
     private String forename, surname;
 
     @OneToOne(mappedBy = "target", fetch = FetchType.LAZY)
-    @JsonIgnore
     @LazyToOne(value = LazyToOneOption.NO_PROXY)
     private EliminationUser targettedBy;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
     @LazyToOne(value = LazyToOneOption.NO_PROXY)
     private EliminationUser target;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
     @LazyToOne(value = LazyToOneOption.NO_PROXY)
     private EliminationUser eliminatedBy;
 
     @OneToMany(mappedBy = "eliminatedBy", fetch = FetchType.EAGER)
-    @JsonProperty
     private Set<EliminationUser> eliminated = ConcurrentHashMap.newKeySet();
 
     @Column
@@ -78,11 +69,9 @@ public class EliminationUser implements Serializable {
     }
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JsonIgnore
     private Collection<Role> roles = ConcurrentHashMap.newKeySet();
 
     @Column
-    @JsonIgnore
     private String eliminationCode;
 
     public EliminationUser() {

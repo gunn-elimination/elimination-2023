@@ -1,8 +1,10 @@
 package net.gunn.elimination.auth;
 
-import net.gunn.elimination.model.EliminationUser;
 import org.springframework.security.core.AuthenticatedPrincipal;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
-public interface EliminationAuthentication extends AuthenticatedPrincipal {
+import java.io.Serializable;
+
+public interface EliminationAuthentication extends AuthenticatedPrincipal, OidcUser, Serializable {
 	String subject();
 }

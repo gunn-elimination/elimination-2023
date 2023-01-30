@@ -1,6 +1,6 @@
 package net.gunn.elimination.routes;
 
-import net.gunn.elimination.auth.EliminationAuthentication;
+import org.springframework.security.core.AuthenticatedPrincipal;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +20,7 @@ public class Login {
         (
             HttpServletRequest request,
             HttpServletResponse response,
-            @AuthenticationPrincipal EliminationAuthentication user,
+            @AuthenticationPrincipal AuthenticatedPrincipal user,
             @RequestParam(value = "redirect_url", defaultValue = "/") String redirectUrl
         ) throws IOException {
         request.getSession().setAttribute("redirect_url", redirectUrl);

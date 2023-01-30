@@ -1,4 +1,4 @@
-package net.gunn.elimination.model;
+package net.gunn.elimination.routes.announcements;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;

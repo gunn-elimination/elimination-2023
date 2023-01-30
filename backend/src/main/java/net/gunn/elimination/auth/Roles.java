@@ -9,18 +9,19 @@ import org.springframework.stereotype.Component;
 public class Roles {
     public static final Role USER = new Role("ROLE_USER");
     public static final Role PLAYER = new Role("ROLE_PLAYER");
-    public static final Role ADMIN = new Role("ROLE_ADMIN");
+	public static final Role ADMIN = new Role("ROLE_ADMIN");
+	public static final Role EXCLUDED = new Role("ROLE_EXCLUDED");
 
     private Roles() {
     }
 
     @Autowired
     void setupRoles(RoleRepository roleRepository) {
-        if (!roleRepository.existsByName(Roles.USER.name()))
+        if (!roleRepository.existsByName(Roles.USER.getAuthority()))
             roleRepository.save(Roles.USER);
-        if (!roleRepository.existsByName(Roles.PLAYER.name()))
+        if (!roleRepository.existsByName(Roles.PLAYER.getAuthority()))
             roleRepository.save(Roles.PLAYER);
-        if (!roleRepository.existsByName(Roles.ADMIN.name()))
+        if (!roleRepository.existsByName(Roles.ADMIN.getAuthority()))
             roleRepository.save(Roles.ADMIN);
     }
 }

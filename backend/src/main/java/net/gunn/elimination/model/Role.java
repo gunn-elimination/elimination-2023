@@ -1,12 +1,14 @@
 package net.gunn.elimination.model;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.io.Serializable;
 
 @Entity
-public class Role implements Serializable {
+public class Role implements Serializable, GrantedAuthority {
     @Column
     @Id
     private String name;
@@ -17,10 +19,6 @@ public class Role implements Serializable {
 
     public Role(String name) {
         this.name = name;
-    }
-
-    public String name() {
-        return name;
     }
 
     @Override
@@ -37,5 +35,10 @@ public class Role implements Serializable {
     public int hashCode() {
         return name.hashCode();
     }
+
+	@Override
+	public String getAuthority() {
+		return name;
+	}
 }
 

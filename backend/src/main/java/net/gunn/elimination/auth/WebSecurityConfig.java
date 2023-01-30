@@ -29,13 +29,11 @@ import java.util.Map;
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 class WebSecurityConfig {
     private final EliminationUserService userDetailsService;
-    private final Error errorHandler;
-    private final ObjectMapper mapper;
+	private final ObjectMapper mapper;
 
     public WebSecurityConfig(EliminationUserService userDetailsService, Error errorHandler, ObjectMapper mapper) {
         this.userDetailsService = userDetailsService;
-        this.errorHandler = errorHandler;
-        this.mapper = mapper;
+		this.mapper = mapper;
     }
 
     @Bean
@@ -74,7 +72,7 @@ class WebSecurityConfig {
                 .GOOGLE
                 .getBuilder("google")
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .authorizationUri("https://accounts.google.com/o/oauth2/v2/auth?hd=pausd.us")
+                .authorizationUri("https://accounts.google.com/o/oauth2/v2/auth")
                 .redirectUri("{baseUrl}/login/oauth2/code/google")
                 .userNameAttributeName(IdTokenClaimNames.SUB)
                 .clientId(clientId)

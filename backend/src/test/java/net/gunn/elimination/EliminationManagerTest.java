@@ -2,7 +2,7 @@ package net.gunn.elimination;
 
 import net.gunn.elimination.auth.EliminationCodeGenerator;
 import net.gunn.elimination.model.EliminationUser;
-import net.gunn.elimination.repository.UserRepository;
+import net.gunn.elimination.routes.user.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

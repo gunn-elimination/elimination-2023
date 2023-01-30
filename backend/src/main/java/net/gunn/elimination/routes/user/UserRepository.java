@@ -1,4 +1,4 @@
-package net.gunn.elimination.repository;
+package net.gunn.elimination.routes.user;
 
 import net.gunn.elimination.model.EliminationUser;
 import net.gunn.elimination.model.Role;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Component
 @Repository
@@ -25,11 +26,7 @@ public interface UserRepository extends JpaRepository<EliminationUser, Long> {
 
 	Page<EliminationUser> findEliminationUsersByRolesContainingAndSubjectNot(Role role, String blacklistedSubject, Pageable pageable);
 
-	// return limited list. with limit as param
-	@Query("select u from EliminationUser u WHERE u.email like '%pausd.us' order by u.eliminated.size desc")
-	List<EliminationUser> findTopByNumberOfEliminations(Pageable pageable);
-
-	int countEliminationUsersByRolesContainingAndEliminatedByNull(Role role);
+	Set<EliminationUser> findByForenameAndSurname(String forename, String surname);
 
 	Optional<EliminationUser> findByWinnerTrue();
 }
