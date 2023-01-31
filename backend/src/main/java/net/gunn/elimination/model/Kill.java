@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -37,8 +38,8 @@ public non-sealed class Kill implements Serializable, KillEvent {
 	public Kill() {}
 
 	public Kill(EliminationUser eliminator, EliminationUser eliminated, Instant timeStamp) {
-		this.eliminator = eliminator;
-		this.eliminated = eliminated;
+		this.eliminator = (EliminationUser) Hibernate.unproxy(eliminator);
+		this.eliminated = (EliminationUser) Hibernate.unproxy(eliminated);
 
 		this.timeStamp = timeStamp;
 	}
