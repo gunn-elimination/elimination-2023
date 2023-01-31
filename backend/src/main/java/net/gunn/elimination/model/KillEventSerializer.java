@@ -31,7 +31,8 @@ public class KillEventSerializer extends JsonSerializer<KillEvent> {
 		gen.writeEndObject();
 	}
 
-	private void addKill(JsonGenerator gen, Kill kill) throws IOException {
+	@Transactional
+	void addKill(JsonGenerator gen, Kill kill) throws IOException {
 		gen.writeStartObject();
 		gen.writeObjectField("eliminator", kill.eliminator());
 		gen.writeObjectField("eliminated", kill.eliminated());
