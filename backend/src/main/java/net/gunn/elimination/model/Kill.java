@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -26,10 +28,12 @@ public non-sealed class Kill implements Serializable, KillEvent {
 
 	@JsonProperty
 	@ManyToOne
+	@LazyToOne(value = LazyToOneOption.NO_PROXY)
 	private EliminationUser eliminator;
 
 	@JsonProperty
 	@OneToOne
+	@LazyToOne(value = LazyToOneOption.NO_PROXY)
 	private EliminationUser eliminated;
 
 	@JsonProperty
