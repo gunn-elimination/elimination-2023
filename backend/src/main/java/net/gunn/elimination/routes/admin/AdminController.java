@@ -147,6 +147,7 @@ public class AdminController {
 		return "OK";
 	}
 
+	@Transactional
 	@GetMapping("/awardEliminationOf")
 	public String awardElim(@RequestParam("toEliminateEmail") String toEliminateEmail, HttpServletResponse response) {
 		var toEliminate = userRepository.findByEmail(toEliminateEmail);
