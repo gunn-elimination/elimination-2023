@@ -1,5 +1,6 @@
 package net.gunn.elimination.routes.game;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.core.annotation.Timed;
 import io.sentry.spring.tracing.SentrySpan;
 import net.gunn.elimination.EliminationManager;
@@ -31,6 +32,8 @@ import java.util.Map;
 public class GameController {
 	public final EliminationManager eliminationManager;
 	private final UserRepository userRepository;
+
+	ObjectMapper objectMapper = new ObjectMapper();
 
 	public GameController(EliminationManager eliminationManager, UserRepository userRepository) {
 		this.eliminationManager = eliminationManager;
@@ -68,14 +71,8 @@ public class GameController {
 		var me = userRepository.findBySubject(me_.subject()).orElseThrow();
 		var target = me.getTarget();
 
-		Map userObj = null;
-		if (target != null) {
-
-			userObj = target.decompose();
-		}
-
-		var result = new HashMap<>();
-		result.put("user", userObj);
+		Map result = new HashMap();
+		result.put("user", target == null ? null : objectMapper.convertValue(target, Map.class));
 		return result;
 	}
 

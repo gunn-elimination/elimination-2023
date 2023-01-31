@@ -2,6 +2,7 @@ package net.gunn.elimination.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
@@ -52,11 +53,16 @@ public class EliminationUser implements Serializable {
     private EliminationUser eliminatedBy;
 
     @OneToMany(mappedBy = "eliminatedBy", fetch = FetchType.EAGER)
-    @JsonProperty
+    @JsonIgnore
     private Set<EliminationUser> eliminated = ConcurrentHashMap.newKeySet();
 
     @Column
     private boolean winner = false;
+
+	@JsonProperty("eliminatedCount")
+	private int eliminatedCount() {
+		return eliminated.size();
+	}
 
     public boolean isWinner() {
         return winner;
@@ -199,5 +205,18 @@ public class EliminationUser implements Serializable {
 			"email", getEmail(),
 			"eliminated", targetEliminations
 		);
+	}
+
+	public Set<Map> getEliminated() {
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		HashSet<Map> targetEliminations = new HashSet<>();
+		for (EliminationUser eliminatee : this.eliminated()) {
+			targetEliminations.add(
+				objectMapper.convertValue(eliminatee, Map.class)
+			);
+		}
+
+		return targetEliminations;
 	}
 }

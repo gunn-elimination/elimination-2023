@@ -1,5 +1,6 @@
 package net.gunn.elimination.routes;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.gunn.elimination.auth.EliminationAuthentication;
 import net.gunn.elimination.model.EliminationUser;
 import net.gunn.elimination.repository.UserRepository;
@@ -24,15 +25,21 @@ import java.util.Map;
 public class User {
 	private final UserRepository userRepository;
 
+	ObjectMapper objectMapper = new ObjectMapper();
+
 	public User(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
 
 	@GetMapping({"/", ""})
 	@Transactional
-	public Object me(@AuthenticationPrincipal EliminationAuthentication user) {
-		var result = userRepository.findBySubject(user.subject()).orElseThrow();
-		return result.decompose();
+	public Map me(@AuthenticationPrincipal EliminationAuthentication user) {
+		EliminationUser me = userRepository.findBySubject(user.subject()).orElseThrow();
+
+		Map res = objectMapper.convertValue(me, Map.class);
+		res.put("eliminated", me.getEliminated());
+
+		return res;
 	}
 
 	@PostMapping("/logout")
