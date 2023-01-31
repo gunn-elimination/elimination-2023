@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import org.hibernate.Hibernate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
@@ -39,8 +40,8 @@ public class KillEventSerializer extends JsonSerializer<KillEvent> {
 	void addKill(JsonGenerator gen, Kill kill) throws IOException {
 		gen.writeStartObject();
 
-		Map eliminatorMap = objectMapper.convertValue(kill.eliminator(), Map.class);
-		Map eliminatedMap = objectMapper.convertValue(kill.eliminated(), Map.class);
+		Map eliminatorMap = objectMapper.convertValue(Hibernate.unproxy(kill.eliminator()), Map.class);
+		Map eliminatedMap = objectMapper.convertValue(Hibernate.unproxy(kill.eliminated()), Map.class);
 
 		gen.writeObjectField("eliminator", eliminatorMap);
 		gen.writeObjectField("eliminated", eliminatedMap);
