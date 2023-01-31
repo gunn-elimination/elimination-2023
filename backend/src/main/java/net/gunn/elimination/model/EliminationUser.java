@@ -3,12 +3,10 @@ package net.gunn.elimination.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
 
 import javax.persistence.*;
-import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
@@ -185,29 +183,7 @@ public class EliminationUser implements Serializable {
         return obj instanceof EliminationUser && ((EliminationUser) obj).getSubject().equals(getSubject());
     }
 
-	// idfk what to cll thism ethod
-	public Map decompose() {
-		var targetEliminations = new HashSet<>();
-		for (var eliminatee : this.eliminated()) {
-			targetEliminations.add(
-				Map.of(
-					"forename", eliminatee.getForename(),
-					"surname", eliminatee.getSurname(),
-					"email", eliminatee.getEmail(),
-					"eliminations", eliminatee.eliminated().size()
-				)
-			);
-		}
-
-		return Map.of(
-			"forename", getForename(),
-			"surname", getSurname(),
-			"email", getEmail(),
-			"eliminated", targetEliminations
-		);
-	}
-
-	public Set<Map> getEliminated() {
+	public Set<Map> getEliminatedSet() {
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		HashSet<Map> targetEliminations = new HashSet<>();

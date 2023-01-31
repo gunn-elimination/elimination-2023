@@ -10,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 @RestController
@@ -37,7 +35,7 @@ public class User {
 		EliminationUser me = userRepository.findBySubject(user.subject()).orElseThrow();
 
 		Map res = objectMapper.convertValue(me, Map.class);
-		res.put("eliminated", me.getEliminated());
+		res.put("eliminated", me.getEliminatedSet());
 
 		return res;
 	}

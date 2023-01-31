@@ -8,8 +8,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import java.io.IOException;
 
 public class KillEventSerializer extends JsonSerializer<KillEvent> {
-	ObjectMapper objectMapper = new ObjectMapper();
-
 	@Override
 	public void serialize(KillEvent value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
 		gen.writeStartObject();

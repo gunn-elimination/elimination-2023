@@ -7,6 +7,7 @@ import net.gunn.elimination.EliminationManager;
 import net.gunn.elimination.EmptyGameException;
 import net.gunn.elimination.IncorrectEliminationCodeException;
 import net.gunn.elimination.auth.EliminationAuthentication;
+import net.gunn.elimination.model.EliminationUser;
 import net.gunn.elimination.repository.UserRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,7 +23,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/game")
-@PreAuthorize("@eliminationManager.gameIsOngoing() && hasRole('ROLE_PLAYER')")
+@PreAuthorize("@eliminationManager.gameIsOngoing() && hasRole('ROLE_USER')")
 @CrossOrigin(
 	origins = {"https://elimination-2023.vercel.app", "https://elimination.gunn.one", "http://localhost:3000"},
 	allowCredentials = "true",
@@ -82,19 +83,10 @@ public class GameController {
 	@Transactional
 	public Map eliminatedBy(@AuthenticationPrincipal EliminationAuthentication me, HttpServletResponse response) {
 		var me_ = userRepository.findBySubject(me.subject()).orElseThrow();
-		var eliminatedBy = me_.getEliminatedBy();
+		EliminationUser eliminatedBy = me_.getEliminatedBy();
 
-		Map user = null;
-		if (eliminatedBy != null) {
-			user = Map.of(
-				"email", eliminatedBy.getEmail(),
-				"forename", eliminatedBy.getForename(),
-				"surname", eliminatedBy.getSurname()
-			);
-		}
-
-		var result = new HashMap<>();
-		result.put("user", user);
+		Map result = new HashMap();
+		result.put("user", eliminatedBy == null ? null : objectMapper.convertValue(eliminatedBy, Map.class));
 		return result;
 	}
 }
