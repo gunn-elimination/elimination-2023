@@ -93,7 +93,6 @@ public class EliminationUser implements Serializable {
     public EliminationUser() {
     }
 
-
     public EliminationUser(String subject, String email, String forename, String surname, String eliminationCode, Set<Role> roles
     ) {
         this.subject = subject;
