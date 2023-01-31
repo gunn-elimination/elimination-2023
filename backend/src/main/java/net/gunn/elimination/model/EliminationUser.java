@@ -61,7 +61,8 @@ public class EliminationUser implements Serializable {
     private boolean winner = false;
 
 	@JsonProperty("eliminatedCount")
-	private int eliminatedCount() {
+	@Transactional
+	public int eliminatedCount() {
 		return eliminated.size();
 	}
 
