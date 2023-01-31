@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -181,6 +182,8 @@ public class EliminationUser implements Serializable {
         return obj instanceof EliminationUser && ((EliminationUser) obj).getSubject().equals(getSubject());
     }
 
+	@Transactional
+	@JsonIgnore
 	public Set<Map> getEliminatedSet() {
 		ObjectMapper objectMapper = new ObjectMapper();
 
