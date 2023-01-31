@@ -21,7 +21,7 @@ public non-sealed class Kill implements Serializable, KillEvent {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@JsonIgnore
-	private String id;
+	private Long id;
 
 	@JsonProperty
 	@ManyToOne
