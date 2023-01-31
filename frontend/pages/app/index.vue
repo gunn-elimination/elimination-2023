@@ -25,7 +25,7 @@
             <div class="text-center flex flex-col items-center">
                 <Avatar :user="userStore.target" large />
                 <span class="font-bold text-lg">{{ userStore.target.forename }} {{ userStore.target.surname }}</span>
-                <span class="text-sm"><!-- #4 • -->{{ userStore.target.eliminations }} eliminations</span>
+                <span class="text-sm"><!-- #4 • -->{{ userStore.target.eliminatedCount }} eliminations</span>
             </div>
         </section>
         <section class="p-8 bg-secondary text-secondary-content" v-else-if="userStore.eliminatedBy">
@@ -36,7 +36,7 @@
             <div class="text-center flex flex-col items-center">
                 <Avatar :user="userStore.eliminatedBy" large />
                 <span class="font-bold text-lg">{{ userStore.eliminatedBy.forename }} {{ userStore.eliminatedBy.surname }}</span>
-                <span class="text-sm"><!-- #4 • -->{{ userStore.eliminatedBy.eliminations }} eliminations</span>
+                <span class="text-sm"><!-- #4 • -->{{ userStore.eliminatedBy.eliminatedCount }} eliminations</span>
             </div>
         </section>
 

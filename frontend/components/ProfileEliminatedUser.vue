@@ -4,8 +4,8 @@
         <div class="flex flex-col">
             <p class="font-semibold">{{ user.forename }} {{ user.surname }}</p>
             <p class="text-sm text-secondary italic">
-                {{ user.eliminations }}
-                elimination<template v-if="user.eliminations !== 1">s</template>
+                {{ user.eliminatedCount }}
+                elimination<template v-if="user.eliminatedCount !== 1">s</template>
             </p>
         </div>
     </div>

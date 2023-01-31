@@ -2,7 +2,7 @@ export type EliminationUser = {
     email: string,
     forename: string,
     surname: string,
-    eliminations: number,
+    eliminatedCount: number,
 }
 
 export type MeEliminationUser = EliminationUser & {
