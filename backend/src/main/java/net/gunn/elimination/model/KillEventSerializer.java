@@ -2,12 +2,16 @@ package net.gunn.elimination.model;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class KillEventSerializer extends JsonSerializer<KillEvent> {
+	ObjectMapper objectMapper = new ObjectMapper();
+
 	@Override
 	@Transactional
 	public void serialize(KillEvent value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
@@ -34,8 +38,12 @@ public class KillEventSerializer extends JsonSerializer<KillEvent> {
 	@Transactional
 	void addKill(JsonGenerator gen, Kill kill) throws IOException {
 		gen.writeStartObject();
-		gen.writeObjectField("eliminator", kill.eliminator());
-		gen.writeObjectField("eliminated", kill.eliminated());
+
+		Map eliminatorMap = objectMapper.convertValue(kill.eliminator(), Map.class);
+		Map eliminatedMap = objectMapper.convertValue(kill.eliminated(), Map.class);
+
+		gen.writeObjectField("eliminator", eliminatorMap);
+		gen.writeObjectField("eliminated", eliminatedMap);
 		gen.writeStringField("timeStamp", kill.timeStamp().toString());
 		gen.writeEndObject();
 	}
