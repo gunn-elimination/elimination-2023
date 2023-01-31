@@ -104,11 +104,13 @@ public class EliminationUser implements Serializable {
         this.roles = roles == null ? ConcurrentHashMap.newKeySet() : roles;
     }
 
+	@JsonIgnore
     public String getSubject() {
         return subject;
     }
 
-    public String getEmail() {
+	@JsonIgnore
+	public String getEmail() {
         return email;
     }
 
