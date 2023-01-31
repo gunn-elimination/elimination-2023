@@ -52,7 +52,7 @@ public class EliminationUser implements Serializable {
     @LazyToOne(value = LazyToOneOption.NO_PROXY)
     private EliminationUser eliminatedBy;
 
-    @OneToMany(mappedBy = "eliminatedBy", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "eliminatedBy", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<EliminationUser> eliminated = ConcurrentHashMap.newKeySet();
 
