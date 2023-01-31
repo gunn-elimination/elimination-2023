@@ -37,7 +37,7 @@ public class Index {
 
         if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof EliminationAuthentication auth) {
 			var user_ = userRepository.findBySubject(auth.subject());
-			model.addAttribute("currentUser", user_);
+			model.addAttribute("currentUser", user_.orElseThrow());
 		}
 
         model.addAttribute("eliminationManager", eliminationManager);
