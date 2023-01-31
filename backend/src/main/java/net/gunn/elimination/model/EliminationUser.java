@@ -1,6 +1,8 @@
 package net.gunn.elimination.model;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.annotations.LazyToOne;
@@ -50,7 +52,7 @@ public class EliminationUser implements Serializable {
     @LazyToOne(value = LazyToOneOption.NO_PROXY)
     private EliminationUser eliminatedBy;
 
-    @OneToMany(mappedBy = "eliminatedBy", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "eliminatedBy", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<EliminationUser> eliminated = ConcurrentHashMap.newKeySet();
 
@@ -72,10 +74,6 @@ public class EliminationUser implements Serializable {
 
     public void setEliminationCode(String eliminationCode) {
         this.eliminationCode = eliminationCode;
-    }
-
-    public Set<EliminationUser> getPreviousVictims() {
-        return eliminated;
     }
 
     public EliminationUser getEliminatedBy() {
