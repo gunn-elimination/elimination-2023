@@ -2,13 +2,14 @@ package net.gunn.elimination.model;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
 public class KillEventSerializer extends JsonSerializer<KillEvent> {
 	@Override
+	@Transactional
 	public void serialize(KillEvent value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
 		gen.writeStartObject();
 		if (value instanceof Kill kill) {

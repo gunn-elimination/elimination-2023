@@ -1,20 +1,12 @@
 package net.gunn.elimination.routes.game;
 
 import io.sentry.spring.tracing.SentrySpan;
-import net.gunn.elimination.EliminationManager;
 import net.gunn.elimination.model.BulkKillfeed;
-import net.gunn.elimination.model.Kill;
 import net.gunn.elimination.repository.KillfeedRepository;
-import net.gunn.elimination.repository.UserRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.EntityManagerFactory;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -23,7 +15,6 @@ import java.util.Map;
 @CrossOrigin(originPatterns = "*")
 public class KillfeedController {
 	private final KillfeedRepository killfeedRepository;
-
 
 	public KillfeedController(KillfeedRepository killfeedRepository) {
 		this.killfeedRepository = killfeedRepository;
