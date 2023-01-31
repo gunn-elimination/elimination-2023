@@ -7,7 +7,7 @@ import net.gunn.elimination.repository.AnnouncementRepository;
 import net.gunn.elimination.repository.UserRepository;
 import net.gunn.elimination.routes.AnnouncementController;
 import net.gunn.elimination.routes.SSEController;
-import net.gunn.elimination.routes.game.Kill;
+import net.gunn.elimination.model.Kill;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
+import java.time.Instant;
 import java.util.Optional;
 
 import static net.gunn.elimination.auth.Roles.BANNED;
@@ -133,7 +134,7 @@ public class AdminController {
 	@GetMapping("/test/elimination")
 	@ConditionalOnProperty(name = "elimination.sse.enabled", havingValue = "true")
 	public String testElimination(HttpServletRequest req, HttpServletResponse response) throws IOException {
-		sseController.get().signalKill(new Kill(new EliminationUser(), new EliminationUser()));
+		sseController.get().signalKill(new Kill(new EliminationUser(), new EliminationUser(), Instant.now()));
 		response.setStatus(HttpServletResponse.SC_OK);
 		return "OK";
 	}
@@ -144,5 +145,29 @@ public class AdminController {
 		sseController.get().signalScoreboardChange();
 		response.setStatus(HttpServletResponse.SC_OK);
 		return "OK";
+	}
+
+	@GetMapping("/awardEliminationOf")
+	public String awardElim(@RequestParam("toEliminateEmail") String toEliminateEmail, HttpServletResponse response) {
+		var toEliminate = userRepository.findByEmail(toEliminateEmail);
+
+		if (toEliminate.isPresent()) {
+			EliminationUser eliminated = toEliminate.get();
+			EliminationUser eliminator = eliminated.getTargettedBy();
+			String elimCode = eliminated.getEliminationCode();
+
+			try {
+				eliminationManager.attemptElimination(eliminator, elimCode);
+
+				response.setStatus(HttpServletResponse.SC_OK);
+				return "OK, eliminated " + eliminated.getEmail();
+			} catch (Exception e) {
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				return "failed to eliminate";
+			}
+		} else {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return "victim not found";
+		}
 	}
 }

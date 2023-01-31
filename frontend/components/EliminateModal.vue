@@ -36,12 +36,7 @@ const store = useUserStore();
 const code = ref('');
 
 function onSubmit() {
-    fetch(`${config.public.apiUrl}/game/eliminate?code=${code.value}`)
-        .then(res => {
-            if (!res.ok) return;
-            store.refreshTarget();
-            store.refreshMe();
-        });
+    fetch(`${config.public.apiUrl}/game/eliminate?code=${code.value}`);
     code.value = '';
 }
 </script>
