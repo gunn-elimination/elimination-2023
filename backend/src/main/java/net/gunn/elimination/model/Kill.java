@@ -2,22 +2,13 @@ package net.gunn.elimination.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Map;
 
 @Entity
 public non-sealed class Kill implements Serializable, KillEvent {
@@ -28,12 +19,12 @@ public non-sealed class Kill implements Serializable, KillEvent {
 
 	@JsonProperty
 	@ManyToOne
-	@LazyToOne(value = LazyToOneOption.NO_PROXY)
+	@LazyToOne(value = LazyToOneOption.FALSE)
 	private EliminationUser eliminator;
 
 	@JsonProperty
 	@OneToOne
-	@LazyToOne(value = LazyToOneOption.NO_PROXY)
+	@LazyToOne(value = LazyToOneOption.FALSE)
 	private EliminationUser eliminated;
 
 	@JsonProperty

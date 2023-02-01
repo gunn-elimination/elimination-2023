@@ -40,6 +40,8 @@ public class KillEventSerializer extends JsonSerializer<KillEvent> {
 	void addKill(JsonGenerator gen, Kill kill) throws IOException {
 		gen.writeStartObject();
 
+//		Hibernate.initialize(kill);
+
 		EliminationUser eliminator = kill.eliminator();
 		EliminationUser eliminated = kill.eliminated();
 
