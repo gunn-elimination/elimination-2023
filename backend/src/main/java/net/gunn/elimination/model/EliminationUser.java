@@ -1,16 +1,19 @@
 package net.gunn.elimination.model;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.Cascade;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
-import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -51,11 +54,17 @@ public class EliminationUser implements Serializable {
     private EliminationUser eliminatedBy;
 
     @OneToMany(mappedBy = "eliminatedBy", fetch = FetchType.EAGER)
-    @JsonProperty
+    @JsonIgnore
     private Set<EliminationUser> eliminated = ConcurrentHashMap.newKeySet();
 
     @Column
     private boolean winner = false;
+
+	@JsonProperty("eliminatedCount")
+	@Transactional
+	public int eliminatedCount() {
+		return eliminated.size();
+	}
 
     public boolean isWinner() {
         return winner;
@@ -67,10 +76,6 @@ public class EliminationUser implements Serializable {
 
     public void setEliminationCode(String eliminationCode) {
         this.eliminationCode = eliminationCode;
-    }
-
-    public Set<EliminationUser> getPreviousVictims() {
-        return eliminated;
     }
 
     public EliminationUser getEliminatedBy() {
@@ -88,7 +93,6 @@ public class EliminationUser implements Serializable {
     public EliminationUser() {
     }
 
-
     public EliminationUser(String subject, String email, String forename, String surname, String eliminationCode, Set<Role> roles
     ) {
         this.subject = subject;
@@ -99,11 +103,13 @@ public class EliminationUser implements Serializable {
         this.roles = roles == null ? ConcurrentHashMap.newKeySet() : roles;
     }
 
+	@JsonIgnore
     public String getSubject() {
         return subject;
     }
 
-    public String getEmail() {
+	@JsonIgnore
+	public String getEmail() {
         return email;
     }
 
@@ -177,4 +183,19 @@ public class EliminationUser implements Serializable {
     public boolean equals(Object obj) {
         return obj instanceof EliminationUser && ((EliminationUser) obj).getSubject().equals(getSubject());
     }
+
+	@Transactional
+	@JsonIgnore
+	public Set<Map> getEliminatedSet() {
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		HashSet<Map> targetEliminations = new HashSet<>();
+		for (EliminationUser eliminatee : this.eliminated()) {
+			targetEliminations.add(
+				objectMapper.convertValue(eliminatee, Map.class)
+			);
+		}
+
+		return targetEliminations;
+	}
 }

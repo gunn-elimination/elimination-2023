@@ -3,8 +3,8 @@
         <Avatar :user="user" />
         <p class="font-medium">{{ user.forename }} {{ user.surname }}</p>
         <p class="text-secondary italic">
-            {{ user.eliminated.length }}
-            elimination<template v-if="user.eliminated.length !== 1">s</template>
+            {{ user.eliminatedCount }}
+            elimination<template v-if="user.eliminatedCount !== 1">s</template>
         </p>
     </li>
 </template>

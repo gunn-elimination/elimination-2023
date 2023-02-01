@@ -1,4 +1,4 @@
-<form method="post" th:fragment="editform" th:action="'/admin/announcement/' + ${announcement.getID()}">
+<form method="post" th:fragment="editform" th:action="'/api/admin/announcement/' + ${announcement.getID()}">
     <table>
         <tr>
             <td>
@@ -56,7 +56,7 @@
     </table>
 </form>
 
-<form th:fragment="createform" action="/admin/announcement" method="post">
+<form th:fragment="createform" action="/api/admin/announcement" method="post">
     <label for="title">
         Title
     </label>

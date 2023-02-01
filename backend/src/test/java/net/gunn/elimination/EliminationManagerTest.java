@@ -2,6 +2,7 @@ package net.gunn.elimination;
 
 import net.gunn.elimination.auth.EliminationCodeGenerator;
 import net.gunn.elimination.model.EliminationUser;
+import net.gunn.elimination.repository.KillfeedRepository;
 import net.gunn.elimination.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,7 +30,10 @@ class EliminationManagerTest {
 	EntityManagerFactory emf;
 
     @Autowired
-        UserRepository userRepository;
+	UserRepository userRepository;
+
+	@Autowired
+	KillfeedRepository killfeedRepository;
 
     EliminationManager manager;
 	EntityManager entityManager;
@@ -41,7 +46,9 @@ class EliminationManagerTest {
             entityManager,
             LocalDateTime.now(),
             LocalDateTime.now().plus(1, java.time.temporal.ChronoUnit.DAYS),
-			eliminationCodeGenerator
+			eliminationCodeGenerator,
+			Optional.empty(),
+			killfeedRepository
 		);
     }
 
