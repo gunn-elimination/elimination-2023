@@ -19,23 +19,17 @@
     </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import {DateTime} from 'luxon';
 import type {PropType} from 'vue';
 import type {DayInfo} from '@/utils/calendar';
-import {DateTime} from 'luxon';
-
-export default {
-    name: "CalendarCell",
-    props: {
-        date: Object as PropType<DateTime>,
-        item: Object as PropType<DayInfo | null>
-    }
-}
-</script>
-
-<script setup lang="ts">
 import {useCurrentTimeStore} from '@/store/time';
 import {lowercaseFirstLetter} from '@/utils/strings';
+
+defineProps({
+    date: Object as PropType<DateTime>,
+    item: Object as PropType<DayInfo | null>
+});
 
 const currentTime = useCurrentTimeStore();
 </script>

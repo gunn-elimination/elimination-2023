@@ -11,25 +11,30 @@
                 </span>
             </h2>
             <p class="text-secondary text-sm">
-                <!-- TODO: make this the same datetime object -->
-                {{ DateTime.fromISO(item.timeStamp).toLocaleString({ weekday: 'long', month: 'long', day: '2-digit' }) }},
-                {{ DateTime.fromISO(item.timeStamp).toRelative() }}
+                {{ timestamp.toLocaleString({weekday: 'long', month: 'long', day: '2-digit'}) }},
+                {{ relativeTime }}
             </p>
         </div>
     </div>
 </template>
 
-<script lang="ts">
-import {PropType} from 'vue';
-import {EliminationFeedItem} from '@/utils/types';
-
-export default {
-    props: {
-        item: Object as PropType<EliminationFeedItem>
-    }
-}
-</script>
-
 <script setup lang="ts">
 import {DateTime} from 'luxon';
+import type {PropType} from 'vue';
+import type {EliminationFeedItem} from '@/utils/types';
+import {useCurrentTimeStore} from '@/store/time';
+
+const props = defineProps({
+    item: {
+        type: Object as PropType<EliminationFeedItem>,
+        required: true
+    }
+});
+
+const timestamp = ref(DateTime.fromISO(props.item.timeStamp));
+const relativeTime = ref(timestamp.value.toRelative());
+
+// Update relative time on current time tick
+const store = useCurrentTimeStore();
+watch(store.time, () => relativeTime.value = timestamp.value.toRelative());
 </script>

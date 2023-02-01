@@ -13,12 +13,6 @@
     </div>
 </template>
 
-<script lang="ts">
-export default {
-    name: "Calendar"
-}
-</script>
-
 <script setup lang="ts">
 import {DateTime} from 'luxon';
 import {calendar} from '@/utils/calendar';

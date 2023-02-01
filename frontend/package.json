@@ -23,7 +23,6 @@
     "daisyui": "^2.46.1",
     "luxon": "^3.2.1",
     "pinia": "^2.0.29",
-    "qrcode.vue": "^3.3.3",
-    "vue-feather": "^2.0.0"
+    "qrcode.vue": "^3.3.3"
   }
 }

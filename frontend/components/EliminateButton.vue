@@ -3,9 +3,3 @@
         <SkullIcon class="h-6 w-6 stroke-2" />
     </label>
 </template>
-
-<script>
-export default {
-    name: "EliminateButton"
-}
-</script>

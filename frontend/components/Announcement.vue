@@ -20,20 +20,15 @@
     </div>
 </template>
 
-<script lang="ts">
-export default {
-    name: "Announcement",
-    props: {
-        title: String,
-        body: String,
-        startDate: String,
-        id: Number
-    }
-}
-</script>
-
 <script setup lang="ts">
 import {useAnnouncementsStore} from '@/store/announcements';
+
+defineProps({
+    title: String,
+    body: String,
+    startDate: String,
+    id: Number
+});
 
 const store = useAnnouncementsStore();
 </script>

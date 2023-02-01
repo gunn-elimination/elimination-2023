@@ -21,12 +21,6 @@
     </label>
 </template>
 
-<script lang="ts">
-export default {
-    name: "EliminateModal"
-}
-</script>
-
 <script setup lang="ts">
 import {useUserStore} from '@/store/user';
 
