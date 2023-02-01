@@ -6,8 +6,7 @@ import io.sentry.spring.tracing.SentrySpan;
 import net.gunn.elimination.auth.Roles;
 import net.gunn.elimination.model.Announcement;
 import net.gunn.elimination.repository.UserRepository;
-import net.gunn.elimination.model.Kill;
-import net.gunn.elimination.routes.game.KillfeedController;
+import net.gunn.elimination.routes.game.Kill;
 import net.gunn.elimination.routes.game.ScoreboardController;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
@@ -35,7 +34,6 @@ public class SSEController {
 
 	private final AnnouncementController announcementController;
 	private final ScoreboardController scoreboardController;
-	private final KillfeedController killfeedController;
 
 	private final UserRepository userRepository;
 
@@ -45,11 +43,10 @@ public class SSEController {
 
 	private final EntityManagerFactory emf;
 
-	public SSEController(RabbitTemplate rabbitTemplate, AnnouncementController announcementController, ScoreboardController scoreboardController, KillfeedController killfeedController, UserRepository userRepository, EntityManagerFactory emf) {
+	public SSEController(RabbitTemplate rabbitTemplate, AnnouncementController announcementController, ScoreboardController scoreboardController, UserRepository userRepository, EntityManagerFactory emf) {
 		this.rabbitTemplate = rabbitTemplate;
 		this.announcementController = announcementController;
 		this.scoreboardController = scoreboardController;
-		this.killfeedController = killfeedController;
 		this.userRepository = userRepository;
 		this.emf = emf;
 	}
@@ -58,7 +55,6 @@ public class SSEController {
 	public SseEmitter announcementsStream() throws IOException {
 		var emitter = new SseEmitter(-1L);
 
-		emitter.onCompletion(() -> announcementEmitters.remove(emitter));
 		announcementEmitters.add(emitter);
 
 		var em = emf.createEntityManager();
@@ -71,6 +67,7 @@ public class SSEController {
 			em.close();
 		}
 
+		emitter.onCompletion(() -> announcementEmitters.remove(emitter));
 		return emitter;
 	}
 
@@ -81,9 +78,8 @@ public class SSEController {
 		var emitter = new SseEmitter(-1L);
 
 		var sub = new ScoreboardController.ScoreboardSubscription(emitter, limit);
-
-		emitter.onCompletion(() -> scoreboardEmitters.remove(sub));
 		scoreboardEmitters.add(sub);
+		emitter.onCompletion(() -> scoreboardEmitters.remove(sub));
 
 		em.getTransaction().begin();
 		em.getTransaction().setRollbackOnly();
@@ -98,21 +94,11 @@ public class SSEController {
 	}
 
 	@GetMapping(value = "/game/eliminations", produces = "text/event-stream")
-	public SseEmitter kills() throws IOException {
-		var em = emf.createEntityManager();
+	public SseEmitter kills() {
 		var emitter = new SseEmitter(-1L);
 
-		emitter.onCompletion(() -> killEmitters.remove(emitter));
 		killEmitters.add(emitter);
-
-		em.getTransaction().begin();
-		em.getTransaction().setRollbackOnly();
-		try {
-			emitter.send(killfeedController.killfeed());
-		} finally {
-			em.getTransaction().rollback();
-			em.close();
-		}
+		emitter.onCompletion(() -> killEmitters.remove(emitter));
 
 		return emitter;
 	}

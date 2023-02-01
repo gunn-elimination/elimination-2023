@@ -1,6 +1,5 @@
 package net.gunn.elimination.routes;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import net.gunn.elimination.auth.EliminationAuthentication;
 import net.gunn.elimination.model.EliminationUser;
 import net.gunn.elimination.repository.UserRepository;
@@ -10,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 @RestController
@@ -23,21 +24,33 @@ import java.util.Map;
 public class User {
 	private final UserRepository userRepository;
 
-	ObjectMapper objectMapper = new ObjectMapper();
-
 	public User(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
 
 	@GetMapping({"/", ""})
 	@Transactional
-	public Map me(@AuthenticationPrincipal EliminationAuthentication user) {
-		EliminationUser me = userRepository.findBySubject(user.subject()).orElseThrow();
+	public Object me(@AuthenticationPrincipal EliminationAuthentication user) {
+		var result = userRepository.findBySubject(user.subject()).orElseThrow();
+		var eliminated = result.eliminated();
 
-		Map res = objectMapper.convertValue(me, Map.class);
-		res.put("eliminated", me.getEliminatedSet());
+		var eliminatedMaps = new HashSet<Map>();
+		for (var e : eliminated) {
+			eliminatedMaps.add(
+				Map.of(
+					"forename", e.getForename(),
+					"surname", e.getSurname(),
+					"email", e.getEmail()
+				)
+			);
+		}
 
-		return res;
+		return Map.of(
+			"forename", result.getForename(),
+			"surname", result.getSurname(),
+			"email", result.getEmail(),
+			"eliminated", eliminatedMaps
+		);
 	}
 
 	@PostMapping("/logout")
