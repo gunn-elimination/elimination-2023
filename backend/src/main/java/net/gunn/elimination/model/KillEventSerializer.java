@@ -5,13 +5,15 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Map;
 
 public class KillEventSerializer extends JsonSerializer<KillEvent> {
-	ObjectMapper objectMapper = new ObjectMapper();
+	@Autowired
+	ObjectMapper objectMapper;
 
 	@Override
 	@Transactional
