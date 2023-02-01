@@ -44,13 +44,12 @@ public class KillEventSerializer extends JsonSerializer<KillEvent> {
 
 		gen.writeStartObject();
 
-//		Hibernate.initialize(kill);
+		Hibernate.initialize(kill);
+		Hibernate.initialize(kill.eliminator());
+		Hibernate.initialize(kill.eliminated());
 
 		EliminationUser eliminator = kill.eliminator();
 		EliminationUser eliminated = kill.eliminated();
-
-//		Hibernate.initialize(eliminator);
-//		Hibernate.initialize(eliminated);
 
 		Map eliminatorMap = objectMapper.convertValue(eliminator, Map.class);
 		Map eliminatedMap = objectMapper.convertValue(eliminated, Map.class);
