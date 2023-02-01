@@ -36,5 +36,7 @@ const relativeTime = ref(timestamp.value.toRelative());
 
 // Update relative time on current time tick
 const store = useCurrentTimeStore();
-watch(store.time, () => relativeTime.value = timestamp.value.toRelative());
+store.$subscribe(() => {
+    relativeTime.value = timestamp.value.toRelative();
+});
 </script>
