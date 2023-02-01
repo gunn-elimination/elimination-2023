@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,8 +13,6 @@ import java.io.IOException;
 import java.util.Map;
 
 public class KillEventSerializer extends JsonSerializer<KillEvent> {
-	@Autowired
-	ObjectMapper objectMapper;
 
 	@Override
 	@Transactional
@@ -40,6 +39,9 @@ public class KillEventSerializer extends JsonSerializer<KillEvent> {
 
 	@Transactional
 	void addKill(JsonGenerator gen, Kill kill) throws IOException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new Hibernate5Module());
+
 		gen.writeStartObject();
 
 //		Hibernate.initialize(kill);
