@@ -194,7 +194,7 @@ public class SSEController {
 	void sendKillToConnectedClients(Kill kill) {
 		for (var emitter : new HashSet<>(killEmitters)) {
 			try {
-				emitter.send(kill);
+				emitter.send(kill.makeMap());
 			} catch (IOException e) {
 				// ignore
 			}
