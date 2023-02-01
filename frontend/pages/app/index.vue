@@ -75,7 +75,7 @@
                 </h3>
                 <KillFeedBlock
                     v-for="item in killFeedStore.feed"
-                    :key="item.timestamp + item.eliminator.email"
+                    :key="item.timeStamp + item.eliminator.email"
                     :item="item"
                 />
             </div>
