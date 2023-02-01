@@ -37,7 +37,6 @@ public class KillEventSerializer extends JsonSerializer<KillEvent> {
 		gen.writeEndObject();
 	}
 
-	@Transactional
 	void addKill(JsonGenerator gen, Kill kill) throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new Hibernate5Module());
