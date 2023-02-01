@@ -15,8 +15,10 @@ export const useKillFeedStore = defineStore('feed', () => {
         const res = JSON.parse(raw);
 
         // Handle both array and single-object events
-        if (res.type === 'bulkKillfeed') feed.value = [...feed.value ?? [], ...res.value];
-        else feed.value = [...feed.value ?? [], res.value];
+        // TODO: work out how the backend is sending these events
+        // TODO: make the sorting prettier
+        if (Array.isArray(res)) feed.value = [...feed.value ?? [], ...res].sort((a, b) => new Date(b.timeStamp).valueOf() - new Date(a.timeStamp).valueOf());
+        else feed.value = [...feed.value ?? [], res].sort((a, b) => new Date(b.timeStamp).valueOf() - new Date(a.timeStamp).valueOf());
 
         // Refresh all user endpoints to instantly update on kill
         userStore.refreshMe();
