@@ -60,25 +60,26 @@
         </section>
 
         <section class="px-4 pt-6 pb-12 sm:p-8">
-            <div v-if="killFeedStore.error" class="flex flex-col">
-                <p class="mb-3">An error occurred fetching the elimination feed. Check the console for more info.</p>
-                <code class="rounded-lg p-5 bg-base-200 font-mono text-secondary whitespace-pre-wrap">
-                    {{ killFeedStore.error.type }} {{ killFeedStore.error }}
-                </code>
+<!--            <div v-if="killFeedStore.error" class="flex flex-col">-->
+            <div class="flex flex-col">
+			<p class="mb-3">An error occurred fetching the elimination feed. Check the console for more info.</p>
+<!--                <code class="rounded-lg p-5 bg-base-200 font-mono text-secondary whitespace-pre-wrap">-->
+<!--                    {{ killFeedStore.error.type }} {{ killFeedStore.error }}-->
+<!--                </code>-->
             </div>
-            <div v-else-if="!killFeedStore.feed" class="flex gap-3 items-center text-secondary text-lg">
-                <Spinner /> Loading elimination feed...
-            </div>
-            <div class="flex flex-col gap-4" v-else>
-                <h3 class="font-semibold text-secondary">
-                    Elimination feed:
-                </h3>
-                <KillFeedBlock
-                    v-for="item in killFeedStore.feed"
-                    :key="item.timeStamp + item.eliminator.email"
-                    :item="item"
-                />
-            </div>
+<!--            <div v-else-if="!killFeedStore.feed" class="flex gap-3 items-center text-secondary text-lg">-->
+<!--                <Spinner /> Loading elimination feed...-->
+<!--            </div>-->
+<!--            <div class="flex flex-col gap-4" v-else>-->
+<!--                <h3 class="font-semibold text-secondary">-->
+<!--                    Elimination feed:-->
+<!--                </h3>-->
+<!--                <KillFeedBlock-->
+<!--                    v-for="item in killFeedStore.feed"-->
+<!--                    :key="item.timeStamp + item.eliminator.email"-->
+<!--                    :item="item"-->
+<!--                />-->
+<!--            </div>-->
         </section>
     </div>
 </template>
