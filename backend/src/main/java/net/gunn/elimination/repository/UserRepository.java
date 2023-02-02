@@ -28,6 +28,8 @@ public interface UserRepository extends JpaRepository<EliminationUser, Long> {
 
 	Set<EliminationUser> findEliminationUsersByRolesContaining(Role role);
 
+	int countEliminationUsersByRolesContaining(Role role);
+
 	// return limited list. with limit as param
 	@Query("select u from EliminationUser u WHERE u.email like '%pausd.us' order by u.eliminated.size desc")
 	List<EliminationUser> findTopByNumberOfEliminations(Pageable pageable);

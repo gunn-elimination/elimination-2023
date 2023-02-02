@@ -161,7 +161,7 @@ public class EliminationManager {
 			return;
 		}
 
-		var page = random.nextInt((int) (userRepository.count() - 1));
+		var page = random.nextInt(userRepository.countEliminationUsersByRolesContaining(PLAYER) - 1);
 		var pageRequest = PageRequest.of(page, 1);
 		var insertionPoint = userRepository.findEliminationUsersByRolesContainingAndSubjectNot(
 			PLAYER,
