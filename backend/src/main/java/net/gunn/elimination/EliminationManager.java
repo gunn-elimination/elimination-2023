@@ -1,6 +1,7 @@
 package net.gunn.elimination;
 
 import net.gunn.elimination.auth.EliminationCodeGenerator;
+import net.gunn.elimination.auth.Roles;
 import net.gunn.elimination.model.EliminationUser;
 import net.gunn.elimination.model.Kill;
 import net.gunn.elimination.repository.KillfeedRepository;
@@ -184,12 +185,13 @@ public class EliminationManager {
 
 	public void reshuffleChain() {
 		HashMap<EliminationUser, EliminationUser> currentMappings = new HashMap<>();
+		Set<EliminationUser> users = userRepository.findEliminationUsersByRolesContaining(PLAYER);
 
-		for (EliminationUser user : userRepository.findAll()) {
+		for (EliminationUser user : users) {
 			currentMappings.put(user, user.getTarget());
 		}
 
-		for (EliminationUser user : userRepository.findAll()) {
+		for (EliminationUser user : users) {
 			while (user.getTarget() == currentMappings.get(user)) {
 				insertUserToChain(user);
 			}
