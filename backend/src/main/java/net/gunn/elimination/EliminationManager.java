@@ -170,10 +170,10 @@ public class EliminationManager {
 		).getContent().get(0);
 
 		user.setTarget(insertionPoint.getTarget());
-		user.getTarget().setTargettedBy(user);
+//		user.getTarget().setTargettedBy(user);
 
 		insertionPoint.setTarget(user);
-		user.setTargettedBy(insertionPoint);
+//		user.setTargettedBy(insertionPoint);
 
 		user.addRole(PLAYER);
 		userRepository.save(user);
@@ -207,6 +207,10 @@ public class EliminationManager {
 		Set<EliminationUser> eliminated = new HashSet<>();
 
 		for (EliminationUser user : allUsers) {
+			if (!user.getRoles().contains(Roles.USER)) {
+				continue;
+			}
+
 			if (user.isEliminated()) {
 				// make sure not in the elimination chain.. lol
 				if (visitedActiveUsers.contains(user)) {
