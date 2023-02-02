@@ -11,7 +11,7 @@
                 </span>
             </h2>
             <p class="text-secondary text-sm">
-                {{ timestamp.toLocaleString({weekday: 'long', month: 'long', day: '2-digit'}) }},
+                {{ timestamp.toLocaleString({weekday: 'long', month: 'long', day: 'numeric'}) }},
                 {{ relativeTime }}
             </p>
         </div>

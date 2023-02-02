@@ -42,7 +42,7 @@
 
         <section class="px-8 py-8 bg-base-200">
             <h3 class="font-semibold text-secondary mb-4">
-                Restrictions for {{ currentTimeStore.time.toLocaleString({ weekday: 'long', month: 'long', day: '2-digit' }) }}:
+                Restrictions for {{ currentTimeStore.time.toLocaleString({weekday: 'long', month: 'long', day: 'numeric'}) }}:
             </h3>
             <div v-if="info" class="flex flex-col gap-2 px-4">
                 <div v-if="info.announcement" class="flex gap-4">
