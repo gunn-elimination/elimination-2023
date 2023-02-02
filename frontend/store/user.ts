@@ -5,14 +5,16 @@ import type {EliminationUser, MeEliminationUser} from '@/utils/types';
 
 export const useUserStore = defineStore('user', () => {
     const config = useRuntimeConfig();
+    const pending = ref(true);
 
     async function responseHandler({response}: { response: FetchResponse<any> }) {
         if (response._data.error) return navigateTo('/login');
+        pending.value = false;
         return response._data;
     }
 
     // TODO: middleware?
-    const {data: currentUser, pending, refresh: refreshMe} = useFetch<MeEliminationUser>(`${config.public.apiUrl}/me`, {
+    const {data: currentUser, refresh: refreshMe} = useFetch<MeEliminationUser>(`${config.public.apiUrl}/me`, {
         credentials: 'include',
         server: false,
         onResponse: responseHandler

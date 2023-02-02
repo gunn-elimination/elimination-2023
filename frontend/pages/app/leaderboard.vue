@@ -1,7 +1,7 @@
 <template>
     <div class="h-full overflow-auto flex flex-col">
         <h1 class="title sticky-header p-8">Leaderboard</h1>
-        <div class="p-8 bg-secondary text-secondary-content">
+        <div class="p-8 bg-secondary text-secondary-content" v-if="store.currentUser">
             <h2 class="font-bold text-xl flex flex-row gap-2">
                 You
             </h2>

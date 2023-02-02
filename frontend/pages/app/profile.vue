@@ -1,7 +1,7 @@
 <template>
     <div class="h-full overflow-auto flex flex-col">
         <h1 class="title sticky-header p-8">Profile</h1>
-        <div class="px-8 py-12 bg-secondary text-secondary-content">
+        <div class="px-8 py-12 bg-secondary text-secondary-content" v-if="store.currentUser">
             <div class="sm:container flex gap-6 sm:gap-8">
                 <Avatar
                     :user="store.currentUser"
@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-        <div class="p-8 sm:px-12">
+        <div class="p-8 sm:px-12" v-if="store.currentUser">
             <h3 class="text-lg font-semibold text-secondary">Your eliminations:</h3>
             <p class="mt-6 sm:mt-12 text-secondary text-center italic" v-if="!store.currentUser.eliminated.length">
                 You have not eliminated anyone yet.
