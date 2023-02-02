@@ -83,23 +83,16 @@
     </div>
 </template>
 
-<script lang="ts">
-import {ChevronDownIcon, QrCodeIcon, ViewfinderCircleIcon} from "@heroicons/vue/24/outline/index.js";
-import {MegaphoneIcon, LockClosedIcon} from "@heroicons/vue/24/solid/index.js";
-
-export default {
-    components: {ChevronDownIcon, QrCodeIcon, ViewfinderCircleIcon, MegaphoneIcon, LockClosedIcon}
-};
-</script>
-
 <script setup lang="ts">
 import {useUserStore} from '@/store/user';
 import {useCurrentTimeStore} from '@/store/time';
 import {useKillFeedStore} from '@/store/feed';
+import {ViewfinderCircleIcon} from "@heroicons/vue/24/outline/index.js";
+import {MegaphoneIcon, LockClosedIcon} from "@heroicons/vue/24/solid/index.js";
 
 const userStore = useUserStore();
 const currentTimeStore = useCurrentTimeStore();
 const killFeedStore = useKillFeedStore();
 
-const info = computed(() => calendar[currentTimeStore.time.toString().slice(0, 10)])
+const info = computed(() => calendar[currentTimeStore.time.toString().slice(0, 10)]);
 </script>

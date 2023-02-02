@@ -38,18 +38,9 @@
     </label>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { ArrowUpOnSquareIcon, PlusCircleIcon } from "@heroicons/vue/24/outline/index.js";
 
-export default {
-    components: {
-        ArrowUpOnSquareIcon,
-        PlusCircleIcon
-    },
-};
-</script>
-
-<script setup lang="ts">
 // TODO: find out how to make this transition on render
 // @ts-ignore
 const checked = ref((/iPad|iPod|iPhone/).test(navigator.userAgent) && !navigator.standalone);

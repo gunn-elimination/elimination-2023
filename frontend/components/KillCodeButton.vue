@@ -4,11 +4,6 @@
     </label>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {QrCodeIcon} from "@heroicons/vue/24/outline/index.js";
-
-export default {
-    name: "KillCodeButton",
-    components: {QrCodeIcon}
-}
 </script>

@@ -17,15 +17,13 @@
     </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import type {PropType} from 'vue';
 import type {EliminationUser} from '@/utils/types';
 
-export default {
-    props: {
-        ring: Boolean,
-        large: Boolean,
-        user: Object as PropType<EliminationUser>
-    }
-}
+defineProps({
+    ring: Boolean,
+    large: Boolean,
+    user: Object as PropType<EliminationUser>
+})
 </script>

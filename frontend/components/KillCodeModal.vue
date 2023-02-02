@@ -20,16 +20,8 @@
     </label>
 </template>
 
-<script lang="ts">
-import QrcodeVue from 'qrcode.vue';
-
-export default {
-    name: "KillCodeModal",
-    components: {QrcodeVue}
-}
-</script>
-
 <script setup lang="ts">
+import QrcodeVue from 'qrcode.vue';
 import {useUserStore} from '@/store/user';
 
 const store = useUserStore();

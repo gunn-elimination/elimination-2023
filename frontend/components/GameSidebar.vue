@@ -64,16 +64,6 @@
     </aside>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {HomeIcon, UserIcon, MegaphoneIcon, CalendarIcon, TrophyIcon} from "@heroicons/vue/24/outline/index.js";
-
-export default {
-    components: {
-        HomeIcon,
-        UserIcon,
-        MegaphoneIcon,
-        CalendarIcon,
-        TrophyIcon,
-    },
-};
 </script>

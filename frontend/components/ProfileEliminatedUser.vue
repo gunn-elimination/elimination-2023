@@ -11,14 +11,11 @@
     </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import type {PropType} from 'vue';
 import type {EliminationUser} from '@/utils/types';
 
-export default {
-    name: "ProfileEliminatedUser",
-    props: {
-        user: Object as PropType<EliminationUser>
-    }
-}
+defineProps({
+    user: Object as PropType<EliminationUser>
+})
 </script>
