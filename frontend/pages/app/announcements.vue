@@ -2,7 +2,7 @@
     <div class="h-full overflow-auto flex flex-col">
         <h1 class="title sticky-header p-8">Announcements</h1>
 
-        <section class="card w-full pt-6 pb-12 px-6 sm:px-8">
+        <section class="card w-full pt-6 pb-12 px-6 sm:px-8 gap-2">
             <div v-if="store.error" class="flex flex-col">
                 <p class="mb-3">An error occurred fetching announcements. Check the console for more info.</p>
                 <code class="rounded-lg p-5 bg-base-200 font-mono text-secondary whitespace-pre-wrap">
