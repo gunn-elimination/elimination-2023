@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Component
 @Repository
@@ -24,6 +25,8 @@ public interface UserRepository extends JpaRepository<EliminationUser, Long> {
 	void deleteBySubject(String subject);
 
 	Page<EliminationUser> findEliminationUsersByRolesContainingAndSubjectNot(Role role, String blacklistedSubject, Pageable pageable);
+
+	Set<EliminationUser> findEliminationUsersByRolesContaining(Role role);
 
 	// return limited list. with limit as param
 	@Query("select u from EliminationUser u WHERE u.email like '%pausd.us' order by u.eliminated.size desc")
