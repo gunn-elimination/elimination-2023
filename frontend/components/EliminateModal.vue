@@ -8,13 +8,16 @@
                 @submit="onSubmit"
             >
                 <input
-                    class="w-full bg-base-200 px-6 py-4 rounded mb-4"
+                    class="w-full bg-base-200 px-6 py-4 rounded"
                     placeholder="elimination-code-here"
-                    :value="code"
-                    @change="(e) => code = e.target.value"
+                    v-model="code"
                 >
+                <p v-if="error" class="text-primary text-sm mt-2">
+                    There was an error validating your inputted code. Make sure you have the correct code, and it is
+                    spelled correctly. <!-- The underlying error is: {{ error }} -->
+                </p>
             </form>
-            <p class="text-secondary">
+            <p class="text-secondary mt-4">
                 To eliminate someone, type their elimination code into the input above.
             </p>
         </label>
@@ -28,9 +31,14 @@ const config = useRuntimeConfig();
 const store = useUserStore();
 
 const code = ref('');
+const error = ref<string | null>(null);
 
 function onSubmit() {
-    fetch(`${config.public.apiUrl}/game/eliminate?code=${code.value}`);
+    fetch(`${config.public.apiUrl}/game/eliminate?code=${code.value}`)
+        .then(res => {
+            if (res.ok) error.value = null;
+            else error.value = res.status + res.statusText;
+        });
     code.value = '';
 }
 </script>
