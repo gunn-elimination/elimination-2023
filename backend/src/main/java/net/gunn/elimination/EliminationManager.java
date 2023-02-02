@@ -183,8 +183,16 @@ public class EliminationManager {
 	}
 
 	public void reshuffleChain() {
+		HashMap<EliminationUser, EliminationUser> currentMappings = new HashMap<>();
+
 		for (EliminationUser user : userRepository.findAll()) {
-			insertUserToChain(user);
+			currentMappings.put(user, user.getTarget());
+		}
+
+		for (EliminationUser user : userRepository.findAll()) {
+			while (user.getTarget() == currentMappings.get(user)) {
+				insertUserToChain(user);
+			}
 		}
 	}
 
