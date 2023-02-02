@@ -12,11 +12,10 @@
 <script setup lang="ts">
 import {useDocumentVisibility} from '@vueuse/core';
 import {useCurrentTimeStore} from '@/store/time';
-import {useUserStore} from '~/store/user';
+import {useUserStore} from '@/store/user';
 
 definePageMeta({
-    layout: "game",
-    // middleware: "elim-auth"
+    layout: "game"
 });
 
 // Update current time store on interval
@@ -29,6 +28,9 @@ onMounted(() => {
 onUnmounted(() => {
     clearInterval(currentTimeInterval);
 });
+
+// Immediately reload page on new service worker install
+onMounted(() => navigator.serviceWorker.addEventListener('controllerchange', () => location.reload()));
 
 // Scan for service worker updates on page visibility
 const pageVisibility = useDocumentVisibility();
