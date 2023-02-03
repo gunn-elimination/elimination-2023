@@ -1,5 +1,6 @@
 package net.gunn.elimination;
 
+import io.sentry.Sentry;
 import net.gunn.elimination.auth.EliminationCodeGenerator;
 import net.gunn.elimination.auth.EliminationUserService;
 import net.gunn.elimination.auth.Roles;
@@ -182,6 +183,9 @@ public class EliminationManager {
 	 * @param insertionPoint
 	 */
 	public void insertUserToChain(EliminationUser user, EliminationUser insertionPoint) {
+		Sentry.setExtra("insertionPoint", insertionPoint.getForename() + " " + insertionPoint.getSurname());
+		assert insertionPoint.getTarget() != null && user != null;
+
 		user.setTarget(insertionPoint.getTarget());
 //		user.getTarget().setTargettedBy(user);
 

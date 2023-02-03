@@ -70,32 +70,6 @@ public class EliminationUserService implements OAuth2UserService<OidcUserRequest
 		throw (T) t;
 	}
 
-	protected void insertUserRandomly(EliminationUser user) {
-		if (userRepository.count() <= 1) {
-			user.setTarget(user);
-			user.setTargettedBy(user);
-			userRepository.save(user);
-			return;
-		}
-
-		var page = random.nextInt((int) (userRepository.count() - 1));
-		var pageRequest = PageRequest.of(page, 1);
-		var insertionPoint = userRepository.findEliminationUsersByRolesContainingAndSubjectNot(PLAYER, user.getSubject(), pageRequest).getContent().get(0);
-
-		user.setTarget(insertionPoint.getTarget());
-		user.getTarget().setTargettedBy(user);
-
-		insertionPoint.setTarget(user);
-		user.setTargettedBy(insertionPoint);
-
-		user.addRole(PLAYER);
-		userRepository.save(user);
-		userRepository.save(user.getTarget());
-
-		insertionPoint.addRole(PLAYER);
-		userRepository.save(insertionPoint);
-	}
-
 	public void setupNewUser(EliminationUser user) {
 		if (userRepository.count() == 1) {
 			// Start the game

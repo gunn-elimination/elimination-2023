@@ -211,18 +211,34 @@ public class AdminController {
 
 	@Transactional
 	@GetMapping("/fixAllGhostsLol")
-	public String fixGhosts() {
+	public String fixGhosts() throws Exception {
 		List<EliminationUser> chasingGhosts = new LinkedList();
 		for (EliminationUser user : userRepository.findEliminationUsersByRolesContaining(PLAYER)) {
 			if (user.getTargettedBy() != null && user.isEliminated()) {
 				chasingGhosts.add(user.getTargettedBy());
-			} else if (user.getTarget() == null) {
-				chasingGhosts.add(user);
 			}
 		}
 
-		// find two poor unsuspecting players
+		EliminationUser insertionPoint = findRandomUnsuspectingInsertionPoint();
 
+		// shuffle chasingGhosts
+		Collections.shuffle(chasingGhosts);
+		// add the insertion point to the beginning
+		chasingGhosts.add(0, insertionPoint);
+
+//		return chasingGhosts.toString();
+
+		String log = chasingGhosts.toString();
+
+		// reinsert them all
+		while (chasingGhosts.size() > 1) {
+			eliminationManager.insertUserToChain(chasingGhosts.get(1), chasingGhosts.remove(0));
+		}
+
+		return "DONE!\n"+log;
+	}
+
+	private EliminationUser findRandomUnsuspectingInsertionPoint() throws Exception {
 		// random point to start looking in chain
 		Random random = new Random();
 		var page = random.nextInt(userRepository.countEliminationUsersByRolesContaining(PLAYER) - 1);
@@ -241,26 +257,40 @@ public class AdminController {
 				break; // might as well be safe idk
 			}
 			currentlySearching = currentlySearching.getTarget();
-		} while (insertionPoint == null && currentlySearching != randUser);
+		} while (currentlySearching != randUser);
 
 		if (insertionPoint == null) {
-			return "COULDN'T FIND INSERTION POINT";
+			throw new Exception("COULD NOT FIND INSERTION POINT");
+		}
+		return insertionPoint;
+	}
+
+	@Transactional
+	@GetMapping("/fixUsersWithoutTargetsLol")
+	public String fixUsersWithoutTargets() throws Exception {
+		List<EliminationUser> withoutTargets = new LinkedList<>();
+		for (EliminationUser user : userRepository.findEliminationUsersByRolesContaining(PLAYER)) {
+			if (user.getTarget() == null) {
+				withoutTargets.add(user);
+			}
 		}
 
-		// shuffle chasingGhosts
-		Collections.shuffle(chasingGhosts);
-		// add the insertion point to the beginning
-		chasingGhosts.add(0, insertionPoint);
+		Collections.shuffle(withoutTargets);
+		String log = withoutTargets.toString();
 
-//		return chasingGhosts.toString();
+		if (withoutTargets.size() > 0) {
+			EliminationUser insertionPoint = findRandomUnsuspectingInsertionPoint();
+			EliminationUser endOfNewChain = insertionPoint.getTarget();
 
-		String log = chasingGhosts.toString();
+			withoutTargets.add(insertionPoint);
 
-		// reinsert them all
-		while (chasingGhosts.size() > 1) {
-			eliminationManager.insertUserToChain(chasingGhosts.get(1), chasingGhosts.remove(0));
+			while (withoutTargets.size() > 1) {
+				withoutTargets.get(0).setTarget(withoutTargets.get(1));
+				withoutTargets.remove(0);
+			}
+			withoutTargets.get(0).setTarget(endOfNewChain);
 		}
 
-		return "DONE!\n"+log;
+		return "OK! \n " + log;
 	}
 }
