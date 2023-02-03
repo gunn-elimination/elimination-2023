@@ -235,7 +235,7 @@ public class AdminController {
 			eliminationManager.insertUserToChain(chasingGhosts.get(1), chasingGhosts.remove(0));
 		}
 
-		return "DONE!\n"+log;
+		return "DONE!\n" + log;
 	}
 
 	private EliminationUser findRandomUnsuspectingInsertionPoint() throws Exception {
@@ -282,7 +282,7 @@ public class AdminController {
 			EliminationUser insertionPoint = findRandomUnsuspectingInsertionPoint();
 			EliminationUser endOfNewChain = insertionPoint.getTarget();
 
-			withoutTargets.add(insertionPoint);
+			withoutTargets.add(0, insertionPoint);
 
 			while (withoutTargets.size() > 1) {
 				withoutTargets.get(0).setTarget(withoutTargets.get(1));
@@ -292,5 +292,26 @@ public class AdminController {
 		}
 
 		return "OK! \n " + log;
+	}
+
+	@Transactional
+	@GetMapping("/reinsertToChain")
+	public String reinsertToChain(@RequestParam("userEmail") String userEmail) throws Exception {
+		EliminationUser toInsert = userRepository.findByEmail(userEmail).orElseThrow();
+
+		// remove from chain
+		EliminationUser targetter = toInsert.getTargettedBy();
+		EliminationUser targetted = toInsert.getTarget();
+		targetter.setTarget(targetted);
+
+		// find new place to insert
+		EliminationUser insertion = findRandomUnsuspectingInsertionPoint();
+		EliminationUser end = insertion.getTarget();
+
+		insertion.setTarget(toInsert);
+		toInsert.setTarget(end);
+
+		return "OK! " + toInsert.toString() + " inserted between " + insertion.toString() + " and " + end.toString() +
+			". " + targetter.toString() + " now has " + targetted.toString() + ".";
 	}
 }
