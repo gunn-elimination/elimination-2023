@@ -189,11 +189,11 @@ public class EliminationManager {
 //		user.setTargettedBy(insertionPoint);
 
 		user.addRole(PLAYER);
-		userRepository.save(user);
-		userRepository.save(user.getTarget());
+//		userRepository.save(user);
+//		userRepository.save(user.getTarget());
 
 		insertionPoint.addRole(PLAYER);
-		userRepository.save(insertionPoint);
+//		userRepository.save(insertionPoint);
 	}
 
 	public void reshuffleChain() {
