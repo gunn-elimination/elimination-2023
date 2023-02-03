@@ -214,8 +214,8 @@ public class AdminController {
 	public String fixGhosts() throws Exception {
 		List<EliminationUser> chasingGhosts = new LinkedList();
 		for (EliminationUser user : userRepository.findEliminationUsersByRolesContaining(PLAYER)) {
-			if (user.getTargettedBy() != null && user.isEliminated()) {
-				chasingGhosts.add(user.getTargettedBy());
+			if (user.getTarget().isEliminated()) {
+				chasingGhosts.add(user);
 			}
 		}
 
