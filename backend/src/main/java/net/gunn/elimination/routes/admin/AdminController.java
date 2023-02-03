@@ -213,9 +213,11 @@ public class AdminController {
 	@GetMapping("/fixAllGhostsLol")
 	public String fixGhosts() {
 		List<EliminationUser> chasingGhosts = new LinkedList();
-		for (EliminationUser user : userRepository.findAll()) {
+		for (EliminationUser user : userRepository.findEliminationUsersByRolesContaining(PLAYER)) {
 			if (user.getTargettedBy() != null && user.isEliminated()) {
 				chasingGhosts.add(user.getTargettedBy());
+			} else if (user.getTarget() == null) {
+				chasingGhosts.add(user);
 			}
 		}
 
