@@ -221,13 +221,8 @@ public class EliminationManager {
 
 		for (EliminationUser user : allUsers) {
 			if (user.isEliminated()) {
-				// make sure not in the elimination chain.. lol
-				if (visitedActiveUsers.contains(user)) {
-					valid = false;
-				}
-
 				eliminated.add(user);
-			} else {
+			} else if (user.getRoles().contains(PLAYER)) {
 				// check if user is already in chain
 				if (visitedActiveUsers.contains(user)) {
 					// all gucchi
@@ -259,6 +254,13 @@ public class EliminationManager {
 						}
 					}
 				}
+			}
+		}
+
+		// make sure eliminated users aren't in active chain
+		for (EliminationUser user : eliminated) {
+			if (visitedActiveUsers.contains(user)) {
+				valid = false;
 			}
 		}
 
