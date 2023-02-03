@@ -250,13 +250,15 @@ public class AdminController {
 		// add the insertion point to the beginning
 		chasingGhosts.add(0, insertionPoint);
 
-		return chasingGhosts.toString();
+//		return chasingGhosts.toString();
+
+		String log = chasingGhosts.toString();
 
 		// reinsert them all
-//		while (chasingGhosts.size() > 0) {
-//			eliminationManager.insertUserToChain(chasingGhosts.get(1), chasingGhosts.remove(0));
-//		}
+		while (chasingGhosts.size() > 1) {
+			eliminationManager.insertUserToChain(chasingGhosts.get(1), chasingGhosts.remove(0));
+		}
 
-//		return "DONE!";
+		return "DONE!\n"+log;
 	}
 }
