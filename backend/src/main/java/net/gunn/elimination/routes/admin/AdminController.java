@@ -220,6 +220,7 @@ public class AdminController {
 		}
 
 		EliminationUser insertionPoint = findRandomUnsuspectingInsertionPoint();
+		EliminationUser endOfChain = insertionPoint.getTarget();
 
 		// shuffle chasingGhosts
 		Collections.shuffle(chasingGhosts);
@@ -231,8 +232,11 @@ public class AdminController {
 		String log = chasingGhosts.toString();
 
 		// reinsert them all
-		while (chasingGhosts.size() > 1) {
-			eliminationManager.insertUserToChain(chasingGhosts.get(1), chasingGhosts.remove(0));
+		if (chasingGhosts.size() > 0) {
+			while (chasingGhosts.size() > 1) {
+				eliminationManager.insertUserToChain(chasingGhosts.get(1), chasingGhosts.remove(0));
+			}
+			chasingGhosts.remove(0).setTarget(endOfChain);
 		}
 
 		return "DONE!\n" + log;
