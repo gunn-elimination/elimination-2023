@@ -1,6 +1,7 @@
 package net.gunn.elimination;
 
 import net.gunn.elimination.auth.EliminationCodeGenerator;
+import net.gunn.elimination.auth.EliminationUserService;
 import net.gunn.elimination.auth.Roles;
 import net.gunn.elimination.model.EliminationUser;
 import net.gunn.elimination.model.Kill;
@@ -169,6 +170,17 @@ public class EliminationManager {
 			pageRequest
 		).getContent().get(0);
 
+		insertUserToChain(user, insertionPoint);
+	}
+
+	/**
+	 * Inserts a user into the elimination chain given a user insertionPoint, who will be assigned the inserted user
+	 * as their new target.
+	 *
+	 * @param user
+	 * @param insertionPoint
+	 */
+	public void insertUserToChain(EliminationUser user, EliminationUser insertionPoint) {
 		user.setTarget(insertionPoint.getTarget());
 //		user.getTarget().setTargettedBy(user);
 

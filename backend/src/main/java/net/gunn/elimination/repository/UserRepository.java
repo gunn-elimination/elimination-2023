@@ -28,6 +28,8 @@ public interface UserRepository extends JpaRepository<EliminationUser, Long> {
 
 	Set<EliminationUser> findEliminationUsersByRolesContaining(Role role);
 
+	Page<EliminationUser> findEliminationUsersByRolesContaining(Role role, Pageable pageable);
+
 	int countEliminationUsersByRolesContaining(Role role);
 
 	// return limited list. with limit as param

@@ -11,6 +11,7 @@ import net.gunn.elimination.routes.AnnouncementController;
 import net.gunn.elimination.routes.SSEController;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static net.gunn.elimination.auth.Roles.BANNED;
 import static net.gunn.elimination.auth.Roles.PLAYER;
@@ -204,10 +202,61 @@ public class AdminController {
 	public Set getAllGhosts() {
 		Set ghosts = new HashSet();
 		for (EliminationUser user : userRepository.findAll()) {
-			if (user.getTargettedBy() != null && user.isEliminated() == true) {
+			if (user.getTargettedBy() != null && user.isEliminated()) {
 				ghosts.add(user);
 			}
 		}
 		return ghosts;
+	}
+
+	@Transactional
+	@GetMapping("/fixAllGhostsLol")
+	public String fixGhosts() {
+		List<EliminationUser> chasingGhosts = new LinkedList();
+		for (EliminationUser user : userRepository.findAll()) {
+			if (user.getTargettedBy() != null && user.isEliminated()) {
+				chasingGhosts.add(user.getTargettedBy());
+			}
+		}
+
+		// find two poor unsuspecting players
+
+		// random point to start looking in chain
+		Random random = new Random();
+		var page = random.nextInt(userRepository.countEliminationUsersByRolesContaining(PLAYER) - 1);
+		var pageRequest = PageRequest.of(page, 1);
+		var randUser = userRepository.findEliminationUsersByRolesContaining(
+			PLAYER,
+			pageRequest
+		).getContent().get(0);
+
+		EliminationUser insertionPoint = null;
+		EliminationUser currentlySearching = randUser;
+		// find first link where user has 0 elims and target has 0 elims (two unsuspecting poor people)
+		do {
+			if (currentlySearching.eliminatedCount() == 0 && currentlySearching.getTarget().eliminatedCount() == 0) {
+				insertionPoint = currentlySearching;
+				break; // might as well be safe idk
+			}
+			currentlySearching = currentlySearching.getTarget();
+		} while (insertionPoint == null && currentlySearching != randUser);
+
+		if (insertionPoint == null) {
+			return "COULDN'T FIND INSERTION POINT";
+		}
+
+		// shuffle chasingGhosts
+		Collections.shuffle(chasingGhosts);
+		// add the insertion point to the beginning
+		chasingGhosts.add(0, insertionPoint);
+
+		return chasingGhosts.toString();
+
+		// reinsert them all
+//		while (chasingGhosts.size() > 0) {
+//			eliminationManager.insertUserToChain(chasingGhosts.get(1), chasingGhosts.remove(0));
+//		}
+
+//		return "DONE!";
 	}
 }
