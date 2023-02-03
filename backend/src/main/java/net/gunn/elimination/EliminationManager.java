@@ -23,6 +23,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 import static net.gunn.elimination.auth.Roles.PLAYER;
+import static net.gunn.elimination.auth.Roles.USER;
 
 @Service
 @Transactional
@@ -213,27 +214,19 @@ public class EliminationManager {
 	public Map validateGame() {
 		boolean valid = true;
 
-		List<EliminationUser> allUsers = userRepository.findAll();
+		Set<EliminationUser> allUsers = userRepository.findEliminationUsersByRolesContaining(USER);
 
 		Set<EliminationUser> visitedActiveUsers = new HashSet<>();
 		Set<EliminationUser> eliminated = new HashSet<>();
 
 		for (EliminationUser user : allUsers) {
-			if (!user.getRoles().contains(Roles.USER)) {
-				continue;
-			}
-
 			if (user.isEliminated()) {
 				// make sure not in the elimination chain.. lol
 				if (visitedActiveUsers.contains(user)) {
 					valid = false;
 				}
 
-				if (eliminated.add(user)) {
-					// already added??
-					// is this invalid lol
-					// if this happens then there are duplicates in allUsers?
-				}
+				eliminated.add(user);
 			} else {
 				// check if user is already in chain
 				if (visitedActiveUsers.contains(user)) {
@@ -269,17 +262,17 @@ public class EliminationManager {
 			}
 		}
 
-		List<String> activeChain = new ArrayList<>();
-		for (EliminationUser user : visitedActiveUsers) {
-			activeChain.add(user.getForename() + " " + user.getSurname() + "->" + user.getTarget().getForename() + " " + user.getTarget().getSurname());
-		}
+//		List<String> activeChain = new ArrayList<>();
+//		for (EliminationUser user : visitedActiveUsers) {
+//			activeChain.add(user.getForename() + " " + user.getSurname() + "->" + user.getTarget().getForename() + " " + user.getTarget().getSurname());
+//		}
 
 		return Map.of(
 			"users", allUsers.size(),
 			"eliminated", eliminated.size(),
 			"active", visitedActiveUsers.size(),
-			"valid game", valid,
-			"elim chain", activeChain
+			"valid game", valid
+//			"elim chain", activeChain
 		);
 	}
 }
