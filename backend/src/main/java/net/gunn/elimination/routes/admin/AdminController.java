@@ -23,6 +23,7 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import static net.gunn.elimination.auth.Roles.BANNED;
 import static net.gunn.elimination.auth.Roles.PLAYER;
@@ -196,5 +197,17 @@ public class AdminController {
 			"bbbb", "ky28059@pausd.us", "Kevin", "Yu", "no-no", new HashSet<>()));
 		userService.setupNewUser(new EliminationUser(
 			"cccc", "ap40132@pausd.us", "Alec", "Petridis", "maybe-maybe", new HashSet<>()));
+	}
+
+	@Transactional
+	@GetMapping("/getAllGhosts")
+	public Set getAllGhosts() {
+		Set ghosts = new HashSet();
+		for (EliminationUser user : userRepository.findAll()) {
+			if (user.getTarget() != null && user.isEliminated() == true) {
+				ghosts.add(user);
+			}
+		}
+		return ghosts;
 	}
 }
