@@ -204,7 +204,7 @@ public class AdminController {
 	public Set getAllGhosts() {
 		Set ghosts = new HashSet();
 		for (EliminationUser user : userRepository.findAll()) {
-			if (user.getTarget() != null && user.isEliminated() == true) {
+			if (user.getTargettedBy() != null && user.isEliminated() == true) {
 				ghosts.add(user);
 			}
 		}
