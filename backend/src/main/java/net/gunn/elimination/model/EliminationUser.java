@@ -1,8 +1,6 @@
 package net.gunn.elimination.model;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.annotations.LazyToOne;
@@ -64,6 +62,14 @@ public class EliminationUser implements Serializable {
 	@Transactional
 	public int eliminatedCount() {
 		return eliminated.size();
+	}
+
+	@JsonProperty("isEliminated")
+	@Transactional
+	public boolean isEliminated() {
+		assert (target == null && targettedBy == null && eliminationCode == null) || (target != null && targettedBy != null && eliminationCode != null);
+
+		return eliminatedBy != null;
 	}
 
     public boolean isWinner() {
@@ -147,12 +153,6 @@ public class EliminationUser implements Serializable {
 
     public String getEliminationCode() {
         return eliminationCode;
-    }
-
-    public boolean isEliminated() {
-        assert (target == null && targettedBy == null && eliminationCode == null) || (target != null && targettedBy != null && eliminationCode != null);
-
-        return eliminatedBy != null;
     }
 
 	public Set<EliminationUser> eliminated() {
