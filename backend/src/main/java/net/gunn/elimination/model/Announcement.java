@@ -19,7 +19,7 @@ public class Announcement {
     @Column
     public String title;
 	@Lob
-    @Column
+    @Column(columnDefinition = "TEXT")
     public String body;
 
     @Column
