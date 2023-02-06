@@ -12,46 +12,6 @@
     <h1>Winner: <span style="color: gold" th:text="${winner}"></span></h1>
 </div>
 
-<!--<div id="playerWindow" th:if="${eliminationManager.gameIsOngoing() && !currentUser.isEliminated()}">-->
-<!--    <table id="criticalInfoTable">-->
-<!--        <tr>-->
-<!--            <th>-->
-<!--                Your current target-->
-<!--            </th>-->
-<!--            <td style="color: blueviolet; "-->
-<!--                th:text="${currentUser.getTarget()}">-->
-<!--            </td>-->
-<!--        </tr>-->
-
-<!--        <tr>-->
-<!--            <th>Your secret code</th>-->
-<!--            <td style="color: red "-->
-<!--                th:text="${currentUser.getEliminationCode()}"></td>-->
-<!--        </tr>-->
-<!--    </table>-->
-
-<!--    <div id="eliminationBox">-->
-<!--        <p style="color: darkblue; margin: .3em 1em .5em;">-->
-<!--            Caught your target?-->
-<!--        </p>-->
-<!--        <form action="/game/eliminate" method="get">-->
-<!--            <input type="text" id="eliminationCode" name="code" placeholder="Target's code"/>-->
-<!--            <input type="submit" value="eliminate"/>-->
-<!--        </form>-->
-<!--    </div>-->
-
-<!--</div>-->
-
-
-<h1 th:if="${currentUser.isEliminated()}"
-    th:text="'you have been eliminated by ' + ${currentUser.getEliminatedBy()}"></h1>
-<h1 th:if="${currentUser.isWinner()}" th:text="'you won!!'"></h1>
-<div th:unless="${eliminationManager.gameIsOngoing()}">
-    <span th:if="${eliminationManager.gameHasEnded()}" th:text="'Game over'"></span>
-    <span th:unless="${eliminationManager.gameHasEnded()}" th:text="'Game not ongoing'"></span>
-
-</div>
-
 <div th:replace="announcement-fragments :: announcements">
 
 </body>

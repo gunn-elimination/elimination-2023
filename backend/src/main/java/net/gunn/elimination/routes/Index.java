@@ -37,11 +37,6 @@ public class Index {
         if (user == null)
             return "redirect:/login";
 
-        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof EliminationAuthentication auth) {
-			var user_ = (EliminationUser)Hibernate.unproxy(userRepository.findBySubject(auth.subject()).orElseThrow());
-			model.addAttribute("currentUser", user_);
-		}
-
         model.addAttribute("eliminationManager", eliminationManager);
         if (eliminationManager.gameHasStarted())
             model.addAttribute("scoreboard", scoreboardController.scoreboard(20));
