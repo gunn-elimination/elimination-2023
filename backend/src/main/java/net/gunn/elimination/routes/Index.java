@@ -2,8 +2,10 @@ package net.gunn.elimination.routes;
 
 import net.gunn.elimination.EliminationManager;
 import net.gunn.elimination.auth.EliminationAuthentication;
+import net.gunn.elimination.model.EliminationUser;
 import net.gunn.elimination.repository.UserRepository;
 import net.gunn.elimination.routes.game.ScoreboardController;
+import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,8 +38,8 @@ public class Index {
             return "redirect:/login";
 
         if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof EliminationAuthentication auth) {
-			var user_ = userRepository.findBySubject(auth.subject());
-			model.addAttribute("currentUser", user_.orElseThrow());
+			var user_ = (EliminationUser)Hibernate.unproxy(userRepository.findBySubject(auth.subject()).orElseThrow());
+			model.addAttribute("currentUser", user_);
 		}
 
         model.addAttribute("eliminationManager", eliminationManager);
