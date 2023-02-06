@@ -18,7 +18,7 @@ public class Announcement {
 
     @Column
     public String title;
-	@Lob
+
     @Column(columnDefinition = "TEXT")
     public String body;
 
