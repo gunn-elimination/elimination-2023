@@ -1,5 +1,5 @@
 <template>
-    <li class="flex gap-4 items-center">
+    <li class="flex gap-4 items-center" :class="{'line-through': user.isEliminated}">
         <Avatar :user="user" />
         <p class="font-medium">{{ user.forename }} {{ user.surname }}</p>
         <p class="text-secondary italic">
