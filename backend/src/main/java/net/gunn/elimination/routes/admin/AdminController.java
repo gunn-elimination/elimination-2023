@@ -92,7 +92,6 @@ public class AdminController {
 
 			announcement.setActive(active != null && active.equals("on"));
 
-			announcementRepository.deleteById(id);
 			announcementRepository.save(announcement);
 			sseController.ifPresent(SSEController::signalAnnouncementChange);
 		}
