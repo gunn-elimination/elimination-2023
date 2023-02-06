@@ -289,10 +289,10 @@ public class AdminController {
 			withoutTargets.add(0, insertionPoint);
 
 			while (withoutTargets.size() > 1) {
-				withoutTargets.get(0).setTarget(withoutTargets.get(1));
+				eliminationManager.insertUserToChain(withoutTargets.get(1), withoutTargets.get(0));
 				withoutTargets.remove(0);
 			}
-			withoutTargets.get(0).setTarget(endOfNewChain);
+			eliminationManager.insertUserToChain(endOfNewChain, withoutTargets.get(0));
 		}
 
 		return "OK! \n " + log;
@@ -310,12 +310,9 @@ public class AdminController {
 
 		// find new place to insert
 		EliminationUser insertion = findRandomUnsuspectingInsertionPoint();
-		EliminationUser end = insertion.getTarget();
 
-		insertion.setTarget(toInsert);
-		toInsert.setTarget(end);
+		eliminationManager.insertUserToChain(toInsert, insertion);
 
-		return "OK! " + toInsert.toString() + " inserted between " + insertion.toString() + " and " + end.toString() +
-			". " + targetter.toString() + " now has " + targetted.toString() + ".";
+		return "OK!";
 	}
 }
