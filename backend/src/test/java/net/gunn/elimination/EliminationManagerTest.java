@@ -80,7 +80,7 @@ class EliminationManagerTest {
     }
 
     @Test
-    void gameHasEnded() throws IncorrectEliminationCodeException, EmptyGameException {
+    void gameHasEnded() throws Exception {
         var testUser0 = userRepository.findBySubject("subject0").orElseThrow();
         var testUser1 = userRepository.findBySubject("subject1").orElseThrow();
 
@@ -126,7 +126,7 @@ class EliminationManagerTest {
     }
 
     @Test
-    void unlink() throws IncorrectEliminationCodeException, EmptyGameException {
+    void unlink() throws Exception {
         // make a bunch of users
         for (int i = 9; i >= 0; i--) {
             var user = new EliminationUser();

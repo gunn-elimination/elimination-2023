@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.core.annotation.Timed;
 import io.sentry.spring.tracing.SentrySpan;
 import net.gunn.elimination.EliminationManager;
-import net.gunn.elimination.EmptyGameException;
-import net.gunn.elimination.IncorrectEliminationCodeException;
 import net.gunn.elimination.auth.EliminationAuthentication;
 import net.gunn.elimination.model.EliminationUser;
 import net.gunn.elimination.repository.UserRepository;
@@ -15,15 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 
 @RestController
 @RequestMapping("/game")
-@PreAuthorize("@eliminationManager.gameIsOngoing() && hasRole('ROLE_USER')")
+@PreAuthorize("hasRole('ROLE_USER')")
 @CrossOrigin(
 	origins = {"https://elimination-2023.vercel.app", "https://elimination.gunn.one", "http://localhost:3000"},
 	allowCredentials = "true",
@@ -57,7 +53,8 @@ public class GameController {
 	@PostMapping("/eliminate")
 	@SentrySpan
 	@Transactional
-	public void eliminate(HttpServletResponse response, @AuthenticationPrincipal EliminationAuthentication me_, @RequestParam("code") String code) throws IncorrectEliminationCodeException, EmptyGameException, IOException {
+	@PreAuthorize("@eliminationManager.gameIsOngoing()")
+	public void eliminate(HttpServletResponse response, @AuthenticationPrincipal EliminationAuthentication me_, @RequestParam("code") String code) throws Exception {
 		var me = userRepository.findBySubject(me_.subject()).orElseThrow();
 		var eliminated = eliminationManager.attemptElimination(me, code);
 
