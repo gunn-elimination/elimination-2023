@@ -17,7 +17,6 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/game")
-@PreAuthorize("@eliminationManager.gameIsOngoing()")
 @CrossOrigin(originPatterns = "*")
 public class KillfeedController {
 	private final KillfeedRepository killfeedRepository;

@@ -4,7 +4,7 @@ elimination:
     words-per-code: 3
     registration-deadline: 2023-01-24T23:59
     game-start-time: 2023-01-27T00:00
-    game-end-time: 2023-06-01T00:00
+    game-end-time: 2023-02-11T00:00
     client-id: ${CLIENT_ID:null}
     client-secret: ${CLIENT_SECRET:null}
     admins:

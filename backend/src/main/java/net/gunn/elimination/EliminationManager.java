@@ -59,7 +59,11 @@ public class EliminationManager {
 		this.killfeedRepository = killfeedRepository;
 	}
 
-	public EliminationUser attemptElimination(EliminationUser eliminator, String code) throws IncorrectEliminationCodeException, EmptyGameException {
+	public EliminationUser attemptElimination(EliminationUser eliminator, String code) throws Exception {
+		if (!gameIsOngoing()) {
+			throw new Exception("Game has ended");
+		}
+
 		var expectedCode = entityManager.createQuery("SELECT u.target.eliminationCode from EliminationUser u WHERE u.subject = :subject", String.class)
 			.setParameter("subject", eliminator.getSubject())
 			.getResultList();
