@@ -10,13 +10,15 @@ export const useUserStore = defineStore('user', () => {
 
     const currentTimeStore = useCurrentTimeStore();
 
-    async function responseHandler({response}: { response: FetchResponse<any> }) {
-        // Ignore auth errors if game has already ended
-        if (response._data.error && !currentTimeStore.gameEnded) return navigateTo('/login');
-        if (currentTimeStore.gameEnded) return null;
+    function createResponseHandler(ignoreErrorAfterGameEnd = true) {
+        return ({response}: { response: FetchResponse<any> }) => {
+            // Ignore auth errors if the option is set and the game has already ended
+            if (response._data.error && (!ignoreErrorAfterGameEnd || !currentTimeStore.gameEnded)) return navigateTo('/login');
+            if (currentTimeStore.gameEnded) return null;
 
-        pending.value = false;
-        return response._data;
+            pending.value = false;
+            return response._data;
+        }
     }
 
     // TODO: middleware?
@@ -24,14 +26,14 @@ export const useUserStore = defineStore('user', () => {
         credentials: 'include',
         server: false,
         redirect: 'manual',
-        onResponse: responseHandler
+        onResponse: createResponseHandler(false)
     });
 
     const {data: targetRaw, refresh: refreshTarget} = useFetch<{user: EliminationUser | null}>(`${config.public.apiUrl}/game/target`, {
         credentials: 'include',
         server: false,
         redirect: 'manual',
-        onResponse: responseHandler
+        onResponse: createResponseHandler()
     });
     const target = computed(() => targetRaw.value && targetRaw.value.user);
 
@@ -39,14 +41,14 @@ export const useUserStore = defineStore('user', () => {
         credentials: 'include',
         server: false,
         redirect: 'manual',
-        onResponse: responseHandler
+        onResponse: createResponseHandler()
     });
 
     const {data: eliminatedByRaw, refresh: refreshEliminatedBy} = useFetch<{user: EliminationUser | null}>(`${config.public.apiUrl}/game/eliminatedBy`, {
         credentials: 'include',
         server: false,
         redirect: 'manual',
-        onResponse: responseHandler
+        onResponse: createResponseHandler()
     });
     const eliminatedBy = computed(() => eliminatedByRaw.value && eliminatedByRaw.value.user);
 
