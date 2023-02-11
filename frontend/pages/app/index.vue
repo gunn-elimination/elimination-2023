@@ -1,6 +1,6 @@
 <template>
     <div class="h-full overflow-auto flex flex-col">
-        <GameEnded v-if="true" />
+        <GameEnded v-if="currentTimeStore.gameEnded" />
         <template v-else>
             <header class="flex sticky-header flex-row gap-8 p-8">
                 <div class="my-auto flex hidden sm:block">
